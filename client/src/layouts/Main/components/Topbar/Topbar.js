@@ -42,12 +42,11 @@ const Topbar = (props) => {
     const [notifications] = useState([]);
 
     const [auth, setAuthenticated] = useState({
-        authenticated : false
+        authenticated : true
     });
     
 
     useEffect(() => {
-        
         getSession()
           .then(res => {
             setAuthenticated({
@@ -56,8 +55,6 @@ const Topbar = (props) => {
           });
     }, []);
 
-    const authenticated = auth.authenticated;
-    
     const getSession = () => {
         return post('member/session', null);
     }
@@ -88,7 +85,7 @@ const Topbar = (props) => {
                             <NotificationsIcon />
                         </Badge>
                     </IconButton>
-                    {authenticated ? 
+                    {auth.authenticated ? 
                         <RouterLink onClick={logout} to="/#">
                             <IconButton
                                 className={classes.signOutButton}

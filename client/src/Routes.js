@@ -15,7 +15,7 @@ import {post} from 'axios';
 const Routes = () => {
 
     const [auth, setAuthenticated] = useState({
-        authenticated : false
+        authenticated : true
     });
     
     useEffect(() => {
@@ -27,8 +27,6 @@ const Routes = () => {
             });
           });
     }, []);
-
-    const authenticated = auth.authenticated;
 
     const getSession = () => {
         return post('member/session', null);
@@ -54,7 +52,7 @@ const Routes = () => {
                 layout={MainLayout}
                 path="/boardList"
             />
-            {authenticated ? 
+            {auth.authenticated ? 
                 <Redirect exact from="/" to="/not-found" />
                 :
                 <RouteWithLayout
@@ -63,7 +61,7 @@ const Routes = () => {
                     layout={MinimalLayout}
                     path="/sign-in"
                 />}
-            {authenticated ? 
+            {auth.authenticated ? 
                 <Redirect exact from="/" to="/not-found" />
                 :
                 <RouteWithLayout
