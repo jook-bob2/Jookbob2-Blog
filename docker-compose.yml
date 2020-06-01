@@ -9,7 +9,7 @@ services:
     container_name: web
     # Configuration for building the docker image for the backend service
     build:
-      context: ./springboot # Use an image built from the specified dockerfile in the `polling-app-server` directory.
+      context: ./server # Use an image built from the specified dockerfile in the `polling-app-server` directory.
       dockerfile: Dockerfile
     ports:
       - "8081:8081" # Forward the exposed port 8080 on the container to port 8080 on the host machine
@@ -27,7 +27,7 @@ services:
   app:
     container_name: app
     build:
-      context: ./react # Use an image built from the specified dockerfile in the `polling-app-client` directory.
+      context: ./client # Use an image built from the specified dockerfile in the `polling-app-client` directory.
       dockerfile: Dockerfile
       #args:
         #REACT_APP_API_BASE_URL: http://127.0.0.1:8080/api/customers
