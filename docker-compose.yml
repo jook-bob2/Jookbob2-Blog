@@ -1,0 +1,58 @@
+# Docker Compose file Reference (https://docs.docker.com/compose/compose-file/)
+
+version: '3.0'
+
+# Define services
+services:
+  # App backend service
+  web:
+    container_name: web
+    # Configuration for building the docker image for the backend service
+    build:
+      context: ./springboot # Use an image built from the specified dockerfile in the `polling-app-server` directory.
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081" # Forward the exposed port 8080 on the container to port 8080 on the host machine
+    restart: always
+    #depends_on:
+    #  - db # This service depends on mysql. Start that first.
+    #environment: # Pass environment variables to the service
+    #  SPRING_DATASOURCE_URL: jdbc:mysql://management-tutorial.ccgxmy3lrzke.us-east-2.rds.amazonaws.com:3306/management
+    #  SPRING_DATASOURCE_USERNAME: user
+    #  SPRING_DATASOURCE_PASSWORD: test1234
+    #volumes:
+      #- test_volume:/var/lib/datas
+
+  # Frontend Service
+  app:
+    container_name: app
+    build:
+      context: ./react # Use an image built from the specified dockerfile in the `polling-app-client` directory.
+      dockerfile: Dockerfile
+      #args:
+        #REACT_APP_API_BASE_URL: http://127.0.0.1:8080/api/customers
+    stdin_open: true
+    #volumes:
+    #  - ./react:/usr/src/app
+    ports:
+      - "80:3000" # Map the exposed port 80 on the container to port 9090 on the host machine
+    restart: always
+    depends_on:
+      - web
+
+#volumes:
+  #test_volume:
+
+  # Database Service (Mysql)
+ # db:
+ #   build:
+ #       context: springboot
+ #   image: mysql:5.6
+ #   ports:
+ #     - "3306:3306"
+ #   restart: always
+ #   environment:
+ #     MYSQL_DATABASE: management
+ #     MYSQL_USER: user
+ #     MYSQL_PASSWORD: test1234
+ #     MYSQL_ROOT_PASSWORD: test1234
