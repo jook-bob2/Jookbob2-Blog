@@ -12,7 +12,8 @@ import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import SettingsIcon from '@material-ui/icons/Settings';*/
 //import LockOpenIcon from '@material-ui/icons/LockOpen'; 
 import { Profile, SidebarNav } from './components';
-import LockOpenIcon from '@material-ui/icons/LockOpen'; 
+import LockOpenIcon from '@material-ui/icons/LockOpen';
+import InputIcon from '@material-ui/icons/Input'; 
 import {post} from 'axios';
 
 const useStyles = makeStyles(theme => ({
@@ -35,6 +36,9 @@ const useStyles = makeStyles(theme => ({
     },
     nav: {
         marginBottom: theme.spacing(2)
+    },
+    logout: {
+        color: '#37474f'
     }
 }));
 
@@ -71,6 +75,11 @@ const Sidebar = props => {
             title: '게시판',
             href: '/boardList',
             icon: <DashboardIcon />
+        },
+        {
+            title: '로그아웃',
+            href: '/sign-in',
+            icon: <InputIcon className={classes.logout}/>
         }
     ];
 

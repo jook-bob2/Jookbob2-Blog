@@ -22,7 +22,8 @@ const useStyles = makeStyles(theme => ({
         flexGrow: 1
     },
     signOutButton: {
-        marginLeft: theme.spacing(1)
+        marginLeft: theme.spacing(1),
+        color: '#FFFFFF'
     }
 }));
 
@@ -89,7 +90,6 @@ const Topbar = (props) => {
                         <RouterLink onClick={logout} to="/#">
                             <IconButton
                                 className={classes.signOutButton}
-                                color="inherit"
                             >
                                 <InputIcon />
                             </IconButton>
@@ -98,7 +98,6 @@ const Topbar = (props) => {
                         <RouterLink to="/sign-in">
                             <IconButton
                                 className={classes.signOutButton}
-                                color="inherit"
                             >
                                 <LockOpenIcon />
                             </IconButton>

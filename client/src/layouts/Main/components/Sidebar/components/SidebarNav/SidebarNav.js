@@ -6,6 +6,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { List, ListItem, Button, colors } from '@material-ui/core';
+import {post} from 'axios';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -37,6 +38,9 @@ const useStyles = makeStyles(theme => ({
     '& $icon': {
       color: theme.palette.primary.main
     }
+  },
+  logout: {
+    color: '#37474f'
   }
 }));
 
@@ -54,6 +58,11 @@ const SidebarNav = props => {
 
   const classes = useStyles();
 
+  const logout = () => {
+    post("/member/logout", null);
+    window.location.reload(true);
+  };
+
   return (
     <List
       {...rest}
@@ -65,15 +74,30 @@ const SidebarNav = props => {
           disableGutters
           key={page.title}
         >
-          <Button
-            activeClassName={classes.active}
-            className={classes.button}
-            component={CustomRouterLink}
-            to={page.href}
-          >
-            <div className={classes.icon}>{page.icon}</div>
-            {page.title}
-          </Button>
+          {page.title === '로그아웃'
+            ?
+            <Button
+              activeClassName={classes.active}
+              className={classes.button}
+              component={CustomRouterLink}
+              onClick={logout}
+              to="/#"
+              color="secondary"
+            >
+              <div className={classes.icon}>{page.icon}</div>
+              <div className={classes.logout}>{page.title}</div>
+            </Button>
+            :
+            <Button
+              activeClassName={classes.active}
+              className={classes.button}
+              component={CustomRouterLink}
+              to={page.href}
+            >
+              <div className={classes.icon}>{page.icon}</div>
+              {page.title}
+            </Button>
+          }
         </ListItem>
       ))}
     </List>
