@@ -1,4 +1,4 @@
-# Docker-Compose Test 입니다.
+# Docker-Compose 빌드하기 입니다.
 ### Installation
 <pre>
 cd /home
@@ -8,7 +8,7 @@ cd ./Docker-Compose
 
 ### Run
 <pre>
-cd Docker-Compose
+cd Spring-React
 docker-compose up -d --build
 </pre>
 # SpringBoot-React
