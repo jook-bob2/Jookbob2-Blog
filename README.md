@@ -2,7 +2,7 @@
 ### Installation
 <pre>
 cd /home
-git clone https://github.com/ehrmaks/Docker-Compose.git
+git clone https://github.com/ehrmaks/SpringBoot-React.git
 cd ./Docker-Compose
 </pre>
 
