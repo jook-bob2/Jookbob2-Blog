@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
@@ -12,9 +12,6 @@ import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import SettingsIcon from '@material-ui/icons/Settings';*/
 //import LockOpenIcon from '@material-ui/icons/LockOpen'; 
 import { Profile, SidebarNav } from './components';
-import LockOpenIcon from '@material-ui/icons/LockOpen';
-import InputIcon from '@material-ui/icons/Input'; 
-import {post} from 'axios';
 
 const useStyles = makeStyles(theme => ({
     drawer: {
@@ -47,25 +44,7 @@ const Sidebar = props => {
 
     const classes = useStyles();
 
-    const [auth, setAuthenticated] = useState({
-        authenticated : true
-    });
-
-    useEffect(() => {
-        getSession()
-          .then(res => {
-            setAuthenticated({
-                authenticated: res.data === "" ? false : true
-            });
-          });
-    }, []);
-
-    const getSession = () => {
-        return post('member/session', null);
-    }
-
-
-    const authPages = [
+    const pages = [
         {
             title: 'Dashboard',
             href: '/dashboard',
@@ -75,29 +54,6 @@ const Sidebar = props => {
             title: '게시판',
             href: '/boardList',
             icon: <DashboardIcon />
-        },
-        {
-            title: '로그아웃',
-            href: '/sign-in',
-            icon: <InputIcon className={classes.logout}/>
-        }
-    ];
-
-    const notAuthPages = [
-        {
-            title: 'Dashboard',
-            href: '/dashboard',
-            icon: <DashboardIcon />
-        },
-        {
-            title: '게시판',
-            href: '/boardList',
-            icon: <DashboardIcon />
-        },
-        {
-            title: '로그인',
-            href: '/sign-in',
-            icon: <LockOpenIcon />
         }
     ];
     
@@ -117,18 +73,11 @@ const Sidebar = props => {
             >
                 <Profile />
                 <Divider className={classes.divider} />
-                {auth.authenticated ? 
-                    <SidebarNav
-                        className={classes.nav}
-                        pages={authPages}
-                    />
-                    :
-                    <SidebarNav
-                        className={classes.nav}
-                        pages={notAuthPages}
-                    />
-                }
                 
+                <SidebarNav
+                    className={classes.nav}
+                    pages={pages}
+                />
             </div>
         </Drawer>
     );
