@@ -55,4 +55,9 @@ public class MemberServiceImpl implements MemberService {
 		return memberMapper.loginCheck(entity);
 	}
 
+	@Override
+	public void uploadPicture(Member entity) {
+		memberMapper.uploadPicture(entity);
+	}
+
 }

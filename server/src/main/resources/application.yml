@@ -15,8 +15,8 @@ spring:
       jdbc-url: jdbc:mysql://management-tutorial.ccgxmy3lrzke.us-east-2.rds.amazonaws.com:3306/management?useSSL=false&useUnicode=true&characterEncoding=utf8
       username: user
       password: test1234
-      connection-test-query: SELECT NOW() FROM dual  devtools:    livereload:      enabled: true
-    restart:      enabled: true
+      connection-test-query: SELECT NOW() FROM dual  devtools:    restart:      enabled: true
+    livereload:      enabled: true
 mybatis:
   configuration:
     map-underscore-to-camel-case: true

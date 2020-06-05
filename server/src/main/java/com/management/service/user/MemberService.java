@@ -13,4 +13,5 @@ public interface MemberService {
 	public int emailCheck(Map<String, Object> map);
 	public String pwCheck(Map<String, Object> map);
 	public Boolean loginCheck(Member entity, HttpSession session);
+	public void uploadPicture(Member entity);
 }

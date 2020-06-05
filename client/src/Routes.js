@@ -10,12 +10,13 @@ import {
     SignIn as SignInView,
     SignUp as SignUpView
 } from './views';
+import {Setting as SettingView} from './views/Setting'
 import {post} from 'axios';
 
 const Routes = () => {
 
     const [auth, setAuthenticated] = useState({
-        authenticated : true
+        authenticated : false
     });
     
     useEffect(() => {
@@ -23,7 +24,7 @@ const Routes = () => {
         getSession()
           .then(res => {
             setAuthenticated({
-                authenticated: res.data === "" ? false : true
+                authenticated: res.data === -1 ? false : true
             });
           });
     }, []);
@@ -71,6 +72,13 @@ const Routes = () => {
                     path="/sign-up"
                 />}
             
+            <RouteWithLayout
+                component={SettingView}
+                exact
+                layout={MainLayout}
+                path="/setting"
+            />
+                
 
             <RouteWithLayout
                 component={NotFoundView}

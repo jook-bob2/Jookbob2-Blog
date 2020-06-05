@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -36,29 +36,11 @@ function HomeIcon(props) {
     );
 }
 
-const Topbar = (props) => {
+const Topbar = props => {
     const { className, onSidebarOpen } = props;
     const classes = useStyles();
 
     const [notifications] = useState([]);
-
-    const [auth, setAuthenticated] = useState({
-        authenticated : true
-    });
-    
-
-    useEffect(() => {
-        getSession()
-          .then(res => {
-            setAuthenticated({
-                authenticated: res.data === "" ? false : true
-            });
-          });
-    }, []);
-
-    const getSession = () => {
-        return post('member/session', null);
-    }
 
     const logout = () => {
         post("/member/logout", null);
@@ -86,7 +68,7 @@ const Topbar = (props) => {
                             <NotificationsIcon />
                         </Badge>
                     </IconButton>
-                    {auth.authenticated ? 
+                    {props.authenticated ? 
                         <RouterLink onClick={logout} to="/#">
                             <IconButton
                                 className={classes.signOutButton}

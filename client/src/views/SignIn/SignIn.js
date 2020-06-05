@@ -179,8 +179,7 @@ const SignIn = (props) => {
             console.log(response);
             let param = response.data;
             if (param.userId !== null && param.userId !== "" && param.message !== "error") {
-              
-              history.goBack();
+              window.location.href = "/";
             } else {
               alert("아이디/비밀번호를 확인 해주세요.");
               document.getElementsByName("email")[0].focus();

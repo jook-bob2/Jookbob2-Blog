@@ -33,72 +33,91 @@ const Profile = props => {
 
     const classes = useStyles();
 
-    const [auth, setAuthenticated] = useState({
-        authenticated : true
+    const [user, setUser] = useState({
+        memberNo: props.userId,
+        name: '',
+        avatar: ''
     });
 
     useEffect(() => {
-        getSession()
-          .then(res => {
-            setAuthenticated({
-                authenticated: res.data === "" ? false : true
-            });
-          });
-    }, []);
+        getUser()
+            .then(res => {
+                const list = res.data.list;
+                setUser({
+                    ...user,
+                    memberNo: list.memberNo,
+                    name: list.name,
+                    avatar: list.profileImg
+                })
+            })
+    },[]);
 
-    const getSession = () => {
-        return post('member/session', null);
+    const getUser = () => {
+        const url = "/member/viewMember";
+        const formData = new FormData();
+        formData.append("userId", props.userId);
+        return post(url, formData);
     }
 
     const logout = () => {
         post("/member/logout", null);
-        window.location.reload(true);
-    };
-
-    const user = {
-        name: 'Sana',
-        avatar: 'https://mybucket7009.s3.ap-northeast-2.amazonaws.com/upload/2020/05/17/4cf66713-f7fb-4130-838a-8e47135c9ccc_sana.jpg',
-        bio: 'Singer'
+        window.location.href="/";
     };
 
     return (
         <div
-            {...rest}
             className={clsx(classes.root, className)}
         >
+            {props.authenticated ?
             <Avatar
                 alt="Person"
                 className={classes.avatar}
                 component={RouterLink}
                 src={user.avatar}
-                to="/settings"
-            />
-            <Typography
-                className={classes.name}
-                variant="h4"
-            >
+                to="/setting"
+            /> 
+            : 
+            <Avatar
+                alt="Person"
+                className={classes.avatar}
+                
+            /> }
+            {props.authenticated ?
+                <Typography
+                    className={classes.name}
+                    variant="h4"
+                >
                 {user.name}
-            </Typography>
-            <Typography variant="body2">{user.bio}</Typography>
+                </Typography>
+                :
+                <Typography
+                    className={classes.name}
+                    variant="h4"
+                >
+                
+                </Typography>
+            }
+            {props.authenticated ?
+                <Typography variant="body2"></Typography>
+                :
+                <Typography variant="body2">Please Login</Typography>}
+            
 
-            {auth.authenticated ?
-            <div className={classes.iconBtn}>
-                <RouterLink onClick={logout} to="/#">
-                    <Button><InputIcon /></Button>
-                </RouterLink>
-                <RouterLink to="/#">
-                    <Button><SettingsIcon /></Button>
-                </RouterLink>
-            </div>
-            :
-            <div className={classes.iconBtn}>
-                <RouterLink to="/sign-in">
-                    <Button><LockOpenIcon /></Button>
-                </RouterLink>
-                <RouterLink to="/#">
-                    <Button><SettingsIcon /></Button>
-                </RouterLink>
-            </div>}
+            {props.authenticated ?
+                <div className={classes.iconBtn}>
+                    <RouterLink onClick={logout} to="/#">
+                        <Button><InputIcon /></Button>
+                    </RouterLink>
+                    <RouterLink to="/setting">
+                        <Button><SettingsIcon /></Button>
+                    </RouterLink>
+                </div>
+                :
+                <div className={classes.iconBtn}>
+                    <RouterLink to="/sign-in">
+                        <Button><LockOpenIcon /></Button>
+                    </RouterLink>
+                </div>}
         </div>
     );
 };

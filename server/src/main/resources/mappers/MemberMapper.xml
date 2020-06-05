@@ -2,13 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.management.mapper.user.MemberMapper">
+	<resultMap type="hashmap" id="selectMap">
+		<result column="member_no" property="memberNo"/>
+		<result column="create_dt" property="createDt"/>
+		<result column="email" property="email"/>
+		<result column="name" property="name"/>
+		<result column="passwd" property="passwd"/>
+		<result column="update_dt" property="updateDt"/>
+		<result column="user_id" property="userId"/>
+		<result column="profile_img" property="profileImg"/>
+		<result column="phone_no" property="phoneNo"/>
+		<result column="post_no" property="postNo"/>
+		<result column="address1" property="address1"/>
+		<result column="address2" property="address2"/>
+	</resultMap>
+
 	
 	<select id="idCheck" parameterType="hashmap" resultType="Integer">
-		SELECT ifnull(SUM(member_no),0) as member_no FROM member_info WHERE user_id=#{userId}
+		SELECT ifnull(SUM(member_no),0) as memberNo FROM member_info WHERE user_id=#{userId}
 	</select>
 	
 	<select id="emailCheck" parameterType="hashmap" resultType="Integer">
-		SELECT ifnull(SUM(member_no),0) as member_no FROM member_info WHERE email=#{email}
+		SELECT ifnull(SUM(member_no),0) as memberNo FROM member_info WHERE email=#{email}
 	</select>
 	
 	<select id="pwCheck" parameterType="hashmap" resultType="String">
@@ -34,14 +49,72 @@
 		AND passwd=#{passwd}
 	</select>
 	
-	<select id="viewMember" parameterType="hashmap" resultType="String">
-		SELECT name FROM member_info
-		WHERE 1=1 AND
+	<select id="viewMember" parameterType="hashmap" resultMap="selectMap">
+		SELECT 
+			member_no
+			,create_dt
+			,email
+			,name
+			,passwd
+			,update_dt
+			,user_id
+			,profile_img
+			,phone_no
+			,post_no
+			,address1
+			,address2
+		FROM member_info
+		WHERE 1=1 
+		<if test="memberNo != null">
+			AND member_no = #{memberNo}
+		</if>
 		<if test="userId != null and !userId.equals('')">
-			user_id=#{userId}
+			AND user_id=#{userId}
 		</if>
 		<if test="email != null and !email.equals('')">
-			email=#{email}
+			AND email=#{email}
 		</if>
 	</select>
+	
+	<update id="uploadPicture" parameterType="com.management.domain.model.Member">
+		UPDATE member_info SET
+			profile_img=#{profileImg}
+			,update_dt=SYSDATE()
+		WHERE 1=1 
+		<if test="memberNo != null">
+			AND member_no = #{memberNo}
+		</if>
+		<if test="userId != null and !userId.equals('')">
+			AND user_id=#{userId}
+		</if>
+		<if test="email != null and !email.equals('')">
+			AND email=#{email}
+		</if>
+	</update>
+	
+	<update id="saveProfile" parameterType="com.management.domain.model.Member">
+		UPDATE member_info SET
+			<if test="name != null and !name.equals('')">
+				name = #{name},
+			</if>
+			<if test="email != null and !email.equals('')">
+				email = #{email},
+			</if>
+			<if test="phoneNo != null and !phoneNo.equals('')">
+				phone_no = #{phoneNo},
+			</if>
+			<if test="address1 != null and !address1.equals('')">
+				address1 = #{address1},
+			</if>
+			<if test="address2 != null and !address2.equals('')">
+				address2 = #{address2},
+			</if>
+			update_dt = SYSDATE()
+		WHERE 1=1
+		AND 
+		<if test="memberNo != null">
+			member_no = #{memberNo}
+		</if>
+	</update>
+	
 </mapper>

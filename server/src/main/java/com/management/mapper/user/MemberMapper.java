@@ -13,5 +13,7 @@ public interface MemberMapper {
 	public int emailCheck(Map<String, Object> map);
 	public String pwCheck(Map<String, Object> map);
 	public Boolean loginCheck(Member entity);
-	public String viewMember(Map<String, Object> map);
+	public Map<String, Object> viewMember(Map<String, Object> map);
+	public void uploadPicture(Member entity);
+	public void saveProfile(Member entity);
 }

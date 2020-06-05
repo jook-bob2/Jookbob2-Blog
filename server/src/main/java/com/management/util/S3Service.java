@@ -17,6 +17,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
 import lombok.NoArgsConstructor;
@@ -48,7 +49,6 @@ public class S3Service {
 	}
 	
 	public String upload(MultipartFile file, String dirName, byte[] fileData) throws Exception {
-		//String fileName = file.getOriginalFilename();
 		String originalName = file.getOriginalFilename();
 		
 		// UUID 발급
@@ -65,6 +65,24 @@ public class S3Service {
 		s3Client.putObject(new PutObjectRequest(bucket, fileNm, file.getInputStream(), null)
 				.withCannedAcl(CannedAccessControlList.PublicRead));
 		return s3Client.getUrl(bucket, fileNm).toString();
+	}
+	
+	public void deleteFile(String prevFile) throws Exception {
+		String imgKey[] = prevFile.split("/");
+		String fileNm = "";
+		int j = 0;
+		for (int i = 0; i<imgKey.length; i++) {
+			System.out.println("몇번째부터인가 ? " + i + "번째 ==> " + imgKey[i]);
+			if (imgKey[i].equals("upload")) {
+				j += i;
+				fileNm = imgKey[i];
+				continue;
+			} else if (j > 0) {
+				fileNm += "/" + imgKey[i];
+			}
+		}
+		System.out.println(fileNm);
+		if (fileNm != null && !fileNm.equals("")) s3Client.deleteObject(new DeleteObjectRequest(bucket, fileNm));
 	}
 	
 	private static String calcPath(String uploadPath) {

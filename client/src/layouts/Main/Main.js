@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/styles';
 import { useMediaQuery } from '@material-ui/core';
 import { Sidebar, Topbar, Footer } from './components';
-
+import {post} from 'axios';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -30,6 +30,25 @@ const Main = props => {
         defaultMatches: true
     });
 
+    const [auth, setAuthenticated] = useState({
+        authenticated : false,
+        memberNo: ''
+    });
+
+    useEffect(() => {
+        getSession()
+          .then(res => {
+            setAuthenticated({
+                authenticated: res.data === -1 ? false : true,
+                memberNo: res.data
+            });
+          });
+    }, []);
+
+    const getSession = () => {
+        return post('member/session', null);
+    }
+
     const [openSidebar, setOpenSidebar] = useState(false);
     
 
@@ -50,11 +69,13 @@ const Main = props => {
                 [classes.shiftContent]: isDesktop
             })}
         >
-            <Topbar onSidebarOpen={handleSidebarOpen} />
+            <Topbar onSidebarOpen={handleSidebarOpen} authenticated={auth.authenticated} memberNo={auth.memberNo}/>
             <Sidebar 
                 onClose={handleSidebarClose}
                 open={shouldOpenSidebar}
                 variant={isDesktop ? 'persistent' : 'temporary'}
+                authenticated={auth.authenticated}
+                memberNo={auth.memberNo}
             />
             <main className={classes.content}>
                 {children}

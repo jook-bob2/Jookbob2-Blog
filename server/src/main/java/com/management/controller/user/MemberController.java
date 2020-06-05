@@ -1,6 +1,9 @@
 package com.management.controller.user;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,17 +15,21 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.management.domain.model.Member;
 import com.management.mapper.user.MemberMapper;
 import com.management.service.user.MemberService;
+import com.management.util.S3Service;
 
 import lombok.AllArgsConstructor;
 
@@ -38,6 +45,9 @@ public class MemberController {
 	
 	@Autowired
 	private MemberMapper memberMapper;
+	
+	@Autowired
+	private S3Service s3Service;
 	
 	@PostMapping(value = "/login")
 	public Map<String, Object> login(@RequestParam Map<String, Object> param, HttpSession session) {
@@ -67,9 +77,14 @@ public class MemberController {
 			entity.setPasswd(pwCheck);
 			boolean result = memberService.loginCheck(entity, session);
 			if(result) {
-				String name = memberMapper.viewMember(map);
+				Map<String, Object> memberList = memberMapper.viewMember(map);
+				String name = (String) memberList.get("name");
+				Long memberNo = (Long) memberList.get("memberNo");
+				System.out.println("로그인 : " + memberNo);
+				
 				session.setAttribute("userId", auth);
 				session.setAttribute("name", name);
+				session.setAttribute("memberNo", memberNo);
 				String userId = session.getAttribute("userId").toString();
 				String name2 = session.getAttribute("name").toString();
 				Map<String, Object> map2 = new HashMap<>();
@@ -104,6 +119,7 @@ public class MemberController {
 			entity.setPasswd((String) dataObj.get("password"));
 			entity.setName((String) dataObj.get("userName"));
 			entity.setEmail((String) dataObj.get("email"));
+			entity.setProfileImg("");
 		}
 		String userId = entity.getUserId();
 		String email = entity.getEmail();
@@ -137,11 +153,12 @@ public class MemberController {
 	}
 	
 	@PostMapping(value = "/session")
-	public String getSession(HttpSession session) throws Exception {
-		if (session.getAttribute("userId") != null) {
-			return session.getAttribute("userId").toString();
+	public Long getSession(HttpSession session) throws Exception {
+		if (session.getAttribute("memberNo") != null) {
+			System.out.println("세션 memberNo : " + session.getAttribute("memberNo"));
+			return (Long) session.getAttribute("memberNo");
 		} else {
-			return "";
+			return (long) -1;
 		}
 	}
 	
@@ -149,6 +166,90 @@ public class MemberController {
 	public void logout(HttpSession session) {
 		session.invalidate();
 		System.out.println("세션 Kill");
+	}
+	
+	@PostMapping(value = "/uploadPicture", headers = "content-type=multipart/form-data")
+	public Map<String, Object> uploadPicture(
+			@RequestPart("image") MultipartFile file, HttpSession session ) throws Exception {
+		Member entity = new Member();
+		Map<String, Object> map = new HashMap<>();
+		entity.setMemberNo((Long) session.getAttribute("memberNo"));
+		
+		if (file != null) {
+			// 회원번호를 가져옴.
+			map.put("memberNo", (Long) session.getAttribute("memberNo"));
+			// 이미지 URL을 가져옴.
+			Map<String, Object> memberList = memberMapper.viewMember(map);
+			String prevFile = "";
+			if (memberList.get("profileImg").toString() != null && !memberList.get("profileImg").toString().equals("")) {
+				prevFile = memberList.get("profileImg").toString();
+				// 기존 이미지를 삭제함.
+				s3Service.deleteFile(prevFile);
+			}
+
+			// 새로운 이미지를 업로드하여 이미지를 화면에 뿌려줌.
+			String url = s3Service.upload(file, "upload/", file.getBytes());
+			entity.setProfileImg(url);
+			memberService.uploadPicture(entity);
+			map.put("profileImg", url);
+			return map;
+		}
+		return map;
+	}
+	
+	@PostMapping(value = "/removePicture")
+	public Boolean removePicture(HttpSession session) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		map.put("memberNo", (Long) session.getAttribute("memberNo"));
+		Map<String, Object> memberList = memberMapper.viewMember(map);
+		
+		// 멤버리스트에 프로필사진이 있다면 삭제 진행
+		if (memberList.get("profileImg").toString() != null && !memberList.get("profileImg").toString().equals("")) {
+			// DB에서 URL 삭제
+			Member entity = new Member();
+			entity.setProfileImg("");
+			entity.setMemberNo((Long) memberList.get("memberNo"));
+			memberService.uploadPicture(entity);
+			
+			// 이전 프로필 이미지 삭제
+			String prevFile = memberList.get("profileImg").toString();
+			s3Service.deleteFile(prevFile);
+			return true;
+		}
+		return false;
+	}
+
+	
+	@PostMapping(value = "/viewMember", headers = "accept=application/json; charset=utf-8")
+	public Map<String, Object> viewMember(@RequestParam Map<String, Object> param, HttpSession session) {
+		Map<String, Object> map = new HashMap<>();
+		
+		// 회원정보 추출을 위한 멤버키를 가져옴.
+		System.out.println(session.getAttribute("memberNo"));
+		map.put("memberNo", session.getAttribute("memberNo"));
+		
+		// 회원정보 추출
+		Map<String, Object> memberList = memberMapper.viewMember(map);
+		Map<String, Object> map2 = new HashMap<>();
+		
+		// list로 전송
+		map2.put("list", memberList);
+		
+		return map2;
+	}
+	
+	@PostMapping(value = "saveProfile")
+	public void saveProfile(@RequestParam Map<String, Object> param, HttpSession session) {
+		Long memberNo = (Long) session.getAttribute("memberNo");
+		Member entity = new Member();
+		System.out.println(param.toString());
+		entity.setMemberNo(memberNo);
+		entity.setName(param.get("name").toString());
+		entity.setAddress1(param.get("address1").toString());
+		entity.setAddress2(param.get("address2").toString());
+		entity.setEmail(param.get("email").toString());
+		entity.setPhoneNo(param.get("phoneNo").toString());
+		memberMapper.saveProfile(entity);
 	}
 	
 }
