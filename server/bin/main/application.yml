@@ -1,37 +1,0 @@
-spring:
-  jpa:
-    database: mysql
-    show-sql: true
-    generate-ddl: false
-    hibernate:
-      ddl-auto: update
-  h2:
-    console:
-      enabled: true
-  freemarker:
-    cache: false
-  datasource:
-    hikari:
-      jdbc-url: jdbc:mysql://management-tutorial.ccgxmy3lrzke.us-east-2.rds.amazonaws.com:3306/management?useSSL=false&useUnicode=true&characterEncoding=utf8
-      username: user
-      password: test1234
-      connection-test-query: SELECT NOW() FROM dual  devtools:    livereload:      enabled: true
-    restart:      enabled: true
-mybatis:
-  configuration:
-    map-underscore-to-camel-case: true
-server:
-  port: 8081
-logging:
-  level:
-    org.springframework.web: debug
-cloud:
-  aws:
-    credentials:
-      access-key: AKIA5Z4TV4JITBVRL454
-      secret-key: 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
-    region:
-      static: ap-northeast-2
-    stack:
-      auto: false
-      
