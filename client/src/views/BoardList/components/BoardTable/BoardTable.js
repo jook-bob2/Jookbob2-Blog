@@ -17,11 +17,11 @@ const BoardTable = props => {
     return (
         <TableRow>
             <TableCell>{props.id}</TableCell>
-            <TableCell><a href={props.image}><img src={props.image} alt="profile" width={64}></img></a></TableCell>
-            <TableCell>{props.name}</TableCell>
-            <TableCell>{moment(props.birthday).format('YYYY/MM/DD')}</TableCell>
-            <TableCell>{props.gender}</TableCell>
-            <TableCell>{props.job}</TableCell>
+            <TableCell>{props.title}</TableCell>
+            <TableCell>{props.writer}</TableCell>
+            <TableCell>{moment(props.createDt).format('YYYY/MM/DD')}</TableCell>
+            <TableCell>{moment(props.updateDt).format('YYYY/MM/DD')}</TableCell>
+            <TableCell>{props.viewcnt}</TableCell>
         </TableRow>
     );
 };

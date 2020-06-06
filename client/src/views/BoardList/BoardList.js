@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-//import Customer from './components/BoardTable'
 import Paper from '@material-ui/core/Paper'
 import Table from '@material-ui/core/Table'
 import TableHead from '@material-ui/core/TableHead'
@@ -74,7 +73,7 @@ const BoardList = props => {
   const classes = useStyles();
 
   const [boardState, setBoardState] = useState({
-    customers: '',
+    values: '',
     searchKeyword: ''
   });
 
@@ -84,7 +83,7 @@ const BoardList = props => {
     callApi()
       .then(res => {
         setBoardState({
-          customers:res,
+          values:res,
           searchKeyword: ''
         });
       })
@@ -102,9 +101,9 @@ const BoardList = props => {
   }, []);
 
   const callApi = async() => {
-    const response = await fetch('/api/customers');
+    const response = await fetch('/board/boardList');
     const body = await response.json();
-    return body.data;
+    return body.list;
   }
 
   const progressCount = () => {
@@ -113,8 +112,6 @@ const BoardList = props => {
 
   const handleValueChange = (e) => {
     e.persist();
-    let nextState = {};
-    nextState[e.target.name] = e.target.value;
     setBoardState(boardState => ({
         ...boardState,
         searchKeyword: e.target.value
@@ -123,16 +120,17 @@ const BoardList = props => {
 
   const filteredComponents = (data) => {
     data = data.filter((c) => {
-      return c.name.indexOf(boardState.searchKeyword) > -1;
+      return c.title.indexOf(boardState.searchKeyword) > -1;
     });
     
     return data.map((c) => {
-      return <BoardTable boardState={boardState} key={c.id} id={c.id} image={c.image} name={c.name} birthday={c.birthday} gender={c.gender} job={c.job}/>
+      return <BoardTable boardState={boardState} key={c.bno} id={c.bno} title={c.title} name={c.name} createDt={c.createDt} updateDt={c.updateDt} viewCnt={c.viewCnt}/>
     });
   }
   
   const cellList = [
-    {title:"번호"}, {title:"프로필 이미지"}, {title:"이름"}, {title:"생년월일"}, {title:"성별"}, {title:"직업"}
+    //{title:"번호"}, {title:"프로필 이미지"}, {title:"이름"}, {title:"생년월일"}, {title:"성별"}, {title:"직업"}
+    {title:"번호"}, {title:"제목"}, {title:"이름"}, {title:"작성일"}, {title:"수정일"}, {title:"조회수"}
   ];
 
   return (
@@ -157,9 +155,9 @@ const BoardList = props => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {boardState.customers ? filteredComponents(boardState.customers) :
+              {boardState.values ? filteredComponents(boardState.values) :
               
-              /* boardState.customers.map(c => {
+              /* boardState.values.map(c => {
                 return (<Customer stateRefresh={boardStateRefresh} key={c.id} id={c.id} image={c.image} name={c.name} birthday={c.birthday} gender={c.gender} job={c.job}/>)
               }) :  */
                 <TableRow>

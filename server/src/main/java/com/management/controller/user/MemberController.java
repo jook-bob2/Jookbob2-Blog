@@ -223,19 +223,23 @@ public class MemberController {
 	@PostMapping(value = "/viewMember", headers = "accept=application/json; charset=utf-8")
 	public Map<String, Object> viewMember(@RequestParam Map<String, Object> param, HttpSession session) {
 		Map<String, Object> map = new HashMap<>();
+		String message = "error";
 		
 		// 회원정보 추출을 위한 멤버키를 가져옴.
 		System.out.println(session.getAttribute("memberNo"));
-		map.put("memberNo", session.getAttribute("memberNo"));
-		
-		// 회원정보 추출
-		Map<String, Object> memberList = memberMapper.viewMember(map);
-		Map<String, Object> map2 = new HashMap<>();
-		
-		// list로 전송
-		map2.put("list", memberList);
-		
-		return map2;
+		if (session.getAttribute("memberNo") != null) {
+			map.put("memberNo", session.getAttribute("memberNo"));
+			Map<String, Object> map2 = new HashMap<>();
+			// 회원정보 추출
+			Map<String, Object> memberList = memberMapper.viewMember(map);
+			message = "succeed";
+			// list로 전송
+			map2.put("list", memberList);
+			map2.put("message", message);
+			return map2;
+		}
+		map.put("message", message);
+		return map;
 	}
 	
 	@PostMapping(value = "saveProfile")

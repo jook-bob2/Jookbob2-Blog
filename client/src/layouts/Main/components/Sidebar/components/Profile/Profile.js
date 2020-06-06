@@ -42,13 +42,19 @@ const Profile = props => {
     useEffect(() => {
         getUser()
             .then(res => {
-                const list = res.data.list;
-                setUser({
-                    ...user,
-                    memberNo: list.memberNo,
-                    name: list.name,
-                    avatar: list.profileImg
-                })
+                const message = res.data.message;
+                if (message === "succeed") {
+                    const list = res.data.list;
+                    setUser({
+                        ...user,
+                        memberNo: list.memberNo,
+                        name: list.name,
+                        avatar: list.profileImg
+                    })
+                } else {
+                    
+                }
+                
             })
     },[]);
 

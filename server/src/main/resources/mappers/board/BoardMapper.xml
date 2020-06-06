@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.management.mapper.board.BoardMapper">
+	<resultMap type="hashmap" id="selectMap">
+		<result column="bno" property="bno"/>
+		<result column="b_kinds" property="bKinds"/>
+		<result column="create_dt" property="createDt"/>
+		<result column="update_dt" property="updateDt"/>
+		<result column="content" property="content"/>
+		<result column="name" property="name"/>
+		<result column="update_yn" property="updateYn"/>
+		<result column="viewcnt" property="viewcnt"/>
+		<result column="writer" property="writer"/>
+	</resultMap>
+	<resultMap type="com.management.domain.model.Board" id="selectList">
+		<result column="bno" property="bno"/>
+		<result column="b_kinds" property="bKinds"/>
+		<result column="create_dt" property="createDt"/>
+		<result column="update_dt" property="updateDt"/>
+		<result column="content" property="content"/>
+		<result column="name" property="name"/>
+		<result column="update_yn" property="updateYn"/>
+		<result column="viewcnt" property="viewcnt"/>
+		<result column="writer" property="writer"/>
+	</resultMap>
+	
+	<select id="boardList" resultMap="selectList">
+		SELECT * FROM board
+	</select>
+
+	
+	
+	
+	
+</mapper>
