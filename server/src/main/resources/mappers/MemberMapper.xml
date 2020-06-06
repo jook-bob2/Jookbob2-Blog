@@ -109,6 +109,9 @@
 			<if test="address2 != null and !address2.equals('')">
 				address2 = #{address2},
 			</if>
+			<if test="passwd != null and !passwd.equals('')">
+				passwd = #{passwd},
+			</if>
 			update_dt = SYSDATE()
 		WHERE 1=1
 		AND 
@@ -116,5 +119,4 @@
 			member_no = #{memberNo}
 		</if>
 	</update>
-	
 </mapper>

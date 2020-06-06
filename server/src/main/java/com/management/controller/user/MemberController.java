@@ -252,4 +252,22 @@ public class MemberController {
 		memberMapper.saveProfile(entity);
 	}
 	
+	@PostMapping(value = "updatePw")
+	public Boolean updatePw(@RequestParam Map<String, Object> param, HttpSession session) {
+		Long memberNo = null;
+		String passwd = "";
+		Member entity = new Member();
+		
+		if (session.getAttribute("memberNo") != null && param.get("passwd") != null) {
+			memberNo = (Long) session.getAttribute("memberNo");	
+			entity.setMemberNo(memberNo);
+			
+			passwd = passwordEncode.encode(param.get("passwd").toString());
+			entity.setPasswd(passwd);
+			memberMapper.saveProfile(entity);
+			return true;
+		}
+		return false;
+	}
+	
 }

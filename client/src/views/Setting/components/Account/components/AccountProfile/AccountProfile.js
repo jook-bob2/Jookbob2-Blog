@@ -88,7 +88,8 @@ const AccountProfile = props => {
       .then(res => {
         setState({
           ...state,
-          avatar: res.data.profileImg
+          avatar: res.data.profileImg,
+          fileName: e.target.files[0]
         })
       })
       .catch(err => console.log(err));
@@ -112,7 +113,8 @@ const AccountProfile = props => {
     .then(res => {
       setState({
         ...state,
-        avatar: res.data ? '' : state.avatar
+        avatar: res.data ? '' : state.avatar,
+        fileName: ''
       })
       res.data ? alert("이미지가 삭제되었습니다.") : alert("삭제 할 이미지가 존재하지 않습니다.")
     })   
@@ -167,7 +169,7 @@ const AccountProfile = props => {
       </CardContent>
       <Divider />
       <CardActions>
-        <input className={classes.hidden} type="file" id="raised-button-file" file={state.file} value={state.fileName} onChange={handleFileChange}></input>
+        <input className={classes.hidden} type="file" accept="image/*" id="raised-button-file" file={state.file} value={state.fileName} onChange={handleFileChange}></input>
         <label htmlFor="raised-button-file">
           <Button
             className={classes.uploadButton}
@@ -176,11 +178,11 @@ const AccountProfile = props => {
             component="span" 
             name="file"
           >
-            Upload picture
+            {state.fileName === "" ? "Upload picture" : "Update picture"}
           </Button>
         </label>
+        {state.fileName === "" ? null : <Button variant="outlined" color="secondary" onClick={handleFileRemove}>Remove picture</Button>}
         
-        <Button variant="outlined" color="secondary" onClick={handleFileRemove}>Remove picture</Button>
       </CardActions>
     </Card>
   );

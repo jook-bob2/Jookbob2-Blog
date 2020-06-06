@@ -86,7 +86,6 @@ const AccountDetails = props => {
     
     handleProfile(event)
      .then(res => {
-       console.log(res);
        alert("저장완료!");
      })
   }
