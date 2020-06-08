@@ -124,7 +124,7 @@ const BoardList = props => {
     });
     
     return data.map((c) => {
-      return <BoardTable boardState={boardState} key={c.bno} id={c.bno} title={c.title} name={c.name} createDt={c.createDt} updateDt={c.updateDt} viewCnt={c.viewCnt}/>
+      return <BoardTable boardState={boardState} key={c.bno} bno={c.bno} title={c.title} writer={c.writer} createDt={c.createDt} updateDt={c.updateDt} viewcnt={c.viewcnt}/>
     });
   }
   
@@ -144,7 +144,7 @@ const BoardList = props => {
               onChange={handleValueChange}
           />
       </div>
-      
+
       <Paper className={classes.paper}>
         <Table className={classes.table}>
             <TableHead>
@@ -155,6 +155,7 @@ const BoardList = props => {
               </TableRow>
             </TableHead>
             <TableBody>
+              
               {boardState.values ? filteredComponents(boardState.values) :
               
               /* boardState.values.map(c => {

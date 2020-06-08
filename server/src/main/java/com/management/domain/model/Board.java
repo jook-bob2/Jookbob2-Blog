@@ -3,6 +3,8 @@ package com.management.domain.model;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,6 +26,7 @@ import lombok.NoArgsConstructor;
 @Entity 
 @Table(name = "board")
 @SequenceGenerator(name = "BOARD_SEQ_GENERATOR", sequenceName = "BOARD_SEQ", initialValue = 1, allocationSize = 1)
+@Embeddable
 public class Board { 
 	// 게시판번호
     @Id 
@@ -37,10 +40,6 @@ public class Board {
     // 작성자
     @Column(length = 50, nullable = false)
     private String writer;
-    
-    // 작성자번호 추후 사용 예정
-//    @Id
-//    private Long wno;
     
     // 내용
     @Column(length = 4000, nullable = true)
@@ -72,6 +71,10 @@ public class Board {
     @Column(length = 20)
     private String bKinds;
     
+    // 작성자 번호
+    @Column(nullable = false)
+    private Long writerNo;
+    
     public Board() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -79,7 +82,7 @@ public class Board {
     
     @Builder
 	public Board(Long bno, String title, String writer, String content, LocalDateTime createDt,
-			LocalDateTime updateDt, Long viewcnt, String updateYn, String writeYn, String bKinds) {
+			LocalDateTime updateDt, Long viewcnt, String updateYn, String writeYn, String bKinds, Long writerNo) {
 		super();
 		this.bno = bno;
 		this.title = title;
@@ -91,6 +94,7 @@ public class Board {
 		this.updateYn = updateYn;
 		this.writeYn = writeYn;
 		this.bKinds = bKinds;
+		this.writerNo = writerNo;
 	}
 
 	public Long getBno() {
@@ -172,4 +176,14 @@ public class Board {
 	public void setbKinds(String bKinds) {
 		this.bKinds = bKinds;
 	}
+
+	public Long getWriterNo() {
+		return writerNo;
+	}
+
+	public void setWriterNo(Long writerNo) {
+		this.writerNo = writerNo;
+	}
+
+    
 }

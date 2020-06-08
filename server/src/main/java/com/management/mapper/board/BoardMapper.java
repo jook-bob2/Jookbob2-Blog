@@ -10,5 +10,5 @@ import com.management.domain.model.Board;
 
 @Mapper
 public interface BoardMapper {
-	public List<Board> boardList();
+	public List<Map<String, Object>> boardList(Map<String, Object> map);
 }

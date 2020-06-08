@@ -23,10 +23,27 @@
 		<result column="update_yn" property="updateYn"/>
 		<result column="viewcnt" property="viewcnt"/>
 		<result column="writer" property="writer"/>
+		<result column="writer_no" property="writerNo"/>
 	</resultMap>
 	
-	<select id="boardList" resultMap="selectList">
-		SELECT * FROM board
+	<select id="boardList" parameterType="hashmap" resultType="hashmap">
+		SELECT 
+			b.bno,
+			b.content,
+			b.create_dt as createDt,
+			b.update_dt as updateDt,
+			b.title,
+			b.update_yn as updateYn,
+			b.viewcnt,
+			b.writer,
+			b.write_yn as writeYn,
+			m.profile_img as profileImg
+		FROM 
+		board b INNER JOIN member_info m
+		ON b.writer_no = m.member_no
+		<if test="bno != null">
+			AND bno=#{bno}
+		</if>
 	</select>
 
 	
