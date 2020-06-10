@@ -37,12 +37,16 @@
 			b.viewcnt,
 			b.writer,
 			b.write_yn as writeYn,
-			m.profile_img as profileImg
+			b.brd_code as bKinds,
+			m.profile_img as profileImg,
+			k.show_text as showText
 		FROM 
 		board b INNER JOIN member_info m
 		ON b.writer_no = m.member_no
+		INNER JOIN board_kinds k
+		ON b.brd_code = k.brd_code
 		<if test="bno != null">
-			AND bno=#{bno}
+			AND bno = #{bno}
 		</if>
 	</select>
 

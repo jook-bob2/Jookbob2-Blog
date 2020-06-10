@@ -9,11 +9,14 @@ import { makeStyles } from '@material-ui/core/styles'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { SearchInput } from '../../components';
 import BoardTable from './components/BoardTable';
+import Button from '@material-ui/core/Button';
+import {post} from 'axios';
+import { Link as RouterLink } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    margin: '50px',
-    minWidth: 1080
+    margin: '50px'
+    //minWidth: 1080
   },
   row: {
     height: '42px',
@@ -62,10 +65,11 @@ const useStyles = makeStyles(theme => ({
     fontSize: '1.0rem'
   },
   menu: {
-    marginTop: 15,
-    marginBottom: 15,
-    display: 'flex',
-    justifyContent: 'center'
+    // marginTop: 15,
+    // marginBottom: 15,
+    // display: 'flex',
+    // justifyContent: 'center'
+    paddingLeft: 40
   }
 }));
 
@@ -78,6 +82,11 @@ const BoardList = props => {
   });
 
   const [progress, setProgress] = useState(0);
+
+  const [auth, setAuthenticated] = useState({
+    authenticated : false,
+    memberNo: ''
+  });
 
   useEffect(() => {
     callApi()
@@ -92,6 +101,15 @@ const BoardList = props => {
     setBoardState(boardState => ({
       ...boardState
     }));
+
+    getSession()
+      .then(res => {
+        console.log(res.data);
+        setAuthenticated({
+            authenticated: res.data === -1 ? false : true,
+            memberNo: res.data
+        });
+      });
     
     const timer = setInterval(progressCount, 20);
     
@@ -129,9 +147,13 @@ const BoardList = props => {
   }
   
   const cellList = [
-    //{title:"번호"}, {title:"프로필 이미지"}, {title:"이름"}, {title:"생년월일"}, {title:"성별"}, {title:"직업"}
     {title:"번호"}, {title:"제목"}, {title:"이름"}, {title:"작성일"}, {title:"수정일"}, {title:"조회수"}
   ];
+
+
+  const getSession = () => {
+    return post('member/session', null);
+  }
 
   return (
     <div className={classes.root}>
@@ -143,8 +165,20 @@ const BoardList = props => {
               value={boardState.searchKeyword}
               onChange={handleValueChange}
           />
+          {auth.authenticated ? 
+            <div className={classes.menu}>
+              <RouterLink
+                to={ { pathname: "/boardInsert", query: {memberNo: auth.memberNo} }}
+              >
+                <Button variant="contained" color="primary">글 쓰기</Button>
+              </RouterLink>
+              
+            </div>
+            :
+            null
+          }
+          
       </div>
-
       <Paper className={classes.paper}>
         <Table className={classes.table}>
             <TableHead>

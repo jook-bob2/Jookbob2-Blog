@@ -5,3 +5,4 @@ export { default as SignIn } from './SignIn';
 export { default as SignUp } from './SignUp';
 export { default as Setting } from './Setting';
 export { default as BoardView } from './BoardList/components/BoardView';
+export { default as BoardInsert } from './BoardList/components/BoardInsert';

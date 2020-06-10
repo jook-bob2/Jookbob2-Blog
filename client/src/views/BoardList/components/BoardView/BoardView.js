@@ -3,18 +3,14 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import {
     Card,
-    CardActions,
     CardContent,
     Avatar,
     Checkbox,
     Table,
     TableBody,
     TableCell,
-    TableHead,
     TableRow,
-    Typography,
-    TablePagination,
-    Divider
+    TablePagination
   } from '@material-ui/core';
 import {post} from 'axios';
 import moment from 'moment';
@@ -22,7 +18,7 @@ import moment from 'moment';
 const styles = makeStyles(theme => ({
     root:{
         margin: '50px',
-        marginRight: '40%'
+        marginRight: '5%'
     },
     content: {
         padding: 0
@@ -31,7 +27,7 @@ const styles = makeStyles(theme => ({
         minWidth: 1050
     },
     avatarTd: {
-        padding: '5px',
+        padding: '5px 0px 5px 5px',
         borderBottom: '1px solid #eeeeee'
     },
     content2: {
@@ -45,32 +41,50 @@ const styles = makeStyles(theme => ({
     bno: {
         paddingTop: "16px",
         paddingLeft: "16px",
-        fontSize: "14px",
+        fontSize: "15px",
         fontWeight: 400,
         lineHeight: "21px",
         letterSpacing: "-0.05px",
-        verticalAlign: "inherit"
+        verticalAlign: "inherit",
+        color: "#1886C4"
     }
 }));
 
 const BoardView = props => {
     const classes = styles();
-    const { className, location, ...rest } = props;
+    const { className, location, history, ...rest } = props;
+    //console.log(rest);
+    //console.log(JSON.stringify(props));
     
     const [state, setState] = useState({
-        bno: location.query.bno || '',
+        bno: location.query !== undefined ? location.query.bno : '',
         title: '',
         writer: '',
         createDt: '',
         updateDt: '',
         content: '',
-        avatar: ''
+        avatar: '',
+        showText: ''
     });
 
+    //let bno = '';
+    
     useEffect(() => {
+        if (location.query !== undefined && state.bno !== '') {
+            
+        } else {
+            getSession()
+                .then(res => {
+                    console.log(res);
+                    setState({
+                        ...state,
+                        bno: res.data
+                    })
+                });
+        }
+
         callView()
             .then(res => {
-                console.log(res);
                 const list = res.data.list[0];
                 setState({
                     bno: list.bno,
@@ -79,26 +93,29 @@ const BoardView = props => {
                     createDt: list.createDt,
                     updateDt: list.updateDt,
                     content: list.content,
+                    showText: list.showText,
                     avatar: list.profileImg
                 })
             })
             .catch(err => console.log(err));
-    }, []);
-
-    const bno = location.query.bno;
-
+    }, [state.bno]);
+    
     const callView = async() => {
-        const url = '/board/boardDetail/' + bno;
+        const url = '/board/boardDetail/' + state.bno;
         const formData = new FormData();
         //formData.append('bno', state.bno);
         return post(url);
-    }
+    };
     //console.log(location.query.bno);
     
+    const getSession = () => {
+        const url = "/board/getSession";
+        return post(url);
+    };
 
     return (
         <Card
-            {...rest}
+            //{...rest}
             className={clsx(classes.root, className)}
         >
             
@@ -114,18 +131,21 @@ const BoardView = props => {
                         <TableBody>
                             <TableRow>
                                 <td colSpan="1" className={classes.avatarTd}>
-                                <Avatar
-                                    alt="Person"
-                                    className={classes.avatar}
-                                    src={state.avatar}
-                                    //component={RouterLink}
-                                    //src=""
-                                    //to="/setting"
-                                /></td>
-                                <td colSpan="1"><span>{state.writer}</span><br/><span>{moment(state.createDt).format('YYYY.MM.DD hh:mm:ss')}</span></td>
+                                    <Avatar
+                                        alt="Person"
+                                        className={classes.avatar}
+                                        src={state.avatar}
+                                        //component={RouterLink}
+                                        //src=""
+                                        //to="/setting"
+                                    />
+                                </td>
+                                <td colSpan="1"><span>{state.writer}</span><br/>
+                                    {state.createDt !== '' ?  <span>{moment(state.createDt).format('YYYY.MM.DD hh:mm:ss')}</span> : '' }
+                                </td>
                             </TableRow>
                             <TableRow>
-                                <td className={classes.bno} colSpan="3">#{state.bno}</td>
+                                <td className={classes.bno} colSpan="3">#{state.bno} {state.showText}</td>
                             </TableRow>
                             <TableRow>
                                 <TableCell colSpan="3"><h2>{state.title}</h2></TableCell>

@@ -68,8 +68,8 @@ public class Board {
     private String writeYn;
     
     // 게시물 종류
-    @Column(length = 20)
-    private String bKinds;
+    @Column(length = 100,nullable = false)
+    private String brdCode; 
     
     // 작성자 번호
     @Column(nullable = false)
@@ -81,9 +81,8 @@ public class Board {
 	}
     
     @Builder
-	public Board(Long bno, String title, String writer, String content, LocalDateTime createDt,
-			LocalDateTime updateDt, Long viewcnt, String updateYn, String writeYn, String bKinds, Long writerNo) {
-		super();
+    public Board(Long bno, String title, String writer, String content, LocalDateTime createDt, LocalDateTime updateDt,
+			Long viewcnt, String updateYn, String writeYn, String brdCode, Long writerNo) {
 		this.bno = bno;
 		this.title = title;
 		this.writer = writer;
@@ -93,7 +92,7 @@ public class Board {
 		this.viewcnt = viewcnt;
 		this.updateYn = updateYn;
 		this.writeYn = writeYn;
-		this.bKinds = bKinds;
+		this.brdCode = brdCode;
 		this.writerNo = writerNo;
 	}
 
@@ -169,12 +168,12 @@ public class Board {
 		this.writeYn = writeYn;
 	}
 
-	public String getbKinds() {
-		return bKinds;
+	public String getBrdCode() {
+		return brdCode;
 	}
 
-	public void setbKinds(String bKinds) {
-		this.bKinds = bKinds;
+	public void setBrdCode(String brdCode) {
+		this.brdCode = brdCode;
 	}
 
 	public Long getWriterNo() {
@@ -184,6 +183,4 @@ public class Board {
 	public void setWriterNo(Long writerNo) {
 		this.writerNo = writerNo;
 	}
-
-    
 }

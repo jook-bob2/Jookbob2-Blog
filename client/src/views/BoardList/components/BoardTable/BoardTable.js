@@ -4,15 +4,8 @@ import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import { makeStyles } from '@material-ui/core/styles'
 import moment from 'moment';
-import BoardDetail from '../BoardView';
-import {
-    Grid,
-    Button,
-    IconButton,
-    TextField,
-    Link,
-    Typography
-  } from '@material-ui/core';
+
+import {post} from 'axios';
 
 const useStyles = makeStyles(theme => ({
     title: {
@@ -25,10 +18,13 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-
-
 const BoardTable = props => {
     const classes = useStyles();
+
+    const setSession = () => {
+        const url = "/board/setSession/" + props.bno;
+        return post(url);
+    }
 
     return (
         <TableRow>
@@ -37,6 +33,7 @@ const BoardTable = props => {
                 {/* RouterLink를 통해 bno를 detail에 넘겨준다. */}
                 <RouterLink
                     to={{ pathname: "/boardView", query: {bno: props.bno} }}
+                    onClick={setSession}
                 >
                     {props.title}
                 </RouterLink>

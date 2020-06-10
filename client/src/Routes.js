@@ -10,7 +10,8 @@ import {
     SignIn as SignInView,
     SignUp as SignUpView,
     Setting as SettingView,
-    BoardView as BoardView
+    BoardView as BoardView,
+    BoardInsert as BoardInsertView
 } from './views';
 
 import {post} from 'axios';
@@ -60,6 +61,13 @@ const Routes = () => {
                 exact
                 layout={MainLayout}
                 path="/boardView"
+            />
+
+            <RouteWithLayout
+                component={BoardInsertView}
+                exact
+                layout={MainLayout}
+                path="/boardInsert"
             />
             {auth.authenticated ? 
                 <Redirect exact from="/" to="/not-found" />

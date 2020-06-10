@@ -84,13 +84,13 @@ const AccountDetails = props => {
   const handleSubmit = event => {
     event.preventDefault();
     
-    handleProfile(event)
+    saveProfile(event)
      .then(res => {
        alert("저장완료!");
      })
   }
 
-  const handleProfile = (event) => {
+  const saveProfile = (event) => {
     const url = "member/saveProfile";
     const formData = new FormData();
     formData.append("name",values.name);
