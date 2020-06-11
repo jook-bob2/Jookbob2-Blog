@@ -73,7 +73,6 @@ const styles = makeStyles(theme => ({
 const BoardInsert = props => {
     const classes = styles();
     const { className, location, history, ...rest } = props;
-    console.log(JSON.stringify(props));
     
     const [state, setState] = useState({
         memberNo: location.query !== undefined ? location.query.memberNo : '',
@@ -196,7 +195,6 @@ const BoardInsert = props => {
                         </div>
                     </div>
                     <div className={classes.buttonArea}>
-                        
                         <Button 
                             color="primary"
                             variant="contained"
