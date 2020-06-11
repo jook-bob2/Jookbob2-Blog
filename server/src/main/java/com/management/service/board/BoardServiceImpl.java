@@ -14,6 +14,7 @@ import com.management.domain.model.Board;
 import com.management.domain.model.Member;
 import com.management.domain.repository.board.BoardRepository;
 import com.management.domain.repository.user.MemberRepository;
+import com.management.mapper.board.BoardMapper;
 import com.management.mapper.user.MemberMapper;
 
 import lombok.AllArgsConstructor;
@@ -24,9 +25,17 @@ public class BoardServiceImpl implements BoardService {
 	
 	@Autowired
 	private BoardRepository boardRepository;
+	
+	@Autowired
+	private BoardMapper boardMapper;
 
 	@Override
 	public void saveBoard(Board entity) {
 		boardRepository.save(entity);
+	}
+
+	@Override
+	public void deleteBoard(Long bno) {
+		boardMapper.deleteBoard(bno);
 	}
 }

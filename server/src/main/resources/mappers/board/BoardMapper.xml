@@ -36,6 +36,7 @@
 			b.update_yn as updateYn,
 			b.viewcnt,
 			b.writer,
+			b.writer_no as writerNo,
 			b.write_yn as writeYn,
 			b.brd_code as bKinds,
 			m.profile_img as profileImg,
@@ -45,13 +46,17 @@
 		ON b.writer_no = m.member_no
 		INNER JOIN board_kinds k
 		ON b.brd_code = k.brd_code
+		AND use_yn = 'Y'
+		AND del_yn = 'N'
 		<if test="bno != null">
 			AND bno = #{bno}
 		</if>
 	</select>
-
 	
-	
-	
-	
+	<update id="deleteBoard" parameterType="Long">
+		UPDATE board SET
+			del_yn = 'Y',
+			use_yn = 'N'
+		WHERE bno = #{bno}
+	</update>
 </mapper>

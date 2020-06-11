@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import {
+    Button,
     Card,
     CardContent,
     Avatar,
@@ -14,11 +15,12 @@ import {
   } from '@material-ui/core';
 import {post} from 'axios';
 import moment from 'moment';
+import BoardDelete from '../BoardDelete';
 
 const styles = makeStyles(theme => ({
     root:{
         margin: '50px',
-        marginRight: '5%'
+        marginRight: '10%'
     },
     content: {
         padding: 0
@@ -53,21 +55,19 @@ const styles = makeStyles(theme => ({
 const BoardView = props => {
     const classes = styles();
     const { className, location, history, ...rest } = props;
-    //console.log(rest);
-    //console.log(JSON.stringify(props));
     
     const [state, setState] = useState({
         bno: location.query !== undefined ? location.query.bno : '',
+        memberNo: location.query !== undefined ? location.query.memberNo : '',
         title: '',
         writer: '',
+        writerNo: '',
         createDt: '',
         updateDt: '',
         content: '',
         avatar: '',
         showText: ''
     });
-
-    //let bno = '';
     
     useEffect(() => {
         if (location.query !== undefined && state.bno !== '') {
@@ -75,7 +75,6 @@ const BoardView = props => {
         } else {
             getSession()
                 .then(res => {
-                    console.log(res);
                     setState({
                         ...state,
                         bno: res.data
@@ -87,9 +86,11 @@ const BoardView = props => {
             .then(res => {
                 const list = res.data.list[0];
                 setState({
+                    ...state,
                     bno: list.bno,
                     title: list.title,
                     writer: list.writer,
+                    writerNo: list.writerNo,
                     createDt: list.createDt,
                     updateDt: list.updateDt,
                     content: list.content,
@@ -156,7 +157,7 @@ const BoardView = props => {
                         </TableBody> 
                         
                     </Table>
-                    
+                    <BoardDelete bno={state.bno} writerNo={state.writerNo} memberNo={state.memberNo}></BoardDelete>
                 </div>
             </CardContent>
         </Card>

@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
   },
   paper: {
     marginLeft: 18,
-    marginRight: 18
+    marginRight: '10%'
   },
 
   progress: {
@@ -106,6 +106,7 @@ const BoardList = props => {
       .then(res => {
         console.log(res.data);
         setAuthenticated({
+            ...auth,
             authenticated: res.data === -1 ? false : true,
             memberNo: res.data
         });
@@ -142,7 +143,7 @@ const BoardList = props => {
     });
     
     return data.map((c) => {
-      return <BoardTable boardState={boardState} key={c.bno} bno={c.bno} title={c.title} writer={c.writer} createDt={c.createDt} updateDt={c.updateDt} viewcnt={c.viewcnt}/>
+      return <BoardTable boardState={boardState} key={c.bno} bno={c.bno} title={c.title} writer={c.writer} createDt={c.createDt} updateDt={c.updateDt} viewcnt={c.viewcnt} memberNo={auth.memberNo}/>
     });
   }
   
@@ -152,7 +153,7 @@ const BoardList = props => {
 
 
   const getSession = () => {
-    return post('member/session', null);
+    return post('member/session');
   }
 
   return (

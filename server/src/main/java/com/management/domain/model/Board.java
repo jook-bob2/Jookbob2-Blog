@@ -59,12 +59,10 @@ public class Board {
     
     // 수정여부
     @Column(length = 2)
-    @ColumnDefault("'N'")
     private String updateYn;
     
     // 작성여부
     @Column(length = 2)
-    @ColumnDefault("'N'")
     private String writeYn;
     
     // 게시물 종류
@@ -75,14 +73,23 @@ public class Board {
     @Column(nullable = false)
     private Long writerNo;
     
+    // 사용여부
+    @Column(length = 2)
+    private String useYn;
+    
+    // 삭제여부
+    @Column(length = 2)
+    private String delYn;
+    
     public Board() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-    
+
     @Builder
-    public Board(Long bno, String title, String writer, String content, LocalDateTime createDt, LocalDateTime updateDt,
-			Long viewcnt, String updateYn, String writeYn, String brdCode, Long writerNo) {
+	public Board(Long bno, String title, String writer, String content, LocalDateTime createDt, LocalDateTime updateDt,
+			Long viewcnt, String updateYn, String writeYn, String brdCode, Long writerNo, String useYn, String delYn) {
+		super();
 		this.bno = bno;
 		this.title = title;
 		this.writer = writer;
@@ -94,6 +101,8 @@ public class Board {
 		this.writeYn = writeYn;
 		this.brdCode = brdCode;
 		this.writerNo = writerNo;
+		this.useYn = useYn;
+		this.delYn = delYn;
 	}
 
 	public Long getBno() {
@@ -183,4 +192,21 @@ public class Board {
 	public void setWriterNo(Long writerNo) {
 		this.writerNo = writerNo;
 	}
+
+	public String getUseYn() {
+		return useYn;
+	}
+
+	public void setUseYn(String useYn) {
+		this.useYn = useYn;
+	}
+
+	public String getDelYn() {
+		return delYn;
+	}
+
+	public void setDelYn(String delYn) {
+		this.delYn = delYn;
+	}
+    
 }
