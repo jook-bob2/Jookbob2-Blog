@@ -12,4 +12,5 @@ import com.management.domain.model.Board;
 public interface BoardMapper {
 	public List<Map<String, Object>> boardList(Map<String, Object> map);
 	public void deleteBoard(Long bno);
+	public void updateBoard(Board entity);
 }

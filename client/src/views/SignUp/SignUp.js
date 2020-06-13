@@ -251,7 +251,7 @@ const useStyles = makeStyles(theme => ({
                         <div className={classes.quoteInner}>
                             <Typography
                                 className={classes.quoteText}
-                                variant="h1"
+                                variant="h6"
                             >
                                 Hella narwhal Cosby sweater McSweeney's, salvia kitsch before
                                 they sold out High Life.
@@ -292,7 +292,7 @@ const useStyles = makeStyles(theme => ({
                             >
                                 <Typography
                                     className={classes.title}
-                                    variant="h2"
+                                    variant="h3"
                                 >
                                     Create new account
                                 </Typography>

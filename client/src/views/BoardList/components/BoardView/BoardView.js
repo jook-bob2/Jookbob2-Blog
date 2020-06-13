@@ -77,37 +77,39 @@ const BoardView = props => {
                 .then(res => {
                     setState({
                         ...state,
-                        bno: res.data
+                        bno: res.data.bno,
+                        memberNo: res.data.memberNo
                     })
                 });
         }
-
-        callView()
-            .then(res => {
-                const list = res.data.list[0];
-                setState({
-                    ...state,
-                    bno: list.bno,
-                    title: list.title,
-                    writer: list.writer,
-                    writerNo: list.writerNo,
-                    createDt: list.createDt,
-                    updateDt: list.updateDt,
-                    content: list.content,
-                    showText: list.showText,
-                    avatar: list.profileImg
+        if (state.bno !== '') {
+            callView()
+                .then(res => {
+                    const list = res.data.list[0];
+                    setState({
+                        ...state,
+                        bno: list.bno,
+                        title: list.title,
+                        writer: list.writer,
+                        writerNo: list.writerNo,
+                        createDt: list.createDt,
+                        updateDt: list.updateDt,
+                        content: list.content,
+                        showText: list.showText,
+                        avatar: list.profileImg,
+                        bKinds: list.bKinds
+                    })
                 })
-            })
-            .catch(err => console.log(err));
+                .catch(err => console.log(err));
+        }
+        
     }, [state.bno]);
-    
+
     const callView = async() => {
         const url = '/board/boardDetail/' + state.bno;
         const formData = new FormData();
-        //formData.append('bno', state.bno);
         return post(url);
     };
-    //console.log(location.query.bno);
     
     const getSession = () => {
         const url = "/board/getSession";
@@ -126,7 +128,7 @@ const BoardView = props => {
                         <colgroup>
                             <col width="5%"/>
                             <col width="50%"/>
-                            <col width="10%"/>
+                            <col width="5%"/>
                             <col width="35%"/>
                         </colgroup>
                         <TableBody>
@@ -157,7 +159,7 @@ const BoardView = props => {
                         </TableBody> 
                         
                     </Table>
-                    <BoardDelete bno={state.bno} writerNo={state.writerNo} memberNo={state.memberNo}></BoardDelete>
+                    <BoardDelete state={state} bno={state.bno} writerNo={state.writerNo} memberNo={state.memberNo}></BoardDelete>
                 </div>
             </CardContent>
         </Card>
