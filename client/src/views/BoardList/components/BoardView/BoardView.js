@@ -2,11 +2,9 @@ import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-    Button,
     Card,
     CardContent,
     Avatar,
-    Checkbox,
     Table,
     TableBody,
     TableCell,
@@ -54,7 +52,7 @@ const styles = makeStyles(theme => ({
 
 const BoardView = props => {
     const classes = styles();
-    const { className, location, history, ...rest } = props;
+    const { className, location } = props;
     
     const [state, setState] = useState({
         bno: location.query !== undefined ? location.query.bno : '',
@@ -107,7 +105,6 @@ const BoardView = props => {
 
     const callView = async() => {
         const url = '/board/boardDetail/' + state.bno;
-        const formData = new FormData();
         return post(url);
     };
     
@@ -144,11 +141,11 @@ const BoardView = props => {
                                     />
                                 </td>
                                 <td colSpan="1"><span>{state.writer}</span><br/>
-                                    {state.createDt !== '' ?  <span>{moment(state.createDt).format('YYYY.MM.DD hh:mm:ss')}</span> : '' }
+                                    {state.createDt !== '' ?  <span><h6>{moment(state.createDt).format('YYYY.MM.DD hh:mm:ss')}</h6></span> : '' }
                                 </td>
                             </TableRow>
                             <TableRow>
-                                <td className={classes.bno} colSpan="3">#{state.bno} {state.showText}</td>
+                                <td className={classes.bno} colSpan="3"><h5>#{state.bno} {state.showText}</h5></td>
                             </TableRow>
                             <TableRow>
                                 <TableCell colSpan="3"><h2>{state.title}</h2></TableCell>

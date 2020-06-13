@@ -10,7 +10,7 @@ import {
     SignIn as SignInView,
     SignUp as SignUpView,
     Setting as SettingView,
-    BoardView as BoardView,
+    BoardView,
     BoardInsert as BoardInsertView,
     BoardUpdate as BoardUpdateView
 } from './views';

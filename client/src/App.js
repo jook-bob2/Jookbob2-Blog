@@ -7,7 +7,7 @@ import Routes from './Routes';
 import './assets/scss/index.scss';
 import validate from 'validate.js';
 import validators from './common/validator';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { createMuiTheme } from '@material-ui/core/styles';
 
 const browserHistory = createBrowserHistory();
 

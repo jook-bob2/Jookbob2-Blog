@@ -53,6 +53,10 @@
 		</if>
 	</select>
 	
+	<select id="getViewcnt" parameterType="Long" resultType="Long">
+		SELECT viewcnt FROM board WHERE bno = #{bno}
+	</select>
+	
 	<update id="deleteBoard" parameterType="Long">
 		UPDATE board SET
 			del_yn = 'Y',
@@ -66,14 +70,33 @@
 	
 	<update id="updateBoard" parameterType="com.management.domain.model.Board">
 		UPDATE board SET
-			title = #{title},
-			content = #{content},
-			brd_code = #{brdCode},
-			update_dt = SYSDATE(),
-			update_yn = #{updateYn}
+			<if test="title != null and !title.equals('')">
+				title = #{title},
+			</if>
+			<if test="content != null and !content.equals('')">
+				content = #{content},
+			</if>
+			<if test="brdCode != null and !brdCode.equals('')">
+				brd_code = #{brdCode},
+			</if>
+			<if test="updateYn != null and !updateYn.equals('')">
+				update_yn = #{updateYn},
+			</if>
+			<if test="title != null and !title.equals('')">
+				update_dt = SYSDATE()
+			</if>
+			<if test="viewcnt != null">
+				viewcnt = #{viewcnt} + 1
+			</if>
+			<if test="writer != null and !writer.equals('')">
+				writer = #{writer}
+			</if>
 		WHERE 1=1
 		<if test="bno != null">
 			AND bno = #{bno}
+		</if>
+		<if test="writerNo != null">
+			AND writer_no = #{writerNo}
 		</if>
 	</update>
 </mapper>

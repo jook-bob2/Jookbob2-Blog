@@ -66,7 +66,7 @@ const styles = makeStyles(theme => ({
 
 const BoardInsert = props => {
     const classes = styles();
-    const { className, location, history, ...rest } = props;
+    const { className, location } = props;
     
     const [state, setState] = useState({
         memberNo: location.query !== undefined ? location.query.memberNo : '',
@@ -130,14 +130,16 @@ const BoardInsert = props => {
     
     document.onkeydown = function(e){
         /* F5, Ctrl+r, Ctrl+F5 */
-        if((e.keyCode === 116) || (e.ctrlKey === true) && (e.keyCode === 82)){
-            e.cancelBubble = true; 
-            e.returnValue = false; 
-            alert("새로고침하면 데이터가 저장되지 않습니다.");
-            setTimeout(function(){
-                window.location.reload();
-            }, 1000);
-            return false;
+        if((e.keyCode === 116) || (e.ctrlKey === true)){
+            if (e.keyCode === 82) {
+                e.cancelBubble = true; 
+                e.returnValue = false; 
+                alert("새로고침하면 데이터가 저장되지 않습니다.");
+                setTimeout(function(){
+                    window.location.reload();
+                }, 1000);
+                return false;
+            }
         }
     }
     
@@ -154,16 +156,16 @@ const BoardInsert = props => {
                     <TableBody>
                         <TableRow>
                             <td className={classes.avatarTd}>
-                            <Avatar
-                                alt="Person"
-                                className={classes.avatar}
-                                src={member.avatar}
-                                //component={RouterLink}
-                                //src=""
-                                //to="/setting"
-                            />
-                        </td>
-                        <td>{member.userName}</td>
+                                <Avatar
+                                    alt="Person"
+                                    className={classes.avatar}
+                                    src={member.avatar}
+                                    //component={RouterLink}
+                                    //src=""
+                                    //to="/setting"
+                                />
+                            </td>
+                            <td><h4>{member.userName}</h4></td>
                         </TableRow>
                     </TableBody>
                 

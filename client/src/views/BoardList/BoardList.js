@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Paper from '@material-ui/core/Paper'
 import Table from '@material-ui/core/Table'
-import TableHead from '@material-ui/core/TableHead'
 import TableBody from '@material-ui/core/TableBody'
 import TableRow from '@material-ui/core/TableRow'
 import TableCell from '@material-ui/core/TableCell'
@@ -16,7 +15,6 @@ import { Link as RouterLink } from 'react-router-dom';
 const useStyles = makeStyles(theme => ({
   root: {
     margin: '50px'
-    //minWidth: 1080
   },
   row: {
     height: '42px',
@@ -26,7 +24,8 @@ const useStyles = makeStyles(theme => ({
   },
   paper: {
     marginLeft: 18,
-    marginRight: '10%'
+    marginRight: '10%',
+    padding: 10
   },
 
   progress: {
@@ -43,7 +42,7 @@ const useStyles = makeStyles(theme => ({
     },
   },
   searchInput: {
-    marginRight: theme.spacing(1)
+    marginRight: theme.spacing(4)
   },
   inputRoot: {
     color: 'inherit',
@@ -69,7 +68,8 @@ const useStyles = makeStyles(theme => ({
     // marginBottom: 15,
     // display: 'flex',
     // justifyContent: 'center'
-    paddingLeft: 40
+    paddingLeft: 40,
+    paddingRight: '6%'
   }
 }));
 
@@ -138,11 +138,11 @@ const BoardList = props => {
 
   const filteredComponents = (data) => {
     data = data.filter((c) => {
-      return c.title.indexOf(boardState.searchKeyword) > -1;
+      return c.title.indexOf(boardState.searchKeyword) > -1 || c.writer.indexOf(boardState.searchKeyword) > -1 || c.createDt.indexOf(boardState.searchKeyword) > -1;
     });
     
     return data.map((c) => {
-      return <BoardTable boardState={boardState} key={c.bno} bno={c.bno} title={c.title} writer={c.writer} createDt={c.createDt} updateDt={c.updateDt} viewcnt={c.viewcnt} memberNo={auth.memberNo}/>
+      return <BoardTable boardState={boardState} key={c.bno} bno={c.bno} title={c.title} writer={c.writer} createDt={c.createDt} updateDt={c.updateDt} viewcnt={c.viewcnt} memberNo={auth.memberNo} profileImg={c.profileImg}/>
     });
   }
   
@@ -170,7 +170,7 @@ const BoardList = props => {
               <RouterLink
                 to={ { pathname: "/boardInsert", query: {memberNo: auth.memberNo} }}
               >
-                <Button variant="contained" color="primary">글 쓰기</Button>
+                <Button variant="contained" color="primary"><h6>글쓰기</h6></Button>
               </RouterLink>
               
             </div>
@@ -180,28 +180,16 @@ const BoardList = props => {
           
       </div>
       <Paper className={classes.paper}>
-        <Table className={classes.table}>
-            <TableHead>
-              <TableRow>
-                {cellList.map((c) => {
-                  return <TableCell className={classes.tableHead} key={c.title.toString()}>{c.title}</TableCell>
-                })}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              
-              {boardState.values ? filteredComponents(boardState.values) :
-              
-              /* boardState.values.map(c => {
-                return (<Customer stateRefresh={boardStateRefresh} key={c.id} id={c.id} image={c.image} name={c.name} birthday={c.birthday} gender={c.gender} job={c.job}/>)
-              }) :  */
-                <TableRow>
-                  <TableCell colSpan="6" align="center">
-                    <CircularProgress className={classes.progress} variant="determinate" value={progress}></CircularProgress>
-                  </TableCell>
-                </TableRow>
+        <Table>
+              {boardState.values ?  filteredComponents(boardState.values) :
+                <TableBody>
+                  <TableRow>
+                    <TableCell colSpan="6" align="center">
+                      <CircularProgress className={classes.progress} variant="determinate" value={progress}></CircularProgress>
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
               }
-            </TableBody>
         </Table>
       </Paper>
     </div>

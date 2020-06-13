@@ -47,7 +47,7 @@ const AccountProfile = props => {
   const classes = useStyles();
   
   const [state, setState] = useState({
-    memberNo: props.memberNo,
+    memberNo: props.memberNo !== undefined ? props.memberNo : '',
     email: '',
     userId: '',
     file: null,
@@ -62,6 +62,7 @@ const AccountProfile = props => {
       .then(res => {
         const list = res.data.list;
         setState({
+          ...state,
           memberNo:list.memberNo,
           userId:list.userId,
           userName:list.name,
@@ -135,7 +136,7 @@ const AccountProfile = props => {
           <div>
             <Typography
               gutterBottom
-              variant="h2"
+              variant="h4"
             >
               {state.userName}({state.userId})
             </Typography>
@@ -144,14 +145,14 @@ const AccountProfile = props => {
               color="textSecondary"
               variant="body1"
             >
-              가입일 : {moment(state.createDt).format('YYYY.MM.DD')}
+              <h5>가입일 : {moment(state.createDt).format('YYYY-MM-DD hh:mm:ss')}</h5>
             </Typography>
             <Typography
               className={classes.dateText}
               color="textSecondary"
               variant="body1"
             >
-              수정일 : {moment(state.updateDt).format('YYYY.MM.DD')}
+              <h5>수정일 : {moment(state.updateDt).format('YYYY-MM-DD hh:mm:ss')}</h5>
             </Typography>
           </div>
           <Avatar

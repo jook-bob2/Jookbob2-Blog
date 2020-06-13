@@ -43,16 +43,6 @@ public class BoardController {
 		boardKindsRepository.save(boardKinds);
 	}
 
-	@GetMapping("/save")
-	public void create(Board board) {
-		boardRepository.save(board);
-	}
-
-	@GetMapping("/selectOne")
-	public Optional readOne(Long bno) {
-		return boardRepository.findById(bno);
-	}
-
 	@GetMapping("/boardList")
 	public Map<String, Object> readAll() {
 		Map<String, Object> map = new HashMap<>();
@@ -65,9 +55,17 @@ public class BoardController {
 	@PostMapping(value = "/boardDetail/{bno}")
 	public Map<String, Object> boardDetail(@PathVariable("bno") Long bno ) {
 		Map<String, Object> map = new HashMap<>();
-		map.put("bno", bno);
-		List<Map<String, Object>> boardList = boardMapper.boardList(map);
-		map.put("list", boardList);
+		if (bno != null) {
+			Board entity = new Board();
+			Long viewcnt = boardService.getViewcnt(bno);
+			entity.setBno(bno);
+			entity.setViewcnt(viewcnt);
+			boardService.updateBoard(entity);
+			map.put("bno", bno);
+			List<Map<String, Object>> boardList = boardMapper.boardList(map);
+			
+			map.put("list", boardList);
+		}
 		return map;
 	}
 	
@@ -120,10 +118,5 @@ public class BoardController {
 	@DeleteMapping(value = "/deleteBoard/{bno}")
 	public void deleteBoard(@PathVariable("bno") Long bno) {
 		boardService.deleteBoard(bno);
-	}
-
-	@GetMapping("/update")
-	public void update(Board board, Long bno) {
-		boardRepository.update(board, bno);
 	}
 }
