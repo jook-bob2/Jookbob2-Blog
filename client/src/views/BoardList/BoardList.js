@@ -104,7 +104,6 @@ const BoardList = props => {
 
     getSession()
       .then(res => {
-        console.log(res.data);
         setAuthenticated({
             ...auth,
             authenticated: res.data === -1 ? false : true,

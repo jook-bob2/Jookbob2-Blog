@@ -64,15 +64,16 @@ const styles = makeStyles(theme => ({
     }
 }));
 
-const BoardInsert = props => {
+const BoardUpdate = props => {
     const classes = styles();
-    const { className, location, history, ...rest } = props;
+    const { className, location, history } = props;
     
     const [state, setState] = useState({
         memberNo: location.query !== undefined ? location.query.memberNo : '',
-        title: '',
-        content: '',
-        brdCode: ''
+        list: location.query !== undefined ? location.query.state : {},
+        title: location.query !== undefined ? location.query.state.title : '',
+        content: location.query !== undefined ? location.query.state.content : '',
+        brdCode: location.query !== undefined ? location.query.state.bKinds : '',
     });
 
     const [member, setMember] = useState({
@@ -97,7 +98,6 @@ const BoardInsert = props => {
     }
 
     const handleChange = event => {
-        console.log([event.target.name]);
         setState({
             ...state,
             [event.target.name]: event.target.value
@@ -111,17 +111,16 @@ const BoardInsert = props => {
             return false;
         }
         event.preventDefault();
-        saveBoard(event)
+        updateBoard(event)
             .then(res => {
-                alert("게시물이 등록 되었습니다.\n게시판 목록으로 이동합니다.");
-                window.location.href = "/boardList";
+                alert("게시물이 수정 되었습니다.\n해당 게시물로 이동합니다.");
+                history.goBack();
             });
     };
 
-    const saveBoard = (event) => {
-        const url = "/board/saveBoard";
+    const updateBoard = (event) => {
+        const url = "/board/updateBoard";
         const formData = new FormData();
-        formData.append("writerNo", state.memberNo);
         formData.append("title", state.title);
         formData.append("content", state.content);
         formData.append("brdCode", state.brdCode);
@@ -158,9 +157,6 @@ const BoardInsert = props => {
                                 alt="Person"
                                 className={classes.avatar}
                                 src={member.avatar}
-                                //component={RouterLink}
-                                //src=""
-                                //to="/setting"
                             />
                         </td>
                         <td>{member.userName}</td>
@@ -174,7 +170,7 @@ const BoardInsert = props => {
                 >  
                     <div className={classes.content}>
                         <div className={classes.select}>
-                            <select className={classes.selectWt} onChange={handleChange} name="brdCode">
+                            <select className={classes.selectWt} onChange={handleChange} name="brdCode" value={state.brdCode}>
                                 <option value>게시판 유형을 선택하세요.</option>
                                 <option value="00">Q&A</option>
                                 <option value="01">취업관련</option>
@@ -182,10 +178,10 @@ const BoardInsert = props => {
                             </select>
                         </div>
                         <div className={classes.input}>
-                            <input className={classes.inputWt} placeholder="제목을 입력해 주세요." onChange={handleChange} name="title"></input>
+                            <input className={classes.inputWt} placeholder="제목을 입력해 주세요." onChange={handleChange} name="title" value={state.title}></input>
                         </div>
                         <div className={classes.textArea}>
-                            <textarea className={classes.contentWt} onChange={handleChange} name="content"></textarea>
+                            <textarea className={classes.contentWt} onChange={handleChange} name="content" value={state.content}></textarea>
                         </div>
                     </div>
                     <div className={classes.buttonArea}>
@@ -195,7 +191,7 @@ const BoardInsert = props => {
                             type="submit"
                             className={classes.submit}
                         >
-                            등록
+                            수정
                         </Button>
                         <RouterLink to="/boardList">
                             <Button 
@@ -216,4 +212,4 @@ const BoardInsert = props => {
 
 };
 
-export default BoardInsert;
+export default BoardUpdate;

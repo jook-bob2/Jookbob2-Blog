@@ -57,6 +57,23 @@
 		UPDATE board SET
 			del_yn = 'Y',
 			use_yn = 'N'
-		WHERE bno = #{bno}
+		WHERE 1=1 
+		<if test="bno != null">
+			AND bno = #{bno}
+		</if>
+		
+	</update>
+	
+	<update id="updateBoard" parameterType="com.management.domain.model.Board">
+		UPDATE board SET
+			title = #{title},
+			content = #{content},
+			brd_code = #{brdCode},
+			update_dt = SYSDATE(),
+			update_yn = #{updateYn}
+		WHERE 1=1
+		<if test="bno != null">
+			AND bno = #{bno}
+		</if>
 	</update>
 </mapper>

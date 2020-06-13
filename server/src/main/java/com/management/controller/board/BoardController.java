@@ -65,7 +65,6 @@ public class BoardController {
 	@PostMapping(value = "/boardDetail/{bno}")
 	public Map<String, Object> boardDetail(@PathVariable("bno") Long bno ) {
 		Map<String, Object> map = new HashMap<>();
-		System.out.println("bno ===========> " + bno);
 		map.put("bno", bno);
 		List<Map<String, Object>> boardList = boardMapper.boardList(map);
 		map.put("list", boardList);
@@ -75,15 +74,17 @@ public class BoardController {
 	@PostMapping(value = "/setSession/{bno}")
 	public void setBno(@PathVariable("bno") Long bno ,HttpSession session) {
 		session.setAttribute("bno", bno);
-		System.out.println("세션 셋팅 : " + bno);
 	}
 	
 	@PostMapping(value = "/getSession")
-	public Long getBno(HttpSession session) {
+	public Map<String, Object> getBno(HttpSession session) {
+		Map<String, Object> map = new HashMap<>();
 		if (session.getAttribute("bno") != null) {
-			return (Long) session.getAttribute("bno");
+			map.put("bno", session.getAttribute("bno"));
+			map.put("memberNo", session.getAttribute("memberNo"));
+			return map;
 		}
-		return null;
+		return map;
 	}
 	
 	@PostMapping(value = "/saveBoard")
@@ -105,9 +106,19 @@ public class BoardController {
 		boardService.saveBoard(entity);
 	}
 	
+	@PostMapping(value = "/updateBoard")
+	public void updateBoard(Board entity, HttpSession session) {
+		Long bno = null;
+		if (session.getAttribute("bno") != null) {
+			bno = (Long) session.getAttribute("bno");
+			entity.setBno(bno);
+			entity.setUpdateYn("Y");
+		}
+		boardService.updateBoard(entity);
+	}
+	
 	@DeleteMapping(value = "/deleteBoard/{bno}")
 	public void deleteBoard(@PathVariable("bno") Long bno) {
-		System.out.println("게시판 삭제 번호 : " + bno);
 		boardService.deleteBoard(bno);
 	}
 

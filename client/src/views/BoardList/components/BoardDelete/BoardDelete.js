@@ -1,18 +1,25 @@
 import React, { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
 import {
     Button,
     Dialog,
     DialogActions,
     DialogTitle,
     DialogContent,
-    Typography
+    Typography,
+    IconButton,
+    Menu,
+    MenuItem
 } from '@material-ui/core';
+import SettingsIcon from '@material-ui/icons/Settings';
 
 const styles = makeStyles(theme => ({
     root: {
-        textAlign: 'center',
-        marginTop: 50
+        //textAlign: 'center',
+        paddingLeft: 5,
+        paddingTop: 50
     },
     delete: {
         marginRight: 10,
@@ -22,10 +29,20 @@ const styles = makeStyles(theme => ({
     goList: {
         marginRight: 10,
         marginLeft: 10
+    },
+    nested: {
+        paddingLeft: theme.spacing(4),
+    },
+    selectD: {
+        color: '#e83553'
     }
 }));
 
+const ITEM_HEIGHT = 48;
+
 const BoardDelete = (props) => {
+    const { className } = props;
+
     const classes = styles();
 
     const [state, setState] = useState({
@@ -33,6 +50,13 @@ const BoardDelete = (props) => {
         memberNo: props !== undefined ? props.memberNo : '',
         open: false
     });
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
 
     const handleClickOpen = () => {
         setState(state => ({
@@ -42,6 +66,7 @@ const BoardDelete = (props) => {
     }
 
     const handleClose = () => {
+        setAnchorEl(null);
         setState(state => ({
             ...state,
             open: false
@@ -62,28 +87,49 @@ const BoardDelete = (props) => {
     };
 
     return (
-        <div className={classes.root}>
-            {props.writerNo === props.memberNo ? 
-                <Button 
-                variant="contained"
-                color="secondary"
-                className={classes.delete}
-                onClick={handleClickOpen}
-                >
-                    삭제
-                </Button>
-                :
-                null
-            }
-
-            <Button 
-                variant="contained"
-                color="primary"
-                className={classes.goList}
-                onClick={goList}
+        <div className={clsx(classes.root, className)}>
+            <IconButton
+                aria-label="more"
+                aria-controls="long-menu"
+                aria-haspopup="true"
+                onClick={handleClick}
             >
-                목록
-            </Button>
+                <SettingsIcon />
+            </IconButton>
+            <Menu
+                id="long-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={open}
+                onClose={handleClose}
+                PaperProps={{
+                style: {
+                    maxHeight: ITEM_HEIGHT * 4.5
+                },
+                }}
+            >
+                {props.writerNo === props.memberNo ? 
+                    <RouterLink to={{ pathname: "/boardUpdate", query: {state: props.state, bno: props.bno, memberNo: props.memberNo} }}>
+                        <MenuItem>
+                            수정
+                        </MenuItem>
+                    </RouterLink>
+                    
+                    :
+                    null
+                }
+                {props.writerNo === props.memberNo ? 
+                    <MenuItem onClick={handleClickOpen} className={classes.selectD}>
+                        삭제
+                    </MenuItem>
+                    :
+                    null
+                }
+                <MenuItem onClick={goList}>
+                    목록
+                </MenuItem>
+                
+            </Menu>
             
             <Dialog
                 open={state.open}

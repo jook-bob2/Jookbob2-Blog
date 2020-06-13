@@ -21,7 +21,8 @@ const useStyles = makeStyles(theme => ({
         height: 60
     },
     name: {
-        marginTop: theme.spacing(1)
+        marginTop: theme.spacing(1),
+        fontWeight: 'bold'
     },
     iconBtn: {
         marginTop: 8
@@ -91,7 +92,7 @@ const Profile = props => {
             {props.authenticated ?
                 <Typography
                     className={classes.name}
-                    variant="h4"
+                    variant="h6"
                 >
                 {user.name}
                 </Typography>
@@ -106,7 +107,7 @@ const Profile = props => {
             {props.authenticated ?
                 <Typography variant="body2"></Typography>
                 :
-                <Typography variant="body2">Please Login</Typography>}
+                <Typography variant="h6" className={classes.name}>Please Login</Typography>}
             
 
             {props.authenticated ?
