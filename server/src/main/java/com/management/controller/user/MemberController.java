@@ -26,7 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.management.domain.model.Board;
 import com.management.domain.model.Member;
+import com.management.mapper.board.BoardMapper;
 import com.management.mapper.user.MemberMapper;
 import com.management.service.user.MemberService;
 import com.management.util.S3Service;
@@ -45,6 +47,9 @@ public class MemberController {
 	
 	@Autowired
 	private MemberMapper memberMapper;
+	
+	@Autowired
+	private BoardMapper boardMapper;
 	
 	@Autowired
 	private S3Service s3Service;
@@ -244,16 +249,27 @@ public class MemberController {
 	
 	@PostMapping(value = "saveProfile")
 	public void saveProfile(@RequestParam Map<String, Object> param, HttpSession session) {
-		Long memberNo = (Long) session.getAttribute("memberNo");
+		Long memberNo = null;
 		Member entity = new Member();
-		System.out.println(param.toString());
-		entity.setMemberNo(memberNo);
-		entity.setName(param.get("name").toString());
-		entity.setAddress1(param.get("address1").toString());
-		entity.setAddress2(param.get("address2").toString());
-		entity.setEmail(param.get("email").toString());
-		entity.setPhoneNo(param.get("phoneNo").toString());
-		memberMapper.saveProfile(entity);
+		if (session.getAttribute("memberNo") != null) {
+			memberNo = (Long) session.getAttribute("memberNo");
+			System.out.println(param.toString());
+			entity.setMemberNo(memberNo);
+			entity.setName(param.get("name").toString());
+			entity.setAddress1(param.get("address1").toString());
+			entity.setAddress2(param.get("address2").toString());
+			entity.setEmail(param.get("email").toString());
+			entity.setPhoneNo(param.get("phoneNo").toString());
+			memberMapper.saveProfile(entity);
+			
+			Board entity2 = new Board();
+			entity2.setWriterNo(memberNo);
+			entity2.setWriter(param.get("name").toString());
+			boardMapper.updateBoard(entity2);
+		}
+		
+		
+		
 	}
 	
 	@PostMapping(value = "updatePw")

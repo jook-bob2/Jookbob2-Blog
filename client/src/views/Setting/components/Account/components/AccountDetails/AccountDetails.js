@@ -87,6 +87,7 @@ const AccountDetails = props => {
     saveProfile(event)
      .then(res => {
        alert("저장완료!");
+       window.location.reload();
      })
   }
 

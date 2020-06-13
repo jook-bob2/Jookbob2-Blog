@@ -43,4 +43,9 @@ public class BoardServiceImpl implements BoardService {
 	public void updateBoard(Board entity) {
 		boardMapper.updateBoard(entity);
 	}
+
+	@Override
+	public Long getViewcnt(Long bno) {
+		return boardMapper.getViewcnt(bno);
+	}
 }
