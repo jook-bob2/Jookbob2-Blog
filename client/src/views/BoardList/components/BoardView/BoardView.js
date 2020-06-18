@@ -8,8 +8,7 @@ import {
     Table,
     TableBody,
     TableCell,
-    TableRow,
-    TablePagination
+    TableRow
   } from '@material-ui/core';
 import {post} from 'axios';
 import moment from 'moment';

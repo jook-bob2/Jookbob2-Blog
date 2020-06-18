@@ -48,8 +48,15 @@
 		ON b.brd_code = k.brd_code
 		AND use_yn = 'Y'
 		AND del_yn = 'N'
+		
 		<if test="bno != null">
 			AND bno = #{bno}
+		</if>
+		
+		ORDER BY b.bno DESC
+		
+		<if test="start != null and end != null">
+			LIMIT #{start}, #{end}
 		</if>
 	</select>
 	
@@ -99,4 +106,8 @@
 			AND writer_no = #{writerNo}
 		</if>
 	</update>
+	
+	<select id="boardCount" resultType="int">
+		SELECT count(*) FROM board;
+	</select>
 </mapper>
