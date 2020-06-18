@@ -3,7 +3,6 @@ package com.management.controller.board;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.management.domain.model.Board;
@@ -43,11 +42,26 @@ public class BoardController {
 		boardKindsRepository.save(boardKinds);
 	}
 
-	@GetMapping("/boardList")
-	public Map<String, Object> readAll() {
+	@PostMapping("/boardList")
+	public Map<String, Object> boardList(@RequestParam Map<String, Object> param) {
+		int page = Integer.parseInt(param.get("page").toString());
+		int rowsPerPage = Integer.parseInt(param.get("rowsPerPage").toString());
+		
+		// 게시판 글 수 가져오기
+		int count = boardMapper.boardCount();
+		
+		int start = page * rowsPerPage;
+		
 		Map<String, Object> map = new HashMap<>();
+	    
+		map.put("start", start);
+		map.put("end", rowsPerPage);
+		
+		// 게시판 리스트 가져오기
 		List<Map<String, Object>> boardList = boardMapper.boardList(map);
+		
 		map.put("list", boardList);
+		map.put("count", count);
 		
 		return map;
 	}
