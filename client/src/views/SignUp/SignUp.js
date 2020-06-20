@@ -208,7 +208,6 @@ const useStyles = makeStyles(theme => ({
         
         goSignUp()
             .then((response) => {
-                console.log(response);
                 let data = response.data;
                 if (data === '/sign-in') {
                     alert("회원가입을 축하 합니다.\n로그인 페이지로 이동합니다.");

@@ -26,7 +26,6 @@ const Setting = () => {
   useEffect(() => {
       getSession()
           .then(res => {
-            console.log("setting : " + res.data);
           setAuthenticated({
               authenticated: res.data === -1 ? false : true,
               memberNo: res.data

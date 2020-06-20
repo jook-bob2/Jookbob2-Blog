@@ -52,10 +52,11 @@ const styles = makeStyles(theme => ({
 const BoardView = props => {
     const classes = styles();
     const { className, location } = props;
-    
+
     const [state, setState] = useState({
         bno: location.query !== undefined ? location.query.bno : '',
         memberNo: location.query !== undefined ? location.query.memberNo : '',
+        bKinds: location.query !== undefined ? location.query.bKinds : '',
         title: '',
         writer: '',
         writerNo: '',
@@ -93,14 +94,13 @@ const BoardView = props => {
                         updateDt: list.updateDt,
                         content: list.content,
                         showText: list.showText,
-                        avatar: list.profileImg,
-                        bKinds: list.bKinds
+                        avatar: list.profileImg
                     })
                 })
                 .catch(err => console.log(err));
         }
         
-    }, [state.bno]);
+    }, []);
 
     const callView = async() => {
         const url = '/board/boardDetail/' + state.bno;
@@ -155,7 +155,7 @@ const BoardView = props => {
                         </TableBody> 
                         
                     </Table>
-                    <BoardDelete state={state} bno={state.bno} writerNo={state.writerNo} memberNo={state.memberNo}></BoardDelete>
+                    <BoardDelete state={state} bno={state.bno} writerNo={state.writerNo} memberNo={state.memberNo} bKinds={state.bKinds}></BoardDelete>
                 </div>
             </CardContent>
         </Card>

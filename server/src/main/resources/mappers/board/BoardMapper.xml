@@ -48,7 +48,9 @@
 		ON b.brd_code = k.brd_code
 		AND use_yn = 'Y'
 		AND del_yn = 'N'
-		
+		<if test="brdText != null and !brdText.equals('')">
+			AND k.brd_code = (SELECT brd_code FROM board_kinds WHERE brd_text = #{brdText})
+		</if>
 		<if test="bno != null">
 			AND bno = #{bno}
 		</if>
@@ -107,7 +109,9 @@
 		</if>
 	</update>
 	
-	<select id="boardCount" resultType="int">
-		SELECT count(*) FROM board;
+	<select id="boardCount" parameterType="hashmap" resultType="int">
+		SELECT count(*) FROM board 
+		WHERE 
+		brd_code = (SELECT brd_code FROM board_kinds WHERE brd_text = #{brdText})
 	</select>
 </mapper>

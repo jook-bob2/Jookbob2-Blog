@@ -48,6 +48,7 @@ const BoardDelete = (props) => {
     const [state, setState] = useState({
         bno: props !== undefined ? props.bno : '',
         memberNo: props !== undefined ? props.memberNo : '',
+        bKinds: props !== undefined ? props.bKinds : '',
         open: false
     });
 
@@ -78,12 +79,12 @@ const BoardDelete = (props) => {
         fetch(url, {
             method: 'DELETE'
         })
-            .then(window.location.href = '/boardList')
+            .then(window.location.href = '/' + state.bKinds)
             .catch(err => console.log(err));
     };
 
     const goList = () => {
-        window.location.href = '/boardList';
+        window.location.href = '/' + state.bKinds;
     };
 
     return (

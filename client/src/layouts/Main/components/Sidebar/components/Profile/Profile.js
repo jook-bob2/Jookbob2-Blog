@@ -94,7 +94,7 @@ const Profile = props => {
                     className={classes.name}
                     variant="h6"
                 >
-                {user.name}
+                    {user.name}
                 </Typography>
                 :
                 <Typography

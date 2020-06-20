@@ -58,11 +58,6 @@ const SidebarNav = props => {
 
   const classes = useStyles();
 
-  const logout = () => {
-    post("/member/logout", null);
-    window.location.reload(true);
-  };
-
   return (
     <List
       {...rest}
@@ -74,21 +69,7 @@ const SidebarNav = props => {
           disableGutters
           key={page.title}
         >
-          {page.title === '로그아웃'
-            ?
-            <Button
-              activeClassName={classes.active}
-              className={classes.button}
-              component={CustomRouterLink}
-              onClick={logout}
-              to="/#"
-              color="secondary"
-            >
-              <div className={classes.icon}>{page.icon}</div>
-              <div className={classes.logout}>{page.title}</div>
-            </Button>
-            :
-            <Button
+          <Button
               activeClassName={classes.active}
               className={classes.button}
               component={CustomRouterLink}
@@ -97,7 +78,6 @@ const SidebarNav = props => {
               <div className={classes.icon}>{page.icon}</div>
               {page.title}
             </Button>
-          }
         </ListItem>
       ))}
     </List>

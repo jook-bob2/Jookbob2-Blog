@@ -33,7 +33,6 @@ const useStyles = makeStyles(theme => ({
 
 const BoardTable = props => {
     const classes = useStyles();
-
     const setSession = () => {
         const url = "/board/setSession/" + props.bno;
         return post(url);
@@ -55,7 +54,7 @@ const BoardTable = props => {
                 <TableCell className={classes.title}>
                     {/* RouterLink를 통해 bno를 boardView에 넘겨준다. */}
                     <RouterLink
-                        to={{ pathname: "/boardView", query: {bno: props.bno, memberNo: props.memberNo, viewcnt: props.viewcnt} }}
+                        to={{ pathname: "/boardView", query: {bno: props.bno, memberNo: props.memberNo, viewcnt: props.viewcnt, bKinds: props.bKinds} }}
                         onClick={setSession}
                     >
                         <h4>{props.title}</h4>

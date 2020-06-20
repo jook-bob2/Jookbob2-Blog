@@ -3,8 +3,10 @@ import { makeStyles } from '@material-ui/styles';
 import { Grid } from '@material-ui/core';
 
 import {
-    Budget
-} from './components';
+    QnA,
+    AboutJob,
+    TalkLife
+} from '../BoardList';
 
 
 const useStyles = makeStyles(theme => ({
@@ -18,7 +20,6 @@ const Dashboard = () => {
 
     return (
         <div className={classes.root}>
-            <h1>dsfsdfasd</h1>
             <Grid
                 container
                 spacing={4}
@@ -29,17 +30,19 @@ const Dashboard = () => {
                 sm={6}
                 xl={3}
                 xs={12}
-                >
-                <Budget />
+                >  
+                    <div>
+                        <QnA count={5}></QnA>
+                    </div>
                 </Grid>
-               {/*  <Grid
+               <Grid
                 item
                 lg={3}
                 sm={6}
                 xl={3}
                 xs={12}
                 >
-                <TotalUsers />
+                    <AboutJob count={5} />
                 </Grid>
                 <Grid
                 item
@@ -48,9 +51,9 @@ const Dashboard = () => {
                 xl={3}
                 xs={12}
                 >
-                <TasksProgress />
+                    <TalkLife count={5} />
                 </Grid>
-                <Grid
+                {/* <Grid
                 item
                 lg={3}
                 sm={6}
