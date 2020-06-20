@@ -5,6 +5,11 @@ import { makeStyles } from '@material-ui/styles';
 import { Divider, Drawer } from '@material-ui/core';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import { Profile, SidebarNav } from './components';
+import {
+    List,
+    AccountBalance,
+    Category
+} from '@material-ui/icons';
 
 const useStyles = makeStyles(theme => ({
     drawer: {
@@ -44,9 +49,19 @@ const Sidebar = props => {
             icon: <DashboardIcon />
         },
         {
-            title: '게시판',
-            href: '/boardList',
-            icon: <DashboardIcon />
+            title: 'Q&A',
+            href: '/qna',
+            icon: <List />
+        },
+        {
+            title: '취업관련',
+            href: '/aboutJob',
+            icon: <AccountBalance />
+        },
+        {
+            title: '일상관련',
+            href: '/talkLife',
+            icon: <Category />
         }
     ];
     

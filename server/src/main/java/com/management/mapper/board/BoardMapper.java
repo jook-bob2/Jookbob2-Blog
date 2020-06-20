@@ -14,5 +14,5 @@ public interface BoardMapper {
 	public void deleteBoard(Long bno);
 	public void updateBoard(Board entity);
 	public Long getViewcnt(Long bno);
-	public int boardCount();
+	public int boardCount(Map<String, Object> map);
 }

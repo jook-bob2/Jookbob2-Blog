@@ -1,6 +1,8 @@
 export { default as Dashboard } from './Dashboard';
 export { default as NotFound } from './NotFound';
-export { default as BoardList } from './BoardList';
+export { default as QnA } from './BoardList/QnA';
+export { default as AboutJob } from './BoardList/AboutJob';
+export { default as TalkLife } from './BoardList/TalkLife';
 export { default as SignIn } from './SignIn';
 export { default as SignUp } from './SignUp';
 export { default as Setting } from './Setting';

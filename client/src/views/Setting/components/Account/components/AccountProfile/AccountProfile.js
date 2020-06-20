@@ -8,10 +8,8 @@ import {
   CardActions,
   CardContent,
   Avatar,
-  Typography,
   Divider,
-  Button,
-  LinearProgress
+  Button
 } from '@material-ui/core';
 import {post} from 'axios';
 
@@ -28,7 +26,7 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 0
   },
   progress: {
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(1)
   },
   uploadButton: {
     marginRight: theme.spacing(2)
@@ -38,6 +36,9 @@ const useStyles = makeStyles(theme => ({
   },
   removeBtn: {
     color: '#d50000'
+  },
+  userName: {
+    marginBottom: 20
   }
 }));
 
@@ -45,6 +46,7 @@ const AccountProfile = props => {
   const { className } = props;
 
   const classes = useStyles();
+  console.log(props);
   
   const [state, setState] = useState({
     memberNo: props.memberNo !== undefined ? props.memberNo : '',
@@ -54,7 +56,7 @@ const AccountProfile = props => {
     userName: '',
     fileName: '',
     avatar: '',
-    createDt: '',
+    createDt: 0,
   });
 
   useEffect(() => {
@@ -134,37 +136,17 @@ const AccountProfile = props => {
       <CardContent>
         <div className={classes.details}>
           <div>
-            <Typography
-              gutterBottom
-              variant="h4"
-            >
-              {state.userName}({state.userId})
-            </Typography>
-            <Typography
-              className={classes.locationText}
-              color="textSecondary"
-              variant="body1"
-            >
-              <h5>가입일 : {moment(state.createDt).format('YYYY-MM-DD hh:mm:ss')}</h5>
-            </Typography>
-            <Typography
-              className={classes.dateText}
-              color="textSecondary"
-              variant="body1"
-            >
-              <h5>수정일 : {moment(state.updateDt).format('YYYY-MM-DD hh:mm:ss')}</h5>
-            </Typography>
+            <h2 className={classes.userName}>{state.userName}({state.userId})</h2>
+            <div>
+              가입일 : {moment(state.createDt).format('YYYY-MM-DD hh:mm:ss')}
+            </div>
+            <div>
+              수정일 : {moment(state.updateDt).format('YYYY-MM-DD hh:mm:ss')}
+            </div>
           </div>
           <Avatar
             className={classes.avatar}
             src={state.avatar}
-          />
-        </div>
-        <div className={classes.progress}>
-          <Typography variant="body1">Profile Completeness: 70%</Typography>
-          <LinearProgress
-            value={70}
-            variant="determinate"
           />
         </div>
       </CardContent>
@@ -179,10 +161,10 @@ const AccountProfile = props => {
             component="span" 
             name="file"
           >
-            {state.fileName === "" ? "Upload picture" : "Update picture"}
+            {state.avatar === "" ? "Upload picture" : "Update picture"}
           </Button>
         </label>
-        {state.fileName === "" ? null : <Button variant="outlined" color="secondary" onClick={handleFileRemove}>Remove picture</Button>}
+        {state.avatar === "" ? null : <Button variant="outlined" color="secondary" onClick={handleFileRemove}>Remove picture</Button>}
         
       </CardActions>
     </Card>

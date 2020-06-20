@@ -176,7 +176,6 @@ const SignIn = (props) => {
     
     handleLogin()
         .then((response) => {
-            console.log(response);
             let param = response.data;
             if (param.userId !== null && param.userId !== "" && param.message !== "error") {
               window.location.href = "/";

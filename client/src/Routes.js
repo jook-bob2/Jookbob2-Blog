@@ -6,7 +6,9 @@ import { Main as MainLayout, Minimal as MinimalLayout } from './layouts';
 import {
     Dashboard as DashboardView,
     NotFound as NotFoundView,
-    BoardList as BoardListView,
+    QnA as QnAView,
+    AboutJob as AboutJobView,
+    TalkLife as TalkLifeView,
     SignIn as SignInView,
     SignUp as SignUpView,
     Setting as SettingView,
@@ -52,10 +54,22 @@ const Routes = () => {
             />
 
             <RouteWithLayout
-                component={BoardListView}
+                component={QnAView}
                 exact
                 layout={MainLayout}
-                path="/boardList"
+                path="/qna"
+            />
+            <RouteWithLayout
+                component={AboutJobView}
+                exact
+                layout={MainLayout}
+                path="/aboutJob"
+            />
+            <RouteWithLayout
+                component={TalkLifeView}
+                exact
+                layout={MainLayout}
+                path="/talkLife"
             />
             <RouteWithLayout
                 component={BoardView}

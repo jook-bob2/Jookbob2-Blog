@@ -67,6 +67,8 @@ const styles = makeStyles(theme => ({
 const BoardInsert = props => {
     const classes = styles();
     const { className, location } = props;
+
+    const bKinds = location.query !== undefined ? location.query.bKinds : '';
     
     const [state, setState] = useState({
         memberNo: location.query !== undefined ? location.query.memberNo : '',
@@ -97,7 +99,6 @@ const BoardInsert = props => {
     }
 
     const handleChange = event => {
-        console.log([event.target.name]);
         setState({
             ...state,
             [event.target.name]: event.target.value
@@ -114,7 +115,8 @@ const BoardInsert = props => {
         saveBoard(event)
             .then(res => {
                 alert("게시물이 등록 되었습니다.\n게시판 목록으로 이동합니다.");
-                window.location.href = "/boardList";
+                console.log(bKinds);
+                window.location.href = "/" + bKinds;
             });
     };
 

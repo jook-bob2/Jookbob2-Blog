@@ -78,7 +78,6 @@ const Password = props => {
     e.preventDefault();
     let passwd = state.values.password;
     let confirm = state.values.confirm;
-    console.log(passwd + ", " + confirm);
     if(passwd !== confirm) {
       alert("비밀번호를 확인해주세요.");
       document.getElementsByName('password')[0].focus();
