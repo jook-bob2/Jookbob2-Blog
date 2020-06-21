@@ -78,20 +78,29 @@ const Routes = () => {
                 path="/boardView"
             />
 
-            <RouteWithLayout
-                component={BoardInsertView}
-                exact
-                layout={MainLayout}
-                path="/boardInsert"
-            />
+            {auth.authenticated ? 
+                <RouteWithLayout
+                    component={BoardInsertView}
+                    exact
+                    layout={MainLayout}
+                    path="/boardInsert"
+                />
+                :
+                <Redirect exact from="/" to="/not-found" />
+            }
 
-            <RouteWithLayout
-                component={BoardUpdateView}
-                exact
-                layout={MainLayout}
-                path="/boardUpdate"
-            />
+            {auth.authenticated ? 
+                <RouteWithLayout
+                    component={BoardUpdateView}
+                    exact
+                    layout={MainLayout}
+                    path="/boardUpdate"
+                />
+                :
+                <Redirect exact from="/" to="/not-found" />
+            }
 
+            
             {auth.authenticated ? 
                 <Redirect exact from="/" to="/not-found" />
                 :
@@ -100,7 +109,8 @@ const Routes = () => {
                     exact
                     layout={MinimalLayout}
                     path="/sign-in"
-                />}
+                />
+            }
             {auth.authenticated ? 
                 <Redirect exact from="/" to="/not-found" />
                 :
@@ -109,15 +119,19 @@ const Routes = () => {
                     exact
                     layout={MinimalLayout}
                     path="/sign-up"
-                />}
+                />
+            }
             
-            <RouteWithLayout
-                component={SettingView}
-                exact
-                layout={MainLayout}
-                path="/setting"
-            />
-                
+            {auth.authenticated ? 
+                <RouteWithLayout
+                    component={SettingView}
+                    exact
+                    layout={MainLayout}
+                    path="/setting"
+                />
+                :
+                <Redirect exact from="/" to="/not-found" />
+            }
 
             <RouteWithLayout
                 component={NotFoundView}

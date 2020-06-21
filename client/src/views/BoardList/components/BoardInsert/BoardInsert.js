@@ -115,7 +115,6 @@ const BoardInsert = props => {
         saveBoard(event)
             .then(res => {
                 alert("게시물이 등록 되었습니다.\n게시판 목록으로 이동합니다.");
-                console.log(bKinds);
                 window.location.href = "/" + bKinds;
             });
     };
@@ -201,7 +200,7 @@ const BoardInsert = props => {
                         >
                             등록
                         </Button>
-                        <RouterLink to="/boardList">
+                        <RouterLink to={bKinds}>
                             <Button 
                                 color="secondary"
                                 variant="contained"
