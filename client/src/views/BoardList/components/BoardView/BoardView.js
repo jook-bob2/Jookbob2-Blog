@@ -13,6 +13,8 @@ import {
 import {post} from 'axios';
 import moment from 'moment';
 import BoardDelete from '../BoardDelete';
+import Reply from '../Reply';
+
 
 const styles = makeStyles(theme => ({
     root:{
@@ -68,21 +70,10 @@ const BoardView = props => {
     });
     
     useEffect(() => {
-        if (location.query !== undefined && state.bno !== '') {
-            
-        } else {
-            getSession()
-                .then(res => {
-                    setState({
-                        ...state,
-                        bno: res.data.bno,
-                        memberNo: res.data.memberNo
-                    })
-                });
-        }
         if (state.bno !== '') {
             callView()
                 .then(res => {
+                    console.log(res);
                     const list = res.data.list[0];
                     setState({
                         ...state,
@@ -94,71 +85,87 @@ const BoardView = props => {
                         updateDt: list.updateDt,
                         content: list.content,
                         showText: list.showText,
-                        avatar: list.profileImg
+                        avatar: list.profileImg,
+                        bKinds: list.bKinds
+                    })
+                })
+                .catch(err => console.log(err));
+        }
+
+        if (location.query !== undefined && state.bno !== '') {
+            
+        } else {
+            getSession()
+                .then(res => {
+                    console.log(res);
+                    setState({
+                        ...state,
+                        bno: res.data.bno,
+                        memberNo: res.data.memberNo
                     })
                 })
                 .catch(err => console.log(err));
         }
         
-    }, []);
+    }, [state.bno]);
 
-    const callView = async() => {
-        const url = '/board/boardDetail/' + state.bno;
-        return post(url);
+    const callView = () => {
+        return post('/board/boardDetail/' + state.bno);
     };
     
-    const getSession = () => {
-        const url = "/board/getSession";
-        return post(url);
+    const getSession = async() => {
+        return post('board/getSession');
     };
 
     return (
-        <Card
-            //{...rest}
-            className={clsx(classes.root, className)}
-        >
-            
-            <CardContent className={classes.content}>
-                <div className={classes.inner}>
-                    <Table>
-                        <colgroup>
-                            <col width="5%"/>
-                            <col width="50%"/>
-                            <col width="5%"/>
-                            <col width="35%"/>
-                        </colgroup>
-                        <TableBody>
-                            <TableRow>
-                                <td colSpan="1" className={classes.avatarTd}>
-                                    <Avatar
-                                        alt="Person"
-                                        className={classes.avatar}
-                                        src={state.avatar}
-                                        //component={RouterLink}
-                                        //src=""
-                                        //to="/setting"
-                                    />
-                                </td>
-                                <td colSpan="1"><span>{state.writer}</span><br/>
-                                    {state.createDt !== '' ?  <span><h6>{moment(state.createDt).format('YYYY.MM.DD hh:mm:ss')}</h6></span> : '' }
-                                </td>
-                            </TableRow>
-                            <TableRow>
-                                <td className={classes.bno} colSpan="3"><h5>#{state.bno} {state.showText}</h5></td>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell colSpan="3"><h2>{state.title}</h2></TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <td colSpan='3' className={classes.content2}>{state.content}</td>
-                            </TableRow>
-                        </TableBody> 
-                        
-                    </Table>
-                    <BoardDelete state={state} bno={state.bno} writerNo={state.writerNo} memberNo={state.memberNo} bKinds={state.bKinds}></BoardDelete>
-                </div>
-            </CardContent>
-        </Card>
+        <div>
+            <Card
+                //{...rest}
+                className={clsx(classes.root, className)}
+            >
+                
+                <CardContent className={classes.content}>
+                    
+                        <Table>
+                            <colgroup>
+                                <col width="2%"/>
+                                <col width="60%"/>
+                                <col width="38%"/>
+                            </colgroup>
+                            <TableBody>
+                                <TableRow>
+                                    <td colSpan="1" className={classes.avatarTd}>
+                                        <Avatar
+                                            alt="Person"
+                                            className={classes.avatar}
+                                            src={state.avatar}
+                                            //component={RouterLink}
+                                            //src=""
+                                            //to="/setting"
+                                        />
+                                    </td>
+                                    <td colSpan="1"><span>{state.writer}</span><br/>
+                                        {state.createDt !== '' ?  <span><h6>{moment(state.createDt).format('YYYY.MM.DD hh:mm:ss')}</h6></span> : '' }
+                                    </td>
+                                </TableRow>
+                                <TableRow>
+                                    <td className={classes.bno} colSpan="2"><h5>#{state.bno} {state.showText}</h5></td>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell colSpan="2"><h2>{state.title}</h2></TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <td colSpan='2' className={classes.content2}>{state.content}</td>
+                                </TableRow>
+                            </TableBody> 
+                            
+                        </Table>
+                        <BoardDelete state={state} bno={state.bno} writerNo={state.writerNo} memberNo={state.memberNo} bKinds={state.bKinds}></BoardDelete>
+                    
+                </CardContent>
+            </Card>
+            <Reply />
+        </div>
     );
 
 };

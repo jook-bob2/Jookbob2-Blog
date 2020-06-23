@@ -29,6 +29,7 @@ const Routes = () => {
         
         getSession()
           .then(res => {
+              console.log(res.data);
             setAuthenticated({
                 authenticated: res.data === -1 ? false : true
             });
@@ -121,17 +122,13 @@ const Routes = () => {
                     path="/sign-up"
                 />
             }
-            
-            {auth.authenticated ? 
-                <RouteWithLayout
-                    component={SettingView}
-                    exact
-                    layout={MainLayout}
-                    path="/setting"
-                />
-                :
-                <Redirect exact from="/" to="/not-found" />
-            }
+             
+            <RouteWithLayout
+                component={SettingView}
+                exact
+                layout={MainLayout}
+                path="/setting"
+            />
 
             <RouteWithLayout
                 component={NotFoundView}
