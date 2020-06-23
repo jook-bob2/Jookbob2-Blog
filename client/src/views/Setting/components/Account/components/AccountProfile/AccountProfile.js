@@ -46,7 +46,6 @@ const AccountProfile = props => {
   const { className } = props;
 
   const classes = useStyles();
-  console.log(props);
   
   const [state, setState] = useState({
     memberNo: props.memberNo !== undefined ? props.memberNo : '',
@@ -85,7 +84,6 @@ const AccountProfile = props => {
   }
 
   const handleFileChange = (e) => {
-    e.persist();
     e.preventDefault();
     addPicture(e)
       .then(res => {

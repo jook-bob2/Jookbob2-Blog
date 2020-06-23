@@ -112,12 +112,13 @@ const QnA = props => {
       })
       .catch(err => console.log(err));
 
-    setBoardState(boardState => ({
-      ...boardState
-    }));
+    // setBoardState(boardState => ({
+    //   ...boardState
+    // }));
 
     getSession()
     .then(res => {
+      console.log(res);
       setAuthenticated({
           ...auth,
           authenticated: res.data === -1 ? false : true,
@@ -200,8 +201,8 @@ const QnA = props => {
       .catch(err => console.log(err));
   };
 
-  const getSession = () => {
-    return post("member/session");
+  const getSession = async() => {
+    return post('member/session');
   }
 
   return (

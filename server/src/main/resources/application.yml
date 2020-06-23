@@ -12,10 +12,11 @@ spring:
     cache: false
   datasource:
     hikari:
-      jdbc-url: jdbc:mysql://management-tutorial.ccgxmy3lrzke.us-east-2.rds.amazonaws.com:3306/management?useSSL=false&useUnicode=true&characterEncoding=utf8
+      jdbc-url: jdbc:log4jdbc:mysql://management-tutorial.ccgxmy3lrzke.us-east-2.rds.amazonaws.com:3306/management?useSSL=false&useUnicode=true&characterEncoding=utf8
       username: user
       password: test1234
-      connection-test-query: SELECT NOW() FROM dual  devtools:    restart:      enabled: true
+      connection-test-query: SELECT NOW() FROM dual      driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+  devtools:    restart:      enabled: true
     livereload:      enabled: true
 mybatis:
   configuration:
