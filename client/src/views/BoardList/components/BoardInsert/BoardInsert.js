@@ -67,14 +67,12 @@ const styles = makeStyles(theme => ({
 const BoardInsert = props => {
     const classes = styles();
     const { className, location } = props;
-
-    const bKinds = location.query !== undefined ? location.query.bKinds : '';
-    
     const [state, setState] = useState({
         memberNo: location.query !== undefined ? location.query.memberNo : '',
+        brdText: location.query !== undefined ? location.query.brdText : '',
         title: '',
         content: '',
-        brdCode: ''
+        brdCode: location.query !== undefined ? location.query.bKinds : ''
     });
 
     const [member, setMember] = useState({
@@ -115,7 +113,7 @@ const BoardInsert = props => {
         saveBoard(event)
             .then(res => {
                 alert("게시물이 등록 되었습니다.\n게시판 목록으로 이동합니다.");
-                window.location.href = "/" + bKinds;
+                window.location.href = "/" + state.brdText;
             });
     };
 
@@ -177,7 +175,7 @@ const BoardInsert = props => {
                 >  
                     <div className={classes.content}>
                         <div className={classes.select}>
-                            <select className={classes.selectWt} onChange={handleChange} name="brdCode">
+                            <select className={classes.selectWt} onChange={handleChange} name="brdCode" value={state.brdCode}>
                                 <option value>게시판 유형을 선택하세요.</option>
                                 <option value="00">Q&A</option>
                                 <option value="01">취업관련</option>
@@ -200,7 +198,7 @@ const BoardInsert = props => {
                         >
                             등록
                         </Button>
-                        <RouterLink to={bKinds}>
+                        <RouterLink to={state.brdText}>
                             <Button 
                                 color="secondary"
                                 variant="contained"

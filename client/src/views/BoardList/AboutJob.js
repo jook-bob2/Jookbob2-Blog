@@ -87,7 +87,8 @@ const AboutJob = props => {
     values: '',
     searchKeyword: '',
     count: 0,
-    bKinds: props.location === undefined ? 'aboutJob' : props.location.pathname.split("/")[1]
+    brdText: props.location === undefined ? 'aboutJob' : props.location.pathname.split("/")[1],
+    bKinds: '01'
   });
 
   const [progress, setProgress] = useState(0);
@@ -112,10 +113,6 @@ const AboutJob = props => {
       })
       .catch(err => console.log(err));
 
-    setBoardState(boardState => ({
-      ...boardState
-    }));
-
     getSession()
     .then(res => {
       setAuthenticated({
@@ -139,7 +136,7 @@ const AboutJob = props => {
     // return body.list;
     const url = '/board/boardList';
     const formData = new FormData();
-    formData.append('brdText', boardState.bKinds);
+    formData.append('brdText', boardState.brdText);
     formData.append('page', pageNo !== undefined ? pageNo : page);
     formData.append('rowsPerPage', (rowPerPageNo !== undefined && rowPerPageNo !== null) ? rowPerPageNo : rowsPerPage);
     return post(url, formData);
@@ -162,7 +159,7 @@ const AboutJob = props => {
       return c.title.indexOf(boardState.searchKeyword) > -1 || c.writer.indexOf(boardState.searchKeyword) > -1 || c.createDt.indexOf(boardState.searchKeyword) > -1;
     });
     return data.map((c) => {
-      return <BoardTable boardState={boardState} key={c.bno} bno={c.bno} title={c.title} writer={c.writer} createDt={c.createDt} updateDt={c.updateDt} viewcnt={c.viewcnt} memberNo={auth.memberNo} profileImg={c.profileImg} bKinds={boardState.bKinds} />
+      return <BoardTable boardState={boardState} key={c.bno} bno={c.bno} title={c.title} writer={c.writer} createDt={c.createDt} updateDt={c.updateDt} viewcnt={c.viewcnt} memberNo={auth.memberNo} profileImg={c.profileImg} bKinds={c.bKinds} />
     });
   }
   
@@ -228,7 +225,7 @@ const AboutJob = props => {
               </RouterLink>
               :
               <RouterLink
-                to={ { pathname: "/boardInsert", query: {memberNo: auth.memberNo, bKinds: boardState.bKinds} }}
+                to={ { pathname: "/boardInsert", query: {memberNo: auth.memberNo, brdText: boardState.brdText, bKinds: boardState.bKinds} }}
               >
                 <Button variant="contained" color="primary"><h5>글쓰기</h5></Button>
               </RouterLink>

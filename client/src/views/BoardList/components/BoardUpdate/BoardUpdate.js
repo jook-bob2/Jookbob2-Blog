@@ -67,6 +67,7 @@ const styles = makeStyles(theme => ({
 const BoardUpdate = props => {
     const classes = styles();
     const { className, location, history } = props;
+    console.log(props);
     
     const [state, setState] = useState({
         memberNo: location.query !== undefined ? location.query.memberNo : '',
@@ -74,6 +75,7 @@ const BoardUpdate = props => {
         title: location.query !== undefined ? location.query.state.title : '',
         content: location.query !== undefined ? location.query.state.content : '',
         brdCode: location.query !== undefined ? location.query.state.bKinds : '',
+        brdText: location.query !== undefined ? location.query.state.brdText : ''
     });
 
     const [member, setMember] = useState({
@@ -193,7 +195,7 @@ const BoardUpdate = props => {
                         >
                             수정
                         </Button>
-                        <RouterLink to="/boardList">
+                        <RouterLink to={state.brdText}>
                             <Button 
                                 color="secondary"
                                 variant="contained"

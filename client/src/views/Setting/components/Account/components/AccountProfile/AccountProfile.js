@@ -87,11 +87,11 @@ const AccountProfile = props => {
     e.preventDefault();
     addPicture(e)
       .then(res => {
+        console.log(res);
         setState({
           ...state,
-          avatar: res.data.profileImg,
-          fileName: e.target.files[0]
-        })
+          avatar: res.data.profileImg
+        });
       })
       .catch(err => console.log(err));
   };

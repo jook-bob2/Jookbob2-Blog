@@ -40,7 +40,8 @@
 			b.write_yn as writeYn,
 			b.brd_code as bKinds,
 			m.profile_img as profileImg,
-			k.show_text as showText
+			k.show_text as showText,
+			k.brd_text as brdText
 		FROM 
 		board b INNER JOIN member_info m
 		ON b.writer_no = m.member_no
@@ -113,5 +114,7 @@
 		SELECT count(*) FROM board 
 		WHERE 
 		brd_code = (SELECT brd_code FROM board_kinds WHERE brd_text = #{brdText})
+		AND use_yn = 'Y'
+		AND del_yn = 'N'
 	</select>
 </mapper>

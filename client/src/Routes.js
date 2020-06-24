@@ -17,28 +17,8 @@ import {
     BoardUpdate as BoardUpdateView
 } from './views';
 
-import {post} from 'axios';
-
-const Routes = () => {
-
-    const [auth, setAuthenticated] = useState({
-        authenticated : false
-    });
-    
-    useEffect(() => {
-        
-        getSession()
-          .then(res => {
-              console.log(res.data);
-            setAuthenticated({
-                authenticated: res.data === -1 ? false : true
-            });
-          });
-    }, []);
-
-    const getSession = () => {
-        return post('member/session', null);
-    }
+const Routes = (props) => {
+    const { authenticated } = props;
 
     return (
         <Switch>
@@ -79,7 +59,7 @@ const Routes = () => {
                 path="/boardView"
             />
 
-            {auth.authenticated ? 
+            {authenticated ? 
                 <RouteWithLayout
                     component={BoardInsertView}
                     exact
@@ -87,10 +67,10 @@ const Routes = () => {
                     path="/boardInsert"
                 />
                 :
-                <Redirect exact from="/" to="/not-found" />
+                null
             }
 
-            {auth.authenticated ? 
+            {authenticated ? 
                 <RouteWithLayout
                     component={BoardUpdateView}
                     exact
@@ -98,11 +78,11 @@ const Routes = () => {
                     path="/boardUpdate"
                 />
                 :
-                <Redirect exact from="/" to="/not-found" />
+                null
             }
 
             
-            {auth.authenticated ? 
+            {authenticated ? 
                 <Redirect exact from="/" to="/not-found" />
                 :
                 <RouteWithLayout
@@ -112,7 +92,7 @@ const Routes = () => {
                     path="/sign-in"
                 />
             }
-            {auth.authenticated ? 
+            {authenticated ? 
                 <Redirect exact from="/" to="/not-found" />
                 :
                 <RouteWithLayout
