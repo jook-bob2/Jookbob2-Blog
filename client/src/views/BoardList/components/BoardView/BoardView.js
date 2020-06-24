@@ -58,6 +58,7 @@ const BoardView = props => {
     const [state, setState] = useState({
         bno: location.query !== undefined ? location.query.bno : '',
         memberNo: location.query !== undefined ? location.query.memberNo : '',
+        brdText: location.query !== undefined ? location.query.brdText : '',
         bKinds: location.query !== undefined ? location.query.bKinds : '',
         title: '',
         writer: '',
@@ -77,7 +78,6 @@ const BoardView = props => {
                     const list = res.data.list[0];
                     setState({
                         ...state,
-                        bno: list.bno,
                         title: list.title,
                         writer: list.writer,
                         writerNo: list.writerNo,
@@ -85,8 +85,7 @@ const BoardView = props => {
                         updateDt: list.updateDt,
                         content: list.content,
                         showText: list.showText,
-                        avatar: list.profileImg,
-                        bKinds: list.bKinds
+                        avatar: list.profileImg
                     })
                 })
                 .catch(err => console.log(err));
@@ -114,7 +113,7 @@ const BoardView = props => {
     };
     
     const getSession = async() => {
-        return post('board/getSession');
+        return post('/board/getSession');
     };
 
     return (
@@ -160,7 +159,7 @@ const BoardView = props => {
                             </TableBody> 
                             
                         </Table>
-                        <BoardDelete state={state} bno={state.bno} writerNo={state.writerNo} memberNo={state.memberNo} bKinds={state.bKinds}></BoardDelete>
+                        <BoardDelete state={state} bno={state.bno} writerNo={state.writerNo} memberNo={state.memberNo} brdText={state.brdText} bKinds={state.bKinds}></BoardDelete>
                     
                 </CardContent>
             </Card>

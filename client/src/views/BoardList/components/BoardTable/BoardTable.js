@@ -54,7 +54,7 @@ const BoardTable = props => {
                 <TableCell className={classes.title}>
                     {/* RouterLink를 통해 bno를 boardView에 넘겨준다. */}
                     <RouterLink
-                        to={{ pathname: "/boardView", query: {bno: props.bno, memberNo: props.memberNo, viewcnt: props.viewcnt, bKinds: props.bKinds} }}
+                        to={{ pathname: "/boardView", query: {bno: props.bno, memberNo: props.memberNo, viewcnt: props.viewcnt, bKinds: props.bKinds, brdText: props.boardState.values[0].brdText} }}
                         onClick={setSession}
                     >
                         <h4>{props.title}</h4>

@@ -48,6 +48,7 @@ const BoardDelete = (props) => {
     const [state, setState] = useState({
         bno: props !== undefined ? props.bno : '',
         memberNo: props !== undefined ? props.memberNo : '',
+        brdText: props !== undefined ? props.brdText : '',
         bKinds: props !== undefined ? props.bKinds : '',
         open: false
     });
@@ -79,12 +80,12 @@ const BoardDelete = (props) => {
         fetch(url, {
             method: 'DELETE'
         })
-            .then(window.location.href = '/' + state.bKinds)
+            .then(window.location.href = '/' + state.brdText)
             .catch(err => console.log(err));
     };
 
     const goList = () => {
-        window.location.href = '/' + state.bKinds;
+        window.location.href = '/' + state.brdText;
     };
 
     return (
@@ -110,7 +111,7 @@ const BoardDelete = (props) => {
                 }}
             >
                 {props.writerNo === props.memberNo ? 
-                    <RouterLink to={{ pathname: "/boardUpdate", query: {state: props.state, bno: props.bno, memberNo: props.memberNo} }}>
+                    <RouterLink to={{ pathname: "/boardUpdate", query: {state: props.state, bno: props.bno, memberNo: props.memberNo, bKinds: props.bKinds, brdText: props.brdText} }}>
                         <MenuItem>
                             수정
                         </MenuItem>
