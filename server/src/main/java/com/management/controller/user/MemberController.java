@@ -85,7 +85,6 @@ public class MemberController {
 				Map<String, Object> memberList = memberMapper.viewMember(map);
 				String name = (String) memberList.get("name");
 				Long memberNo = (Long) memberList.get("memberNo");
-				System.out.println("로그인 : " + memberNo);
 				
 				session.setAttribute("userId", auth);
 				session.setAttribute("name", name);
@@ -160,7 +159,6 @@ public class MemberController {
 	@PostMapping(value = "/session")
 	public Long getSession(HttpSession session) throws Exception {
 		if (session.getAttribute("memberNo") != null) {
-			System.out.println("세션 memberNo : " + session.getAttribute("memberNo"));
 			return (Long) session.getAttribute("memberNo");
 		} else {
 			return (long) -1;
@@ -170,7 +168,6 @@ public class MemberController {
 	@PostMapping(value = "/logout")
 	public void logout(HttpSession session) {
 		session.invalidate();
-		System.out.println("세션 Kill");
 	}
 	
 	@PostMapping(value = "/uploadPicture", headers = "content-type=multipart/form-data")
@@ -231,7 +228,6 @@ public class MemberController {
 		String message = "error";
 		
 		// 회원정보 추출을 위한 멤버키를 가져옴.
-		System.out.println(session.getAttribute("memberNo"));
 		if (session.getAttribute("memberNo") != null) {
 			map.put("memberNo", session.getAttribute("memberNo"));
 			Map<String, Object> map2 = new HashMap<>();
@@ -253,7 +249,6 @@ public class MemberController {
 		Member entity = new Member();
 		if (session.getAttribute("memberNo") != null) {
 			memberNo = (Long) session.getAttribute("memberNo");
-			System.out.println(param.toString());
 			entity.setMemberNo(memberNo);
 			entity.setName(param.get("name").toString());
 			entity.setAddress1(param.get("address1").toString());

@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Profile = props => {
-    const { className, ...rest } = props;
+    const { className } = props;
 
     const classes = useStyles();
 
@@ -57,7 +57,7 @@ const Profile = props => {
                 }
                 
             })
-    },[]);
+    }, []);
 
     const getUser = () => {
         const url = "/member/viewMember";

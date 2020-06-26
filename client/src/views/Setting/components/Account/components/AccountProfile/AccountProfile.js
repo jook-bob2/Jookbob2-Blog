@@ -74,7 +74,7 @@ const AccountProfile = props => {
         })
       })
       .catch(err => console.log(err));
-  },[]);
+  }, [state.memberNo]);
 
   const callMember = async() => {
     const url = 'member/viewMember';
