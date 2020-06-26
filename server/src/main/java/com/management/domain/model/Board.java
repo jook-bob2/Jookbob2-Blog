@@ -20,9 +20,11 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-//@NoArgsConstructor(access = AccessLevel.PROTECTED) 
+// @NoArgsConstructor(access = AccessLevel.PROTECTED) 
 @Getter 
+@Setter
 @Entity 
 @Table(name = "board")
 @SequenceGenerator(name = "BOARD_SEQ_GENERATOR", sequenceName = "BOARD_SEQ", initialValue = 1, allocationSize = 1)
@@ -208,5 +210,4 @@ public class Board {
 	public void setDelYn(String delYn) {
 		this.delYn = delYn;
 	}
-    
 }

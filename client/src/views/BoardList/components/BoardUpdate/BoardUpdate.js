@@ -131,7 +131,7 @@ const BoardUpdate = props => {
     
     document.onkeydown = function(e){
         /* F5, Ctrl+r, Ctrl+F5 */
-        if((e.keyCode === 116) || (e.ctrlKey === true) && (e.keyCode === 82)){
+        if((e.keyCode === 116) || (e.ctrlKey === true && e.keyCode === 82)){
             e.cancelBubble = true; 
             e.returnValue = false; 
             alert("새로고침하면 데이터가 저장되지 않습니다.");

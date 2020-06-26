@@ -74,7 +74,6 @@ const BoardView = props => {
         if (state.bno !== '') {
             callView()
                 .then(res => {
-                    console.log(res);
                     const list = res.data.list[0];
                     setState({
                         ...state,
@@ -96,7 +95,6 @@ const BoardView = props => {
         } else {
             getSession()
                 .then(res => {
-                    console.log(res);
                     setState({
                         ...state,
                         bno: res.data.bno,
@@ -163,7 +161,7 @@ const BoardView = props => {
                     
                 </CardContent>
             </Card>
-            <Reply />
+            <Reply bno={state.bno} memberNo={state.memberNo} />
         </div>
     );
 

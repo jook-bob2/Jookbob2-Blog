@@ -25,10 +25,16 @@ import lombok.NoArgsConstructor;
 @Getter 
 @Entity 
 @Table(name = "reply")
+@SequenceGenerator(name = "REPLY_SEQ_GENERATOR", sequenceName = "REPLY_SEQ", initialValue = 1, allocationSize = 1)
 @Embeddable
 public class Reply { 
+	// 댓글코드
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "REPLY_SEQ_GENERATOR")
+	private Long rcd;
+	
 	// 게시판번호
-    @Id 
+    @Column(nullable = false)
     private Long bno; 
     
     // 댓글번호
@@ -37,15 +43,15 @@ public class Reply {
     
     // 댓글내용
     @Column(length = 2000 ,nullable = false)
-    private String replytext;
+    private String replyText;
     
     // 작성자
     @Column(length = 50, nullable = false)
     private String replyer;
     
     // 작성자코드
-    @Column(length = 4000, nullable = false)
-    private String replyerNo;
+    @Column(nullable = false)
+    private Long replyerNo;
     
     // 생성일
     @CreationTimestamp
@@ -63,10 +69,6 @@ public class Reply {
     @Column(length = 2)
     private String updateYn;
     
-    // 게시물 종류
-    @Column(length = 100,nullable = false)
-    private String brdCode; 
-    
     // 사용여부
     @Column(length = 2)
     private String useYn;
@@ -75,26 +77,30 @@ public class Reply {
     @Column(length = 2)
     private String delYn;
     
+    // 추천수
+    @Column
+    private Long recCnt;
+    
     public Reply() {
 		super();
 	}
-    
-	@Builder
-	public Reply(Long bno, Long rno, String replytext, String replyer, String replyerNo, LocalDateTime createDt,
-			LocalDateTime updateDt, String writeYn, String updateYn, String brdCode, String useYn, String delYn) {
+
+    @Builder
+    public Reply(Long bno, Long rno, String replyText, String replyer, Long replyerNo, LocalDateTime createDt,
+			LocalDateTime updateDt, String writeYn, String updateYn, String useYn, String delYn, Long recCnt) {
 		super();
 		this.bno = bno;
 		this.rno = rno;
-		this.replytext = replytext;
+		this.replyText = replyText;
 		this.replyer = replyer;
 		this.replyerNo = replyerNo;
 		this.createDt = createDt;
 		this.updateDt = updateDt;
 		this.writeYn = writeYn;
 		this.updateYn = updateYn;
-		this.brdCode = brdCode;
 		this.useYn = useYn;
 		this.delYn = delYn;
+		this.recCnt = recCnt;
 	}
 
 	public Long getBno() {
@@ -113,12 +119,12 @@ public class Reply {
 		this.rno = rno;
 	}
 
-	public String getReplytext() {
-		return replytext;
+	public String getReplyText() {
+		return replyText;
 	}
 
-	public void setReplytext(String replytext) {
-		this.replytext = replytext;
+	public void setReplyText(String replyText) {
+		this.replyText = replyText;
 	}
 
 	public String getReplyer() {
@@ -129,11 +135,11 @@ public class Reply {
 		this.replyer = replyer;
 	}
 
-	public String getReplyerNo() {
+	public Long getReplyerNo() {
 		return replyerNo;
 	}
 
-	public void setReplyerNo(String replyerNo) {
+	public void setReplyerNo(Long replyerNo) {
 		this.replyerNo = replyerNo;
 	}
 
@@ -169,14 +175,6 @@ public class Reply {
 		this.updateYn = updateYn;
 	}
 
-	public String getBrdCode() {
-		return brdCode;
-	}
-
-	public void setBrdCode(String brdCode) {
-		this.brdCode = brdCode;
-	}
-
 	public String getUseYn() {
 		return useYn;
 	}
@@ -191,5 +189,13 @@ public class Reply {
 
 	public void setDelYn(String delYn) {
 		this.delYn = delYn;
+	}
+
+	public Long getRecCnt() {
+		return recCnt;
+	}
+
+	public void setRecCnt(Long recCnt) {
+		this.recCnt = recCnt;
 	}
 }
