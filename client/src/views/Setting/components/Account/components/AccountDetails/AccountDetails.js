@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
@@ -43,9 +43,11 @@ const AccountDetails = props => {
     });
   };
 
-  useEffect(() => {
-    callMember()
-      .then(res => {
+  const callBackMember = useCallback(() => {
+    const url = 'member/viewMember';
+    const formData = new FormData();
+    formData.append('memberNo', props.memberNo);
+    post(url, formData).then(res => {
         const list = res.data.list;
         setValues({
           memberNo: list.memberNo,
@@ -57,14 +59,11 @@ const AccountDetails = props => {
         })
       })
       .catch(err => console.log(err));
-  },[]);
+  }, [props.memberNo]);
 
-  const callMember = async() => {
-    const url = 'member/viewMember';
-    const formData = new FormData();
-    formData.append('memberNo', props.memberNo);
-    return post(url, formData);
-  }
+  useEffect(() => {
+    callBackMember();
+  },[callBackMember]);
 
   const states = [
     {

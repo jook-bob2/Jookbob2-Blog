@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -40,34 +40,30 @@ const Profile = props => {
         avatar: ''
     });
 
-    useEffect(() => {
-        getUser()
-            .then(res => {
-                const message = res.data.message;
-                if (message === "succeed") {
-                    const list = res.data.list;
-                    setUser({
-                        ...user,
-                        memberNo: list.memberNo,
-                        name: list.name,
-                        avatar: list.profileImg
-                    })
-                } else {
-                    
-                }
-                
-            })
-    }, []);
-
-    const getUser = () => {
+    const callBackUser = useCallback(() => {
         const url = "/member/viewMember";
         const formData = new FormData();
         formData.append("userId", props.userId);
-        return post(url, formData);
-    }
+        post(url, formData).then(res => {
+            const message = res.data.message;
+            if (message === "succeed") {
+                const list = res.data.list;
+                setUser(user => ({
+                    ...user,
+                    memberNo: list.memberNo,
+                    name: list.name,
+                    avatar: list.profileImg
+                }))
+            }
+        });
+    }, [props.userId]);
+
+    useEffect(() => {
+        callBackUser();
+    }, [callBackUser]);
 
     const logout = () => {
-        post("/member/logout", null);
+        post("/member/logout");
         window.location.href="/";
     };
 

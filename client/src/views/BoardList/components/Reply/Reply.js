@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
@@ -86,47 +86,31 @@ const Reply = props => {
         avatar: '',
         replyer: ''
     });
+    
+    const callBackApi = useCallback(() => {
+        const url = '/reply/replyList';
+        const formData = new FormData();
+        formData.append('bno', props.bno);
+        post(url, formData).then(res => {
+            setReplyState(replyState => ({
+                ...replyState,
+                values: res.data.list
+            }));
+        })
+        .catch(err => console.log(err));;
+    }, [props.bno]);
 
     const [progress, setProgress] = useState(0);
 
     useEffect(() => {
-        callApi()
-            .then(res => {
-                console.log(res);
-                setReplyState({
-                    ...replyState,
-                    values: res.data.list
-                });
-            })
-            .catch(err => console.log(err));
-
-        callMember()
-            .then(res => {
-                const list = res.data.list;
-                if (res.data.message === "succeed") {
-                    setState({
-                        ...state,
-                        avatar: list.profileImg,
-                        replyer: list.name
-                    });
-                }
-                
-            })
+        callBackApi();
 
         const timer = setInterval(progressCount, 20);
     
         return () => {
         clearInterval(timer);
         };
-    }, [replyState.bno]);
-
-    const callApi = () => {
-        console.log(props.bno);
-        const url = '/reply/replyList';
-        const formData = new FormData();
-        formData.append('bno', props.bno);
-        return post(url, formData);
-    };
+    }, [callBackApi]);
 
     const progressCount = () => {
         setProgress(oldProgress => (oldProgress >= 100 ? 0 : oldProgress + 1));
@@ -145,31 +129,39 @@ const Reply = props => {
     /*
         insert 부분
     */
-   
-    const callMember = () => {
-        return post('/member/viewMember');
-    };
+
+   useEffect(() => {
+        const callMember = () => {
+            return post('/member/viewMember');
+        };
+        callMember()
+            .then(res => {
+                const list = res.data.list;
+                if (res.data.message === "succeed") {
+                    setState(state => ({
+                        ...state,
+                        avatar: list.profileImg,
+                        replyer: list.name
+                    }));
+                }
+            })
+    }, []);
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        insertReply()
-            .then(res => {
-                if (res.data === 'succeed') {
-                    setState({
-                        ...state,
-                        replyText: ''
-                    });
-                }
-                callApi()
-                    .then(res => {
-                        setReplyState({
-                            ...replyState,
-                            values: res.data.list
-                        });
-                    })
-                    .catch(err => console.log(err));
-            })
-            .catch(err => console.log(err));
+        if (state.replyText !== '') {
+            insertReply()
+                .then(res => {
+                    if (res.data === 'succeed') {
+                        callBackApi();
+                        document.getElementsByName('replyText')[0].value = "";
+                    }
+                })
+                .catch(err => console.log(err));
+        } else {
+            alert("댓글 내용을 입력해주세요.");
+        }
+        
     };
 
     const insertReply = () => {

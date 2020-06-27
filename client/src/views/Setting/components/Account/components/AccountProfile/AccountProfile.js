@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import moment from 'moment';
@@ -58,30 +58,29 @@ const AccountProfile = props => {
     createDt: 0,
   });
 
-  useEffect(() => {
-    callMember()
-      .then(res => {
-        const list = res.data.list;
-        setState({
-          ...state,
-          memberNo:list.memberNo,
-          userId:list.userId,
-          userName:list.name,
-          email:list.email,
-          createDt:list.createDt,
-          updateDt:list.updateDt,
-          avatar:list.profileImg
-        })
-      })
-      .catch(err => console.log(err));
-  }, [state.memberNo]);
-
-  const callMember = async() => {
+  const callBackMember = useCallback(() => {
     const url = 'member/viewMember';
     const formData = new FormData();
     formData.append('memberNo', props.memberNo);
-    return post(url, formData);
-  }
+    post(url, formData).then(res => {
+      const list = res.data.list;
+      setState(state => ({
+        ...state,
+        memberNo:list.memberNo,
+        userId:list.userId,
+        userName:list.name,
+        email:list.email,
+        createDt:list.createDt,
+        updateDt:list.updateDt,
+        avatar:list.profileImg
+      }))
+    })
+    .catch(err => console.log(err));
+  }, [props.memberNo]);
+
+  useEffect(() => {
+    callBackMember();
+  }, [callBackMember]);
 
   const handleFileChange = (e) => {
     e.preventDefault();
