@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -69,47 +69,47 @@ const BoardView = props => {
         avatar: '',
         showText: ''
     });
+
+    const callBackView = useCallback(() => {
+        post('/board/boardDetail/' + state.bno).then(res => {
+            const list = res.data.list[0];
+            setState(state => ({
+                ...state,
+                title: list.title,
+                writer: list.writer,
+                writerNo: list.writerNo,
+                createDt: list.createDt,
+                updateDt: list.updateDt,
+                content: list.content,
+                showText: list.showText,
+                avatar: list.profileImg
+            }));
+        })
+        .catch(err => console.log(err));
+    }, [state.bno]);
     
     useEffect(() => {
         if (state.bno !== '') {
-            callView()
-                .then(res => {
-                    const list = res.data.list[0];
-                    setState({
-                        ...state,
-                        title: list.title,
-                        writer: list.writer,
-                        writerNo: list.writerNo,
-                        createDt: list.createDt,
-                        updateDt: list.updateDt,
-                        content: list.content,
-                        showText: list.showText,
-                        avatar: list.profileImg
-                    })
-                })
-                .catch(err => console.log(err));
+            callBackView();
         }
+    }, [callBackView, state.bno]);
 
+    useEffect(() => {
         if (location.query !== undefined && state.bno !== '') {
             
         } else {
             getSession()
                 .then(res => {
-                    setState({
+                    setState(state => ({
                         ...state,
                         bno: res.data.bno,
                         memberNo: res.data.memberNo
-                    })
+                    }));
                 })
                 .catch(err => console.log(err));
         }
-        
-    }, [state.bno]);
+    }, [location.query, state.bno]);
 
-    const callView = () => {
-        return post('/board/boardDetail/' + state.bno);
-    };
-    
     const getSession = async() => {
         return post('/board/getSession');
     };

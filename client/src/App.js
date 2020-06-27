@@ -31,7 +31,6 @@ export default function App () {
   useEffect(() => {
     getSession()
       .then(res => {
-          console.log(res.data);
         setAuthenticated({
             authenticated: res.data === -1 ? false : true
         });

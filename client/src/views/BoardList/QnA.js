@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Paper from '@material-ui/core/Paper'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -101,39 +101,7 @@ const QnA = props => {
   const [rowsPerPage, setRowsPerPage] = useState(props.count !== undefined ? 5 : 10);
   const [page, setPage] = useState(0);
 
-  useEffect(() => {
-    callApi()
-      .then(res => {
-        setBoardState({
-          ...boardState,
-          values:res.data.list,
-          searchKeyword: '',
-          count: res.data.count
-        });
-      })
-      .catch(err => console.log(err));
-
-    getSession()
-    .then(res => {
-      setAuthenticated({
-          ...auth,
-          authenticated: res.data === -1 ? false : true,
-          memberNo: res.data
-      });
-    })
-    .catch(err => console.log(err));
-    
-    const timer = setInterval(progressCount, 20);
-    
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
-
   const callApi = (rowPerPageNo, pageNo) => {
-    // const response = await fetch('/board/boardList');
-    // const body = await response.json();
-    // return body.list;
     const url = '/board/boardList';
     const formData = new FormData();
     formData.append('brdText', boardState.brdText);
@@ -141,6 +109,45 @@ const QnA = props => {
     formData.append('rowsPerPage', (rowPerPageNo !== undefined && rowPerPageNo !== null) ? rowPerPageNo : rowsPerPage);
     return post(url, formData);
   }
+
+  const callBackApi = useCallback(() => {
+    const url = '/board/boardList';
+    const formData = new FormData();
+    formData.append('brdText', boardState.brdText);
+    formData.append('page', page);
+    formData.append('rowsPerPage', rowsPerPage);
+    post(url, formData).then(res => {
+      setBoardState(boardState => ({
+        ...boardState,
+        values:res.data.list,
+        searchKeyword: '',
+        count: res.data.count
+      }));
+    })
+    .catch(err => console.log(err));;
+  }, [boardState.brdText, page, rowsPerPage]);
+
+  useEffect(() => {
+    callBackApi();
+
+    const timer = setInterval(progressCount, 20);
+    
+    return () => {
+      clearInterval(timer);
+    };
+  }, [callBackApi]);
+
+  useEffect(() => {
+    getSession()
+    .then(res => {
+      setAuthenticated(auth => ({
+          ...auth,
+          authenticated: res.data === -1 ? false : true,
+          memberNo: res.data
+      }));
+    })
+    .catch(err => console.log(err));
+  }, []);
 
   const progressCount = () => {
     setProgress(oldProgress => (oldProgress >= 100 ? 0 : oldProgress + 1));
