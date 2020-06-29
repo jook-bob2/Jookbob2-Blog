@@ -175,7 +175,7 @@ const AboutJob = props => {
   
   const handlePageChange = (event, page) => {
     event.preventDefault();
-    setPage(parseInt(page, 10));
+    setPage(Number(page));
 
     callApi(rowsPerPage, page)
       .then(res => {
@@ -191,8 +191,8 @@ const AboutJob = props => {
 
   const handleRowsPerPageChange = event => {
     event.preventDefault();
-    setPage(parseInt(0, 10));
-    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(Number(0));
+    setRowsPerPage(Number(event.target.value));
 
     callApi(event.target.value, 0)
       .then(res => {
@@ -265,11 +265,11 @@ const AboutJob = props => {
             :
             <TablePagination
               component="div"
-              count={parseInt(boardState.count, 10)}
+              count={Number(boardState.count)}
               onChangePage={handlePageChange}
               onChangeRowsPerPage={handleRowsPerPageChange}
-              page={parseInt(page, 10)}
-              rowsPerPage={parseInt(rowsPerPage, 10)}
+              page={Number(page)}
+              rowsPerPage={Number(rowsPerPage)}
               rowsPerPageOptions={[5, 10, 25]}
               color="secondary"
               shape="round"

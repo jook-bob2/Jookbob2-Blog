@@ -97,7 +97,7 @@ const Reply = props => {
                 values: res.data.list
             }));
         })
-        .catch(err => console.log(err));;
+        .catch(err => console.log(err));
     }, [props.bno]);
 
     const [progress, setProgress] = useState(0);
@@ -131,10 +131,7 @@ const Reply = props => {
     */
 
    useEffect(() => {
-        const callMember = () => {
-            return post('/member/viewMember');
-        };
-        callMember()
+        post('/member/viewMember')
             .then(res => {
                 const list = res.data.list;
                 if (res.data.message === "succeed") {
@@ -146,6 +143,20 @@ const Reply = props => {
                 }
             })
     }, []);
+
+    useEffect(() => {
+        if (props.bno === undefined || props.bno === '') {
+            post('/board/getSession')
+            .then(res => {
+                setState(state => ({
+                    ...state,
+                    bno: res.data.bno,
+                    memberNo: res.data.memberNo
+                }));
+            })
+            .catch(err => console.log(err));
+        }
+    }, [props.bno]);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -167,8 +178,8 @@ const Reply = props => {
     const insertReply = () => {
         const url = "/reply/replyInsert";
         const formData = new FormData();
-        formData.append("bno", parseInt(state.bno, 10));
-        formData.append("memberNo", parseInt(state.memberNo, 10));
+        formData.append("bno", Number(state.bno));
+        formData.append("memberNo", Number(state.memberNo));
         formData.append("replyer", state.replyer);
         formData.append("replyText", state.replyText);
         return post(url, formData);
