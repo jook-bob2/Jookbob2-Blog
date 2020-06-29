@@ -67,7 +67,6 @@ const styles = makeStyles(theme => ({
 const BoardUpdate = props => {
     const classes = styles();
     const { className, location, history } = props;
-    console.log(props);
     
     const [state, setState] = useState({
         memberNo: location.query !== undefined ? location.query.memberNo : '',
