@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Grid } from '@material-ui/core';
 
 import { Account } from './components';
-import {post} from 'axios';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -13,25 +12,6 @@ const useStyles = makeStyles(theme => ({
 
 const Setting = () => {
   const classes = useStyles();
-
-  const [auth, setAuthenticated] = useState({
-    authenticated : false,
-    memberNo : null,
-  });
-
-  const getSession = () => {
-      return post('member/session', null);
-  }
-
-  useEffect(() => {
-      getSession()
-          .then(res => {
-          setAuthenticated({
-              authenticated: res.data === -1 ? false : true,
-              memberNo: res.data
-          });
-      });
-  },[]);
 
   return (
     <div className={classes.root}>
@@ -45,7 +25,7 @@ const Setting = () => {
           md={12}
           xs={12}
         >
-          <Account authenticated={auth.authenticated} memberNo={auth.memberNo}/>
+          <Account />
         </Grid>
       </Grid>
     </div>

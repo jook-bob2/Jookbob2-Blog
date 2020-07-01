@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Switch, Redirect } from 'react-router-dom';
 import { RouteWithLayout } from './components';
 import { Main as MainLayout, Minimal as MinimalLayout } from './layouts';
+import { useSelector, useDispatch } from 'react-redux';
+import { getSessioning } from './store/actions/index';
 
 import {
     Dashboard as DashboardView,
@@ -17,8 +19,14 @@ import {
     BoardUpdate as BoardUpdateView
 } from './views';
 
-const Routes = (props) => {
-    const { authenticated } = props;
+const Routes = () => {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getSessioning());
+    }, [dispatch]);
+
+    const session = useSelector(state => state.session, []) || [];
+    const authenticated = session.authenticated;
 
     return (
         <Switch>

@@ -26,19 +26,11 @@ const Account = (props) => {
           md={6}
           xl={4}
           xs={12}
-          // lg={12}
-          // md={12}
-          // xl={12}
-          // xs={12}
         >
-          <AccountProfile authenticated={props.authenticated} memberNo={props.memberNo}/>
+          <AccountProfile />
         </Grid>
         <Grid
           item
-          // lg={8}
-          // md={6}
-          // xl={8}
-          // xs={12}
           lg={12}
           md={12}
           xl={12}
@@ -53,7 +45,7 @@ const Account = (props) => {
           xl={4}
           xs={12}
         >
-          <Password authenticated={props.authenticated} memberNo={props.memberNo}/>
+          <Password />
         </Grid>
       </Grid>
     </div>

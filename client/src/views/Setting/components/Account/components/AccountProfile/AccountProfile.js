@@ -48,7 +48,6 @@ const AccountProfile = props => {
   const classes = useStyles();
   
   const [state, setState] = useState({
-    memberNo: props.memberNo !== undefined ? props.memberNo : '',
     email: '',
     userId: '',
     file: null,
@@ -61,12 +60,10 @@ const AccountProfile = props => {
   const callBackMember = useCallback(() => {
     const url = 'member/viewMember';
     const formData = new FormData();
-    formData.append('memberNo', props.memberNo);
     post(url, formData).then(res => {
       const list = res.data.list;
       setState(state => ({
         ...state,
-        memberNo:list.memberNo,
         userId:list.userId,
         userName:list.name,
         email:list.email,
@@ -76,7 +73,7 @@ const AccountProfile = props => {
       }))
     })
     .catch(err => console.log(err));
-  }, [props.memberNo]);
+  }, []);
 
   useEffect(() => {
     callBackMember();
@@ -98,7 +95,6 @@ const AccountProfile = props => {
   const addPicture = (e) => {
     const url = '/member/uploadPicture';
     const formData = new FormData();
-    //formData.append('memberNo', state.memberNo);
     formData.append('image', e.target.files[0]);
     const config = {
       headers: {

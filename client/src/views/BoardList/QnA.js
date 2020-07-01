@@ -13,6 +13,8 @@ import Button from '@material-ui/core/Button';
 import {post} from 'axios';
 import { Link as RouterLink } from 'react-router-dom';
 import ListIcon from '@material-ui/icons/List';
+import { useSelector, useDispatch } from 'react-redux';
+import { getSessioning } from '../../store/actions/index';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -93,11 +95,6 @@ const QnA = props => {
 
   const [progress, setProgress] = useState(0);
 
-  const [auth, setAuthenticated] = useState({
-    authenticated : false,
-    memberNo: ''
-  });
-
   const [rowsPerPage, setRowsPerPage] = useState(props.count !== undefined ? 5 : 10);
   const [page, setPage] = useState(0);
 
@@ -137,17 +134,14 @@ const QnA = props => {
     };
   }, [callBackApi]);
 
-  useEffect(() => {
-    getSession()
-    .then(res => {
-      setAuthenticated(auth => ({
-          ...auth,
-          authenticated: res.data === -1 ? false : true,
-          memberNo: res.data
-      }));
-    })
-    .catch(err => console.log(err));
-  }, []);
+  const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getSessioning());
+    }, [dispatch]);
+
+  const session = useSelector(state => state.session, []) || [];
+  const authenticated = session.authenticated;
+  const memberNo = session.memberNo;
 
   const progressCount = () => {
     setProgress(oldProgress => (oldProgress >= 100 ? 0 : oldProgress + 1));
@@ -166,7 +160,7 @@ const QnA = props => {
       return c.title.indexOf(boardState.searchKeyword) > -1 || c.writer.indexOf(boardState.searchKeyword) > -1 || c.createDt.indexOf(boardState.searchKeyword) > -1;
     });
     return data.map((c) => {
-      return <BoardTable boardState={boardState} key={c.bno} bno={c.bno} title={c.title} writer={c.writer} createDt={c.createDt} updateDt={c.updateDt} viewcnt={c.viewcnt} memberNo={auth.memberNo} profileImg={c.profileImg} bKinds={c.bKinds} />
+      return <BoardTable boardState={boardState} key={c.bno} bno={c.bno} title={c.title} writer={c.writer} createDt={c.createDt} updateDt={c.updateDt} viewcnt={c.viewcnt} memberNo={memberNo} profileImg={c.profileImg} bKinds={c.bKinds} />
     });
   }
   
@@ -204,10 +198,6 @@ const QnA = props => {
       .catch(err => console.log(err));
   };
 
-  const getSession = async() => {
-    return post('/member/session');
-  }
-
   return (
     <div className={classes.root}>
       <div className={classes.row}>
@@ -224,7 +214,7 @@ const QnA = props => {
           />
         }
           
-          {auth.authenticated ? 
+          {authenticated ? 
             <div className={classes.menu}>
               {props.count !== undefined ?
                 <RouterLink
@@ -234,7 +224,7 @@ const QnA = props => {
                 </RouterLink>
                 :
                 <RouterLink
-                  to={ { pathname: "/boardInsert", query: {memberNo: auth.memberNo, brdText: boardState.brdText, bKinds: boardState.bKinds} }}
+                  to={ { pathname: "/boardInsert", query: {memberNo: memberNo, brdText: boardState.brdText, bKinds: boardState.bKinds} }}
                 >
                   <Button variant="contained" color="primary"><h5>글쓰기</h5></Button>
                 </RouterLink>
