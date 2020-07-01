@@ -8,6 +8,8 @@ import InputIcon from '@material-ui/icons/Input';
 import {post} from 'axios';
 import SettingsIcon from '@material-ui/icons/Settings';
 import LockOpenIcon from '@material-ui/icons/LockOpen'; 
+import { useSelector, useDispatch } from 'react-redux';
+import { getSessioning } from '../../../../../../store/actions/index';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -34,8 +36,15 @@ const Profile = props => {
 
     const classes = useStyles();
 
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getSessioning());
+    }, [dispatch]);
+
+    const session = useSelector(state => state.session, []) || [];
+    const authenticated = session.authenticated;
+
     const [user, setUser] = useState({
-        memberNo: props.userId,
         name: '',
         avatar: ''
     });
@@ -43,20 +52,19 @@ const Profile = props => {
     const callBackUser = useCallback(() => {
         const url = "/member/viewMember";
         const formData = new FormData();
-        formData.append("userId", props.userId);
+
         post(url, formData).then(res => {
             const message = res.data.message;
             if (message === "succeed") {
                 const list = res.data.list;
                 setUser(user => ({
                     ...user,
-                    memberNo: list.memberNo,
                     name: list.name,
                     avatar: list.profileImg
                 }))
             }
         });
-    }, [props.userId]);
+    }, []);
 
     useEffect(() => {
         callBackUser();
@@ -71,7 +79,7 @@ const Profile = props => {
         <div
             className={clsx(classes.root, className)}
         >
-            {props.authenticated ?
+            {authenticated ?
             <Avatar
                 alt="Person"
                 className={classes.avatar}
@@ -85,7 +93,7 @@ const Profile = props => {
                 className={classes.avatar}
                 
             /> }
-            {props.authenticated ?
+            {authenticated ?
                 <Typography
                     className={classes.name}
                     variant="h6"
@@ -100,13 +108,13 @@ const Profile = props => {
                 
                 </Typography>
             }
-            {props.authenticated ?
+            {authenticated ?
                 <Typography variant="body2"></Typography>
                 :
                 <Typography variant="h6" className={classes.name}>Please Login</Typography>}
             
 
-            {props.authenticated ?
+            {authenticated ?
                 <div className={classes.iconBtn}>
                     <RouterLink onClick={logout} to="/#">
                         <Button><InputIcon /></Button>

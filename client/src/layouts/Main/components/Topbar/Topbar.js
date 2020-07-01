@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -10,6 +10,8 @@ import InputIcon from '@material-ui/icons/Input';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import LockOpenIcon from '@material-ui/icons/LockOpen'; 
 import {post} from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
+import { getSessioning } from '../../../../store/actions/index';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -42,8 +44,16 @@ const Topbar = props => {
 
     const [notifications] = useState([]);
 
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getSessioning());
+    }, [dispatch]);
+
+    const session = useSelector(state => state.session, []) || [];
+    const authenticated = session.authenticated;
+
     const logout = () => {
-        post("/member/logout", null);
+        post("/member/logout");
         window.location.reload(true);
     };
 
@@ -68,7 +78,7 @@ const Topbar = props => {
                             <NotificationsIcon />
                         </Badge>
                     </IconButton>
-                    {props.authenticated ? 
+                    {authenticated ? 
                         <RouterLink onClick={logout} to="/#">
                             <IconButton
                                 className={classes.signOutButton}
