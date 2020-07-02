@@ -19,4 +19,4 @@ RUN npm install
 COPY . .
 
 # start app 
-CMD ["./node_modules/.bin/cross-env", "react-scripts", "start"]
+CMD ["react-scripts", "start"]
