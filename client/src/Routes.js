@@ -3,7 +3,7 @@ import { Switch, Redirect } from 'react-router-dom';
 import { RouteWithLayout } from './components';
 import { Main as MainLayout, Minimal as MinimalLayout } from './layouts';
 import { useSelector, useDispatch } from 'react-redux';
-import { getSessioning } from './store/actions/index';
+import { getSessioning } from 'store/actions';
 
 import {
     Dashboard as DashboardView,
