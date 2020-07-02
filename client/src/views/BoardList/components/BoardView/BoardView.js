@@ -15,7 +15,6 @@ import moment from 'moment';
 import BoardDelete from '../BoardDelete';
 import Reply from '../Reply';
 
-
 const styles = makeStyles(theme => ({
     root:{
         margin: '50px',
