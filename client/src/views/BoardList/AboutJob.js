@@ -7,14 +7,14 @@ import TableCell from '@material-ui/core/TableCell'
 import TablePagination from '@material-ui/core/TablePagination'
 import { makeStyles } from '@material-ui/core/styles'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import { SearchInput } from '../../components';
+import { SearchInput } from 'components';
 import BoardTable from './components/BoardTable';
 import Button from '@material-ui/core/Button';
 import {post} from 'axios';
 import { Link as RouterLink } from 'react-router-dom';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import { useSelector, useDispatch } from 'react-redux';
-import { getSessioning } from '../../store/actions/index';
+import { getSessioning } from 'store/actions';
 
 const useStyles = makeStyles(theme => ({
   root: {
