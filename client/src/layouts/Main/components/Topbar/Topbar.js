@@ -13,7 +13,6 @@ import {post} from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { getSessioning } from 'store/actions';
 
-
 const useStyles = makeStyles(theme => ({
     root: {
         boxShadow: 'none',
