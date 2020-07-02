@@ -11,7 +11,6 @@ import LockOpenIcon from '@material-ui/icons/LockOpen';
 import { useSelector, useDispatch } from 'react-redux';
 import { getSessioning } from 'store/actions';
 
-
 const useStyles = makeStyles(theme => ({
     root: {
         display: 'flex',
