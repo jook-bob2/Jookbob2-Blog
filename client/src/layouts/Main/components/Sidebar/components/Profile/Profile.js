@@ -9,7 +9,7 @@ import {post} from 'axios';
 import SettingsIcon from '@material-ui/icons/Settings';
 import LockOpenIcon from '@material-ui/icons/LockOpen'; 
 import { useSelector, useDispatch } from 'react-redux';
-import { getSessioning } from '../../../../../../store/actions/index';
+import { getSessioning } from 'store/actions/index';
 
 const useStyles = makeStyles(theme => ({
     root: {
