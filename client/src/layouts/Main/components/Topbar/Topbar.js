@@ -11,7 +11,7 @@ import SvgIcon from '@material-ui/core/SvgIcon';
 import LockOpenIcon from '@material-ui/icons/LockOpen'; 
 import {post} from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
-import { getSessioning } from '../../../../store/actions/index';
+import { getSessioning } from 'store/actions';
 
 const useStyles = makeStyles(theme => ({
     root: {

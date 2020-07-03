@@ -14,7 +14,7 @@ import {post} from 'axios';
 import { Link as RouterLink } from 'react-router-dom';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import { useSelector, useDispatch } from 'react-redux';
-import { getSessioning } from '../../store/actions/index';
+import { getSessioning } from 'store/actions';
 
 const useStyles = makeStyles(theme => ({
   root: {

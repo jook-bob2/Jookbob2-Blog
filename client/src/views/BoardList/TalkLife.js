@@ -14,7 +14,7 @@ import {post} from 'axios';
 import { Link as RouterLink } from 'react-router-dom';
 import CategoryIcon from '@material-ui/icons/Category';
 import { useSelector, useDispatch } from 'react-redux';
-import { getSessioning } from '../../store/actions/index';
+import { getSessioning } from 'store/actions';
 
 const useStyles = makeStyles(theme => ({
   root: {
