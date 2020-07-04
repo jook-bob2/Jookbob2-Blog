@@ -117,4 +117,12 @@
 		AND use_yn = 'Y'
 		AND del_yn = 'N'
 	</select>
+	
+	<select id="getFileUrl" parameterType="com.management.domain.model.Upload" resultType="String">
+		SELECT file_url as fileUrl
+		FROM upload
+		WHERE 
+		member_no = #{memberNo}
+		AND upload_cd = #{uploadCd}
+	</select>
 </mapper>

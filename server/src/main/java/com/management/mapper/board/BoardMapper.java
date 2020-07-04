@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.management.domain.model.Board;
+import com.management.domain.model.Upload;
 
 @Mapper
 public interface BoardMapper {
@@ -15,4 +16,5 @@ public interface BoardMapper {
 	public void updateBoard(Board entity);
 	public Long getViewcnt(Long bno);
 	public int boardCount(Map<String, Object> map);
+	public String getFileUrl(Upload entity);
 }

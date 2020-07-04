@@ -13,14 +13,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.management.domain.model.Board;
 import com.management.domain.model.BoardKinds;
+import com.management.domain.model.Upload;
 import com.management.domain.repository.board.BoardRepository;
 import com.management.domain.repository.boardKinds.BoardKindsRepository;
+import com.management.domain.repository.upload.UploadRepository;
 import com.management.mapper.board.BoardMapper;
 import com.management.service.board.BoardService;
+import com.management.util.S3Service;
 
 @RestController
 @RequestMapping("board")
@@ -36,6 +41,9 @@ public class BoardController {
 	
 	@Autowired
 	private BoardMapper boardMapper;
+	
+	@Autowired
+	private S3Service s3Service;
 	
 	@GetMapping("/insert")
 	public void create(BoardKinds boardKinds) {
@@ -136,5 +144,33 @@ public class BoardController {
 	@DeleteMapping(value = "/deleteBoard/{bno}")
 	public void deleteBoard(@PathVariable("bno") Long bno) {
 		boardService.deleteBoard(bno);
+	}
+	
+	@PostMapping(value = "/uploadImg", headers = "content-type=multipart/form-data")
+	public Map<String, Object> uploadImg (@RequestPart("upload") MultipartFile file, HttpSession session) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		if (file != null && session.getAttribute("memberNo") != null) {
+			Upload entity = new Upload();
+			entity.setMemberNo((Long) session.getAttribute("memberNo"));
+			
+			String fileUrl = s3Service.upload(file, "upload/", file.getBytes());
+			entity.setFileUrl(fileUrl);
+			
+			Long uploadCd = boardService.uploadImg(entity);
+			
+			entity.setUploadCd(uploadCd);
+			
+			String url = boardService.getFileUrl(entity);
+			
+			map.put("uploaded", true);
+			map.put("url", url);
+			
+			return map;
+		} else {
+			map.put("uploaded", false);
+			map.put("url", null);
+			
+			return map;
+		}
 	}
 }
