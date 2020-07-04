@@ -12,6 +12,8 @@ import {
   } from '@material-ui/core';
 import {post} from 'axios';
 import { Link as RouterLink } from 'react-router-dom';
+import CKEditor from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 const styles = makeStyles(theme => ({
     root: {},
@@ -98,11 +100,19 @@ const BoardUpdate = props => {
         return post(url);
     }
 
-    const handleChange = event => {
-        setState({
-            ...state,
-            [event.target.name]: event.target.value
-        });
+    const handleChange = (event, editor) => {
+        if (event.target !== undefined) {
+            setState({
+                ...state,
+                [event.target.name]: event.target.value
+            });
+        }
+        if (editor !== undefined) {
+            setState({
+                ...state,
+                content: editor.getData()
+            });
+        }
     };
 
     const handleSubmit = event => {
@@ -182,7 +192,20 @@ const BoardUpdate = props => {
                             <input className={classes.inputWt} placeholder="제목을 입력해 주세요." onChange={handleChange} name="title" value={state.title}></input>
                         </div>
                         <div className={classes.textArea}>
-                            <textarea className={classes.contentWt} onChange={handleChange} name="content" value={state.content}></textarea>
+                            {/* <textarea className={classes.contentWt} onChange={handleChange} name="content" value={state.content}></textarea> */}
+                            <CKEditor 
+                                editor={ClassicEditor} 
+                                onChange={handleChange} 
+                                name="content" 
+                                config={
+                                    {
+                                        ckfinder: {
+                                            uploadUrl: '/board/uploadImg'
+                                        },
+                                    }
+                                }
+                                data={state.content}
+                            />
                         </div>
                     </div>
                     <div className={classes.buttonArea}>

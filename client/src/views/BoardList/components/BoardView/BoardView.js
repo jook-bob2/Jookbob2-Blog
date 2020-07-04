@@ -10,6 +10,7 @@ import {
     TableCell,
     TableRow
   } from '@material-ui/core';
+import ReactHtmlParser from 'react-html-parser';
 import {post} from 'axios';
 import moment from 'moment';
 import BoardDelete from '../BoardDelete';
@@ -86,7 +87,7 @@ const BoardView = props => {
         })
         .catch(err => console.log(err));
     }, [state.bno]);
-    
+
     useEffect(() => {
         if (state.bno !== '') {
             callBackView();
@@ -116,7 +117,6 @@ const BoardView = props => {
     return (
         <div>
             <Card
-                //{...rest}
                 className={clsx(classes.root, className)}
             >
                 
@@ -151,7 +151,7 @@ const BoardView = props => {
                                     <TableCell colSpan="2"><h2>{state.title}</h2></TableCell>
                                 </TableRow>
                                 <TableRow>
-                                    <td colSpan='2' className={classes.content2}>{state.content}</td>
+                                    <td colSpan='2' className={classes.content2} id="content">{ReactHtmlParser(state.content)}</td>
                                 </TableRow>
                             </TableBody> 
                             

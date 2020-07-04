@@ -12,7 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.management.domain.model.Board;
 import com.management.domain.model.Member;
+import com.management.domain.model.Upload;
 import com.management.domain.repository.board.BoardRepository;
+import com.management.domain.repository.upload.UploadRepository;
 import com.management.domain.repository.user.MemberRepository;
 import com.management.mapper.board.BoardMapper;
 import com.management.mapper.user.MemberMapper;
@@ -28,6 +30,9 @@ public class BoardServiceImpl implements BoardService {
 	
 	@Autowired
 	private BoardMapper boardMapper;
+	
+	@Autowired
+	private UploadRepository uploadRepositoy;
 
 	@Override
 	public void saveBoard(Board entity) {
@@ -47,5 +52,15 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public Long getViewcnt(Long bno) {
 		return boardMapper.getViewcnt(bno);
+	}
+
+	@Override
+	public Long uploadImg(Upload entity) {
+		return uploadRepositoy.save(entity).getUploadCd();
+	}
+
+	@Override
+	public String getFileUrl(Upload entity) {
+		return boardMapper.getFileUrl(entity);
 	}
 }
