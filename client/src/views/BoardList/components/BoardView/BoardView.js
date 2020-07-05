@@ -53,10 +53,12 @@ const styles = makeStyles(theme => ({
 
 const BoardView = props => {
     const classes = styles();
-    const { className, location } = props;
+    const { className, location, match } = props;
+
+    console.log(props);
 
     const [state, setState] = useState({
-        bno: location.query !== undefined ? location.query.bno : '',
+        bno: match.params !== undefined ? match.params.bno : '',
         memberNo: location.query !== undefined ? location.query.memberNo : '',
         brdText: location.query !== undefined ? location.query.brdText : '',
         bKinds: location.query !== undefined ? location.query.bKinds : '',
@@ -71,11 +73,14 @@ const BoardView = props => {
     });
 
     const callBackView = useCallback(() => {
-        post('/board/boardDetail/' + state.bno).then(res => {
+        post('/board/boardDetail/' + match.params.bno).then(res => {
             const list = res.data.list[0];
             setState(state => ({
                 ...state,
+                bno: list.bno,
                 title: list.title,
+                brdText: list.brdText,
+                bKinds: list.bKinds,
                 writer: list.writer,
                 writerNo: list.writerNo,
                 createDt: list.createDt,
@@ -86,33 +91,13 @@ const BoardView = props => {
             }));
         })
         .catch(err => console.log(err));
-    }, [state.bno]);
+    }, [match.params.bno]);
 
     useEffect(() => {
         if (state.bno !== '') {
             callBackView();
         }
     }, [callBackView, state.bno]);
-
-    useEffect(() => {
-        if (location.query !== undefined && state.bno !== '') {
-            
-        } else {
-            getSession()
-                .then(res => {
-                    setState(state => ({
-                        ...state,
-                        bno: res.data.bno,
-                        memberNo: res.data.memberNo
-                    }));
-                })
-                .catch(err => console.log(err));
-        }
-    }, [location.query, state.bno]);
-
-    const getSession = async() => {
-        return post('/board/getSession');
-    };
 
     return (
         <div>
@@ -160,7 +145,7 @@ const BoardView = props => {
                     
                 </CardContent>
             </Card>
-            <Reply bno={state.bno} memberNo={state.memberNo} />
+            <Reply bno={state.bno} />
         </div>
     );
 

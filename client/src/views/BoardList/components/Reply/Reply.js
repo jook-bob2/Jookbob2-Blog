@@ -15,6 +15,8 @@ import {
   } from '@material-ui/core';
 import {post} from 'axios';
 import ReplyTable from '../ReplyTable';
+import { useSelector, useDispatch } from 'react-redux';
+import { getSessioning } from 'store/actions';
 
 const styles = makeStyles(theme => ({
     root: {
@@ -158,6 +160,14 @@ const Reply = props => {
         }
     }, [props.bno]);
 
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getSessioning());
+    }, [dispatch]);
+
+    const session = useSelector(state => state.session, []) || [];
+    const memberNo = session.memberNo;
+
     const handleSubmit = (event) => {
         event.preventDefault();
         if (state.replyText !== '') {
@@ -179,7 +189,7 @@ const Reply = props => {
         const url = "/reply/replyInsert";
         const formData = new FormData();
         formData.append("bno", Number(state.bno));
-        formData.append("memberNo", Number(state.memberNo));
+        formData.append("memberNo", Number(memberNo));
         formData.append("replyer", state.replyer);
         formData.append("replyText", state.replyText);
         return post(url, formData);

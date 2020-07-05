@@ -64,7 +64,7 @@ const Routes = () => {
                 component={BoardView}
                 exact
                 layout={MainLayout}
-                path="/boardView"
+                path="/boardView/:bno"
             />
 
             {authenticated ? 
@@ -83,7 +83,7 @@ const Routes = () => {
                     component={BoardUpdateView}
                     exact
                     layout={MainLayout}
-                    path="/boardUpdate"
+                    path="/boardUpdate/:bno"
                 />
                 :
                 null

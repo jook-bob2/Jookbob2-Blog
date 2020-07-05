@@ -69,15 +69,16 @@ const styles = makeStyles(theme => ({
 const BoardUpdate = props => {
     const classes = styles();
     const { className, location, history } = props;
-    
+    console.log(location);
+
     const [state, setState] = useState({
-        memberNo: location.query !== undefined ? location.query.memberNo : '',
         list: location.query !== undefined ? location.query.state : {},
         title: location.query !== undefined ? location.query.state.title : '',
         content: location.query !== undefined ? location.query.state.content : '',
         brdCode: location.query !== undefined ? location.query.state.bKinds : '',
         brdText: location.query !== undefined ? location.query.state.brdText : ''
     });
+    console.log(state.brdText);
 
     const [member, setMember] = useState({
         userName: '',
@@ -96,7 +97,7 @@ const BoardUpdate = props => {
     },[]);
 
     const callMember = async() => {
-        const url = 'member/viewMember';
+        const url = '/member/viewMember';
         return post(url);
     }
 
@@ -117,7 +118,17 @@ const BoardUpdate = props => {
 
     const handleSubmit = event => {
         event.preventDefault();
-        if (state.brdCode === '' || state.title === '' || state.content === '') {
+        if (state.brdCode === '') {
+            alert("게시판 유형을 선택하세요.");
+            document.getElementsByName('brdCode')[0].focus();
+            return false;
+        }
+        if (state.title === '') {
+            alert("제목을 입력하세요.");
+            document.getElementsByName('title')[0].focus();
+            return false;
+        }
+        if (state.content === '') {
             alert("내용을 입력하세요.");
             return false;
         }
@@ -138,18 +149,18 @@ const BoardUpdate = props => {
         return post(url, formData);
     }
     
-    document.onkeydown = function(e){
-        /* F5, Ctrl+r, Ctrl+F5 */
-        if((e.keyCode === 116) || (e.ctrlKey === true && e.keyCode === 82)){
-            e.cancelBubble = true; 
-            e.returnValue = false; 
-            alert("새로고침하면 데이터가 저장되지 않습니다.");
-            setTimeout(function(){
-                window.location.reload();
-            }, 1000);
-            return false;
-        }
-    }
+    // document.onkeydown = function(e){
+    //     /* F5, Ctrl+r, Ctrl+F5 */
+    //     if((e.keyCode === 116) || (e.ctrlKey === true && e.keyCode === 82)){
+    //         e.cancelBubble = true; 
+    //         e.returnValue = false; 
+    //         alert("새로고침하면 데이터가 저장되지 않습니다.");
+    //         setTimeout(function(){
+    //             window.location.reload();
+    //         }, 1000);
+    //         return false;
+    //     }
+    // }
     
     return (
         <div className={classes.main}>
@@ -217,7 +228,7 @@ const BoardUpdate = props => {
                         >
                             수정
                         </Button>
-                        <RouterLink to={state.brdText}>
+                        <RouterLink to={"/" + state.brdText}>
                             <Button 
                                 color="secondary"
                                 variant="contained"

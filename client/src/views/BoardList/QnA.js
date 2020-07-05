@@ -89,7 +89,7 @@ const QnA = props => {
     values: '',
     searchKeyword: '',
     count: 0,
-    brdText: props.location === undefined ? 'qnA' : props.location.pathname.split("/")[1],
+    brdText: props.location === undefined ? 'qna' : props.location.pathname.split("/")[1],
     bKinds: '00'
   });
 
@@ -121,7 +121,7 @@ const QnA = props => {
         count: res.data.count
       }));
     })
-    .catch(err => console.log(err));;
+    .catch(err => console.log(err));
   }, [boardState.brdText, page, rowsPerPage]);
 
   useEffect(() => {

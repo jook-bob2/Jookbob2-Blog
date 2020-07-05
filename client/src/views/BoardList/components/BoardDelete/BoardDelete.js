@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -14,6 +14,8 @@ import {
     MenuItem
 } from '@material-ui/core';
 import SettingsIcon from '@material-ui/icons/Settings';
+import { useSelector, useDispatch } from 'react-redux';
+import { getSessioning } from 'store/actions';
 
 const styles = makeStyles(theme => ({
     root: {
@@ -55,6 +57,14 @@ const BoardDelete = (props) => {
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
+
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getSessioning());
+    }, [dispatch]);
+
+    const session = useSelector(state => state.session, []) || [];
+    const memberNo = session.memberNo;
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -110,8 +120,8 @@ const BoardDelete = (props) => {
                 },
                 }}
             >
-                {props.writerNo === props.memberNo ? 
-                    <RouterLink to={{ pathname: "/boardUpdate", query: {state: props.state, bno: props.bno, memberNo: props.memberNo, bKinds: props.bKinds, brdText: props.brdText} }}>
+                {props.writerNo === memberNo ? 
+                    <RouterLink to={{ pathname: "/boardUpdate/" + props.bno, query: {state: props.state, bno: props.bno, bKinds: props.bKinds, brdText: props.brdText} }}>
                         <MenuItem>
                             수정
                         </MenuItem>
@@ -120,7 +130,7 @@ const BoardDelete = (props) => {
                     :
                     null
                 }
-                {props.writerNo === props.memberNo ? 
+                {props.writerNo === memberNo ? 
                     <MenuItem onClick={handleClickOpen} className={classes.selectD}>
                         삭제
                     </MenuItem>
