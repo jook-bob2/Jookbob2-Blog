@@ -7,7 +7,7 @@ export default function (state = [], action) {
                 ...state,
                 memberNo: action.data,
                 authenticated: action.data !== -1 ? true : false
-            }        
+            } 
         default:
             return state;
     }

@@ -14,27 +14,164 @@
 			r.reply_text as replyText,
 			r.update_yn as updateYn,
 			r.write_yn as writeYn,
-			r.rec_cnt as recCnt,
+			r.like_cnt as likeCnt,
+			r.hate_cnt as hateCnt,
 			m.profile_img as avatar
-			
 		FROM reply r 
 		INNER JOIN member_info m 
 		ON r.replyer_no = m.member_no
-		INNER JOIN board b
-		ON b.bno = r.bno
 		WHERE 1=1
 		AND r.use_yn = 'Y'
 		AND r.del_yn = 'N'
 		<if test="bno != null">
 			AND r.bno = #{bno}
 		</if>
-		<if test="rno != null">
-			AND r.rno = #{rno}
-		</if>
 		ORDER BY r.rcd
+	</select>
+	
+	<select id="confirmLike" parameterType="hashmap" resultType="hashmap">
+		SELECT
+			member_no as likeMember,
+			like_yn as likeYn
+		FROM like_reply
+		WHERE 1=1
+			AND member_no = #{memberNo}
+			AND rcd = #{rcd}
+			AND use_yn = 'Y'
+	</select>
+	
+	<select id="confirmHate" parameterType="hashmap" resultType="hashmap">
+		SELECT
+			member_no as hateMember,
+			hate_yn as hateYn
+		FROM hate_reply
+		WHERE 1=1
+			AND member_no = #{memberNo}
+			AND rcd = #{rcd}
+			AND use_yn = 'Y'
+	</select>
+	
+	<select id="likeCnt" parameterType="hashmap" resultType="long">
+		SELECT like_cnt
+		FROM reply
+		WHERE rcd = #{rcd}
+	</select>
+	
+	<select id="hateCnt" parameterType="hashmap" resultType="long">
+		SELECT hate_cnt
+		FROM reply
+		WHERE rcd = #{rcd}
+	</select>
+	
+	<select id="getLikeState" parameterType="hashmap" resultType="hashmap">
+		SELECT 
+			r.like_cnt as likeCnt
+			, r.hate_cnt as hateCnt
+			, l.member_no as likeMember
+			, l.like_yn as likeYn
+		FROM reply r 
+			INNER JOIN like_reply l
+			ON r.rcd = l.rcd
+		WHERE 1=1
+			AND l.use_yn = 'Y'
+			AND l.rcd = #{rcd}
+			AND l.member_no = #{memberNo}
+			<if test="likeNo != null">
+				AND l.like_no = #{likeNo}
+			</if>
+	</select>
+	
+	<select id="getHateState" parameterType="hashmap" resultType="hashmap">
+		SELECT 
+			r.like_cnt as likeCnt
+			, r.hate_cnt as hateCnt
+			, h.member_no as hateMember
+			, h.hate_yn as hateYn
+		FROM reply r 
+			INNER JOIN hate_reply h
+			ON r.rcd = h.rcd
+		WHERE 1=1
+			AND h.use_yn = 'Y'
+			AND h.rcd = #{rcd}
+			AND h.member_no = #{memberNo}
+			<if test="hateNo != null">
+				AND h.hate_no = #{hateNo}
+			</if>
 	</select>
 	
 	<select id="selectMaxRno" parameterType="Integer" resultType="Integer">
 		SELECT ifnull(max(rno), 0) as rno FROM reply WHERE bno = #{bno}
 	</select>
+	
+	<update id="deletePrevLike" parameterType="hashmap">
+		UPDATE like_reply SET
+			use_yn = 'N',
+			del_yn = 'Y'
+		WHERE like_no != #{likeNo}
+		AND rcd = #{rcd}
+		AND member_no = #{memberNo}
+		AND use_yn = 'Y'
+		AND del_yn = 'N'
+	</update>
+	
+	<update id="deletePrevHate" parameterType="hashmap">
+		UPDATE hate_reply SET
+			use_yn = 'N',
+			del_yn = 'Y'
+		WHERE hate_no != #{hateNo}
+		AND rcd = #{rcd}
+		AND member_no = #{memberNo}
+		AND use_yn = 'Y'
+		AND del_yn = 'N'
+	</update>
+	
+	<update id="hateDownLikeUp" parameterType="hashmap">
+		UPDATE reply SET 
+			hate_cnt = #{hateCnt},
+			like_cnt = #{likeCnt}
+		WHERE
+			replyer_no = #{replyerNo}
+			AND rcd = #{rcd}
+	</update>
+	
+	<update id="likeDownHateUp" parameterType="hashmap">
+		UPDATE reply SET 
+			hate_cnt = #{hateCnt},
+			like_cnt = #{likeCnt}
+		WHERE
+			replyer_no = #{replyerNo}
+			AND rcd = #{rcd}
+	</update>
+	
+	<update id="likeUp" parameterType="hashmap">
+		UPDATE reply SET 
+			like_cnt = #{likeCnt}
+		WHERE
+			replyer_no = #{replyerNo}
+			AND rcd = #{rcd}
+	</update>
+	
+	<update id="likeDown" parameterType="hashmap">
+		UPDATE reply SET 
+			like_cnt = #{likeCnt}
+		WHERE
+			replyer_no = #{replyerNo}
+			AND rcd = #{rcd}
+	</update>
+	
+	<update id="hateUp" parameterType="hashmap">
+		UPDATE reply SET 
+			hate_cnt = #{hateCnt}
+		WHERE
+			replyer_no = #{replyerNo}
+			AND rcd = #{rcd}
+	</update>
+	
+	<update id="hateDown" parameterType="hashmap">
+		UPDATE reply SET 
+			hate_cnt = #{hateCnt}
+		WHERE
+			replyer_no = #{replyerNo}
+			AND rcd = #{rcd}
+	</update>
 </mapper>

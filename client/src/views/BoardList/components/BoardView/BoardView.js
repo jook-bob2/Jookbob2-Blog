@@ -55,8 +55,6 @@ const BoardView = props => {
     const classes = styles();
     const { className, location, match } = props;
 
-    console.log(props);
-
     const [state, setState] = useState({
         bno: match.params !== undefined ? match.params.bno : '',
         memberNo: location.query !== undefined ? location.query.memberNo : '',
