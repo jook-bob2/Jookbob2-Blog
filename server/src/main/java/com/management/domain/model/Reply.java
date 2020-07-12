@@ -77,18 +77,24 @@ public class Reply {
     @Column(length = 2)
     private String delYn;
     
-    // 추천수
+    // 좋아요 갯수
     @Column
-    private Long recCnt;
+    private Long likeCnt;
+    
+    // 싫어요 갯수
+    @Column
+    private Long hateCnt;
     
     public Reply() {
 		super();
 	}
 
     @Builder
-    public Reply(Long bno, Long rno, String replyText, String replyer, Long replyerNo, LocalDateTime createDt,
-			LocalDateTime updateDt, String writeYn, String updateYn, String useYn, String delYn, Long recCnt) {
+	public Reply(Long rcd, Long bno, Long rno, String replyText, String replyer, Long replyerNo, LocalDateTime createDt,
+			LocalDateTime updateDt, String writeYn, String updateYn, String useYn, String delYn, Long likeCnt,
+			Long hateCnt) {
 		super();
+		this.rcd = rcd;
 		this.bno = bno;
 		this.rno = rno;
 		this.replyText = replyText;
@@ -100,7 +106,16 @@ public class Reply {
 		this.updateYn = updateYn;
 		this.useYn = useYn;
 		this.delYn = delYn;
-		this.recCnt = recCnt;
+		this.likeCnt = likeCnt;
+		this.hateCnt = hateCnt;
+	}
+
+	public Long getRcd() {
+		return rcd;
+	}
+
+	public void setRcd(Long rcd) {
+		this.rcd = rcd;
 	}
 
 	public Long getBno() {
@@ -191,11 +206,19 @@ public class Reply {
 		this.delYn = delYn;
 	}
 
-	public Long getRecCnt() {
-		return recCnt;
+	public Long getLikeCnt() {
+		return likeCnt;
 	}
 
-	public void setRecCnt(Long recCnt) {
-		this.recCnt = recCnt;
+	public void setLikeCnt(Long likeCnt) {
+		this.likeCnt = likeCnt;
+	}
+
+	public Long getHateCnt() {
+		return hateCnt;
+	}
+
+	public void setHateCnt(Long hateCnt) {
+		this.hateCnt = hateCnt;
 	}
 }

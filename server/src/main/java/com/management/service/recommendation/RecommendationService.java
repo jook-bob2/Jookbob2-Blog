@@ -1,7 +1,12 @@
 package com.management.service.recommendation;
 
-import com.management.domain.model.Recommendation;
+import java.util.List;
+import java.util.Map;
+
+import com.management.domain.model.HateReply;
+import com.management.domain.model.LikeReply;
 
 public interface RecommendationService {
-	public void recomInsert(Recommendation entity);
+	public Long likeReplyInsert(LikeReply entity);
+	public Long hateReplyInsert(HateReply entity);
 }

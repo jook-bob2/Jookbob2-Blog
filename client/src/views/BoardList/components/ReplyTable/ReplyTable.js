@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles'
 import moment from 'moment';
-import { ArrowDropUp, ArrowDropDown } from '@material-ui/icons';
 import {
     Avatar, 
     TableBody,
@@ -9,6 +8,10 @@ import {
     TableRow,
     IconButton
 } from '@material-ui/core'
+import {ThumbUpAlt, ThumbUpOutlined, ThumbDownAlt, ThumbDownOutlined} from '@material-ui/icons';
+import {post} from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
+import { getSessioning } from 'store/actions';
 
 
 const styles = makeStyles(theme => ({
@@ -30,13 +33,110 @@ const styles = makeStyles(theme => ({
 const ReplyTable = props => {
     const classes = styles();
 
-    const handleRecUp = () => {
+    const dispatch = useDispatch();
 
+    useEffect(() => {
+        dispatch(getSessioning());
+    }, [dispatch]);
+
+    const session = useSelector(state => state.session, []) || [];
+    const memberNo = session.memberNo;
+    
+    const [ state, setState ] = useState({
+        likeYn: 'N',
+        hateYn: 'N',
+        likeCnt: props.likeCnt !== undefined ? props.likeCnt : 0,
+        hateCnt: props.hateCnt !== undefined ? props.hateCnt : 0
+    });
+
+    useEffect(() => {
+        try {
+            const formData = new FormData();
+            formData.append('rcd', props.rcd);
+            post('/reply/confirmRecom', formData)
+                .then(res => {
+                    const data = res.data;
+                    setState(state => ({
+                        ...state,
+                        likeYn: data.likeMember === memberNo && data.likeYn === 'Y' ? 'Y' : 'N',
+                        hateYn: data.hateMember === memberNo && data.hateYn === 'Y' ? 'Y' : 'N'
+                    }))
+                })
+                .catch(err => {
+                    throw(err);
+                });
+        } catch (error) {
+            throw(error);
+        }
+        
+    }, [props.rcd, memberNo]);
+
+    const handleRecomLike = (event) => {
+        event.preventDefault();
+        if (memberNo === -1) {
+            alert("로그인 후 이용해주세요.");
+            return false;
+        }
+        if (props.replyerNo === memberNo) {
+            alert("댓글 작성자는 추천할 수 없습니다.");
+            return false;
+        }
+        if (state.likeYn === 'Y') {
+            alert("좋아요를 취소합니다.");
+            updateRecom('LIKE_CANCEL');
+            return false;
+        }
+        if (state.likeYn === 'N') {
+            alert("좋아요를 선택하셨습니다.");
+            updateRecom('LIKE_OK');
+            return false;
+        }
     };
 
-    const handleRecDown = () => {
-
+    const handleRecomHate = (event) => {
+        event.preventDefault();
+        if (memberNo === -1) {
+            alert("로그인 후 이용해주세요.");
+            return false;
+        }
+        if (props.replyerNo === memberNo) {
+            alert("댓글 작성자는 추천할 수 없습니다.");
+            return false;
+        }
+        if (state.hateYn === 'Y') {
+            alert("싫어요를 취소합니다.");
+            updateRecom('HATE_CANCEL');
+            return false;
+        }
+        if (state.hateYn === 'N') {
+            alert("싫어요를 선택하셨습니다.");
+            updateRecom('HATE_OK');
+            return false;
+        }
     };
+
+    const updateRecom = (likeAction) => {
+        const formData = new FormData();
+        formData.append('bno', props.bno);
+        formData.append('replyerNo', props.replyerNo);
+        formData.append('rcd', props.rcd);
+        formData.append('rno', props.rno);
+        formData.append('likeAction', likeAction);
+        formData.append('hateYn', state.hateYn);
+        formData.append('likeYn', state.likeYn);
+        post('/reply/updateRecom', formData)
+            .then(res => {
+                console.log(res.data.data);
+                const data = res.data.data;
+                setState({
+                    likeYn: data.likeMember === memberNo && data.likeYn === 'Y' ? 'Y' : 'N',
+                    hateYn: data.hateMember === memberNo && data.hateYn === 'Y' ? 'Y' : 'N',
+                    likeCnt: data.likeCnt,
+                    hateCnt: data.hateCnt
+                })
+            })
+            .catch(err => console.log(err));
+    }
     
     return (
         <TableBody>
@@ -58,13 +158,29 @@ const ReplyTable = props => {
             </TableRow>
             <TableRow>
                 <TableCell colSpan="2">
-                    <IconButton onClick={handleRecUp}>
-                        <ArrowDropUp />
-                    </IconButton>
-                    {props.recCnt}
-                    <IconButton onClick={handleRecDown}>
-                        <ArrowDropDown />
-                    </IconButton>
+                    {state.likeYn === 'Y'
+                        ? 
+                        <IconButton onClick={handleRecomLike}>
+                            <ThumbUpAlt />
+                        </IconButton>
+                        :
+                        <IconButton onClick={handleRecomLike}>
+                            <ThumbUpOutlined />
+                        </IconButton>
+                    }
+                    {state.likeCnt}
+
+                    {state.hateYn === 'Y'
+                        ? 
+                        <IconButton onClick={handleRecomHate}>
+                            <ThumbDownAlt />
+                        </IconButton>
+                        :
+                        <IconButton onClick={handleRecomHate}>
+                            <ThumbDownOutlined />
+                        </IconButton>
+                    }
+                    {state.hateCnt}
                 </TableCell>
             </TableRow>
         </TableBody>

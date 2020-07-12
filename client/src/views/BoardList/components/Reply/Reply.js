@@ -16,7 +16,7 @@ import {
 import {post} from 'axios';
 import ReplyTable from '../ReplyTable';
 import { useSelector, useDispatch } from 'react-redux';
-import { getSessioning } from 'store/actions';
+import { getBrdSessioning } from 'store/actions';
 
 const styles = makeStyles(theme => ({
     root: {
@@ -74,21 +74,27 @@ const Reply = props => {
     const classes = styles();
     const { className } = props;
 
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getBrdSessioning());
+    }, [dispatch]);
+
+    const brdSession = useSelector(state => state.brdSession, []) || [];
+
     const [replyState, setReplyState] = useState({
         values: '',
-        count: 0,
-        memberNo: props.memberNo,
-        bno: props.bno
+        memberNo: brdSession.memberNo,
+        bno: brdSession.bno
     });
 
     const [state, setState] = useState({
         replyText: '',
-        memberNo: props.memberNo,
-        bno: props.bno,
+        memberNo: brdSession.memberNo,
+        bno: brdSession.bno,
         avatar: '',
         replyer: ''
     });
-    
+
     const callBackApi = useCallback(() => {
         const url = '/reply/replyList';
         const formData = new FormData();
@@ -123,7 +129,8 @@ const Reply = props => {
           return <ReplyTable 
                     replyState={replyState} 
                     key={c.rcd} 
-                    bno={c.bno} updateYn={c.updateYn} createDt={c.createDt} replyer={c.replyer} recCnt={c.recCnt} avatar={c.avatar} replyText={c.replyText}
+                    bno={c.bno} updateYn={c.updateYn} createDt={c.createDt} replyer={c.replyer} likeCnt={c.likeCnt} hateCnt={c.hateCnt} avatar={c.avatar} replyText={c.replyText}
+                    replyerNo={c.replyerNo} rno={c.rno} rcd={c.rcd} recomNo={c.recomNo} likeMember={c.likeMember} hateMember={c.hateMember}
                 />
         });
     }
@@ -146,34 +153,13 @@ const Reply = props => {
             })
     }, []);
 
-    useEffect(() => {
-        if (props.bno === undefined || props.bno === '') {
-            post('/board/getSession')
-            .then(res => {
-                setState(state => ({
-                    ...state,
-                    bno: res.data.bno,
-                    memberNo: res.data.memberNo
-                }));
-            })
-            .catch(err => console.log(err));
-        }
-    }, [props.bno]);
-
-    const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(getSessioning());
-    }, [dispatch]);
-
-    const session = useSelector(state => state.session, []) || [];
-    const memberNo = session.memberNo;
-
     const handleSubmit = (event) => {
         event.preventDefault();
         if (state.replyText !== '') {
             insertReply()
                 .then(res => {
                     if (res.data === 'succeed') {
+                        alert("댓글이 등록되었습니다.");
                         callBackApi();
                         document.getElementsByName('replyText')[0].value = "";
                     }
@@ -188,8 +174,8 @@ const Reply = props => {
     const insertReply = () => {
         const url = "/reply/replyInsert";
         const formData = new FormData();
-        formData.append("bno", Number(state.bno));
-        formData.append("memberNo", Number(memberNo));
+        formData.append("bno", Number(brdSession.bno));
+        // formData.append("memberNo", Number(brdSession.memberNo));
         formData.append("replyer", state.replyer);
         formData.append("replyText", state.replyText);
         return post(url, formData);
