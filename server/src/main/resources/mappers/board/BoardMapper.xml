@@ -70,7 +70,8 @@
 	<update id="deleteBoard" parameterType="Long">
 		UPDATE board SET
 			del_yn = 'Y',
-			use_yn = 'N'
+			use_yn = 'N',
+			update_dt = SYSDATE()
 		WHERE 1=1 
 		<if test="bno != null">
 			AND bno = #{bno}

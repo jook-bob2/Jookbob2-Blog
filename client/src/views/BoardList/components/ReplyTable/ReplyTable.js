@@ -12,6 +12,7 @@ import {ThumbUpAlt, ThumbUpOutlined, ThumbDownAlt, ThumbDownOutlined} from '@mat
 import {post} from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { getSessioning } from 'store/actions';
+import ReplyDelete from '../ReplyDelete';
 
 
 const styles = makeStyles(theme => ({
@@ -27,6 +28,10 @@ const styles = makeStyles(theme => ({
     },
     title: {
         padding: '20px 15px 0px 15px'
+    },
+    setting: {
+        textAlign: 'right',
+        paddingRight: 5
     }
 }));
 
@@ -152,12 +157,18 @@ const ReplyTable = props => {
                     {props.updateYn === 'Y' ? <h6>{moment(props.createDt).format('YYYY-MM-DD hh:mm:ss')}(작성) ∙ {moment(props.updateDt).format('YYYY-MM-DD hh:mm:ss')}(수정됨)</h6>
                         : <h6>{moment(props.createDt).format('YYYY-MM-DD hh:mm:ss')}(작성)</h6>}
                 </td>
+                <td colSpan="1" className={classes.setting}>
+                    {props.replyerNo === memberNo
+                        ? <ReplyDelete replyerNo={props.replyerNo} rcd={props.rcd} callBackApi={props.callBackApi}/>
+                        : null
+                    }
+                </td>
             </TableRow>
             <TableRow>
-                <td colSpan="2" className={classes.title}>{props.replyText}</td>
+                <td colSpan="3" className={classes.title}>{props.replyText}</td>
             </TableRow>
             <TableRow>
-                <TableCell colSpan="2">
+                <TableCell colSpan="3">
                     {state.likeYn === 'Y'
                         ? 
                         <IconButton onClick={handleRecomLike}>

@@ -174,4 +174,28 @@
 			replyer_no = #{replyerNo}
 			AND rcd = #{rcd}
 	</update>
+	
+	<update id="deleteReply" parameterType="Long">
+		UPDATE reply SET
+			use_yn = 'N',
+			del_yn = 'Y',
+			update_dt = SYSDATE()
+		WHERE rcd = #{rcd}
+	</update>
+	
+	<update id="deleteLike" parameterType="Long">
+		UPDATE like_reply SET
+			use_yn = 'N',
+			del_yn = 'Y',
+			update_dt = SYSDATE()
+		WHERE rcd = #{rcd}
+	</update>
+	
+	<update id="deleteHate" parameterType="Long">
+		UPDATE hate_reply SET
+			use_yn = 'N',
+			del_yn = 'Y',
+			update_dt = SYSDATE()
+		WHERE rcd = #{rcd}
+	</update>
 </mapper>

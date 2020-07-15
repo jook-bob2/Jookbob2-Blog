@@ -130,7 +130,7 @@ const Reply = props => {
                     replyState={replyState} 
                     key={c.rcd} 
                     bno={c.bno} updateYn={c.updateYn} createDt={c.createDt} replyer={c.replyer} likeCnt={c.likeCnt} hateCnt={c.hateCnt} avatar={c.avatar} replyText={c.replyText}
-                    replyerNo={c.replyerNo} rno={c.rno} rcd={c.rcd} recomNo={c.recomNo} likeMember={c.likeMember} hateMember={c.hateMember}
+                    replyerNo={c.replyerNo} rno={c.rno} rcd={c.rcd} callBackApi={callBackApi}
                 />
         });
     }
@@ -200,9 +200,9 @@ const Reply = props => {
                 <div >
                     <Table>
                         <colgroup>
-                            <col width="2%"/>
-                            <col width="60%"/>
-                            <col width="38%"/>
+                            <col width="5%"/>
+                            <col width="85%"/>
+                            <col width="10%"/>
                         </colgroup>
                         {replyState.values ? setValueComponents(replyState.values) :
                             <TableBody>
