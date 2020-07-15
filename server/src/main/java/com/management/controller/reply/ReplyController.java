@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -171,7 +173,7 @@ public class ReplyController {
 	}
 	
 	@PostMapping(value = "/confirmRecom")
-	public Map<String, Object> confirmRecom(@RequestParam Map<String, Object> param, HttpSession session) {
+	public Map<String, Object> confirmRecom(@RequestParam Map<String, Object> param, HttpSession session) throws Exception{
 		try {
 			Long memberNo = (long) Integer.parseInt(session.getAttribute("memberNo").toString());
 			param.put("memberNo", memberNo);
@@ -185,9 +187,14 @@ public class ReplyController {
 			param.put("likeYn", like.get("likeYn"));
 			param.put("hateYn", hate.get("hateYn"));
 		} catch (Exception e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 		
 		return param;
+	}
+	
+	@DeleteMapping(value = "/deleteReply/{rcd}")
+	public void deleteReply(@PathVariable("rcd") Long rcd, HttpSession session) {
+		replyService.deleteReply(rcd);
 	}
 }

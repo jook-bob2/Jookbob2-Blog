@@ -23,4 +23,7 @@ public interface ReplyMapper {
 	public Long hateCnt (Map<String, Object> param);
 	public Map<String, Object> confirmLike (Map<String, Object> param);
 	public Map<String, Object> confirmHate (Map<String, Object> param);
+	public void deleteReply(Long rcd);
+	public void deleteLike(Long rcd);
+	public void deleteHate(Long rcd);
 }

@@ -103,4 +103,11 @@ public class ReplyServiceImpl implements ReplyService {
 		// 이전 hate 이력을 삭제
 		replyMapper.deletePrevHate(param);
 	}
+
+	@Override
+	public void deleteReply(Long rcd) {
+		replyMapper.deleteReply(rcd);
+		replyMapper.deleteLike(rcd);
+		replyMapper.deleteHate(rcd);
+	}
 }
