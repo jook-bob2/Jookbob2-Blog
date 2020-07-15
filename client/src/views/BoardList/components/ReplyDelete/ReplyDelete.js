@@ -16,6 +16,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { useSelector, useDispatch } from 'react-redux';
 import { getSessioning } from 'store/actions';
 import Axios from 'axios';
+import ReplyUpdate from '../ReplyUpdate';
 
 const styles = makeStyles(theme => ({
     root: {
@@ -35,6 +36,9 @@ const styles = makeStyles(theme => ({
     },
     selectD: {
         color: '#e83553'
+    },
+    updateOpen: {
+        color: 'blue'
     }
 }));
 
@@ -46,7 +50,8 @@ const ReplyDelete = (props) => {
     const classes = styles();
     const [state, setState] = useState({
         rcd: props !== undefined ? props.rcd : '',
-        open: false
+        open: false,
+        updateOpen: false
     });
 
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -69,6 +74,13 @@ const ReplyDelete = (props) => {
             ...state,
             open: true
         }))
+
+    }
+    const handleClickUpdateOpen = () => {
+        setState(state => ({
+            ...state,
+            updateOpen: true
+        }))
     }
 
     const handleClose = () => {
@@ -76,6 +88,14 @@ const ReplyDelete = (props) => {
         setState(state => ({
             ...state,
             open: false
+        }));
+    };
+
+    const handleUpdateClose = () => {
+        setAnchorEl(null);
+        setState(state => ({
+            ...state,
+            updateOpen: false
         }));
     };
 
@@ -115,7 +135,7 @@ const ReplyDelete = (props) => {
                 }}
             >
                 {props.replyerNo === memberNo ? 
-                    <MenuItem>
+                    <MenuItem onClick={handleClickUpdateOpen} className={classes.updateOpen}>
                         수정
                     </MenuItem>
                     :
@@ -154,13 +174,13 @@ const ReplyDelete = (props) => {
                     <Button
                         variant="contained"
                         color="primary"
-                        //className={classes.delete}
                         onClick={handleClose}
                     >
                         닫기
                     </Button>
                 </DialogActions>
             </Dialog>
+            <ReplyUpdate open={state.updateOpen} rcd={props.rcd} handleUpdateClose={handleUpdateClose} callBackApi={props.callBackApi} />
         </div>
     );
 };

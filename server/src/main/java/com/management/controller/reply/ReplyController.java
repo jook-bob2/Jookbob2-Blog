@@ -194,7 +194,20 @@ public class ReplyController {
 	}
 	
 	@DeleteMapping(value = "/deleteReply/{rcd}")
-	public void deleteReply(@PathVariable("rcd") Long rcd, HttpSession session) {
+	public void deleteReply(@PathVariable("rcd") Long rcd) {
 		replyService.deleteReply(rcd);
+	}
+	
+	@PostMapping(value = "/getReplyForm/{rcd}")
+	public Map<String, Object> getReplyForm(@PathVariable("rcd") Long rcd) {
+		Map<String, Object> map = new HashMap<>();
+		String replyText = replyService.getReplyForm(rcd);
+		map.put("replyText", replyText);
+		return map;
+	}
+	
+	@PostMapping(value = "/updateReply")
+	public void updateReply(@RequestParam Map<String, Object> param) {
+		replyMapper.updateReply(param);
 	}
 }

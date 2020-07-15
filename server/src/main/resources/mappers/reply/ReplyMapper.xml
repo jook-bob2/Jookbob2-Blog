@@ -198,4 +198,18 @@
 			update_dt = SYSDATE()
 		WHERE rcd = #{rcd}
 	</update>
+	
+	<select id="getReplyForm" parameterType="Long" resultType="String">
+		SELECT reply_text
+		FROM reply
+		WHERE rcd = #{rcd}
+	</select>
+	
+	<update id="updateReply" parameterType="hashmap">
+		UPDATE reply SET
+			reply_text = #{replyText},
+			update_yn = 'Y',
+			update_dt = SYSDATE()
+		WHERE rcd = #{rcd}
+	</update>
 </mapper>

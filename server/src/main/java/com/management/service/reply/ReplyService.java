@@ -15,4 +15,5 @@ public interface ReplyService {
 	public Map<String, Object> getHateState(Map<String, Object> param);
 	public void updateRecom(Map<String, Object> param);
 	public void deleteReply(Long rcd);
+	public String getReplyForm(Long rcd);
 }
