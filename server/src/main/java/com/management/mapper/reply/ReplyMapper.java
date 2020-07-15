@@ -26,4 +26,6 @@ public interface ReplyMapper {
 	public void deleteReply(Long rcd);
 	public void deleteLike(Long rcd);
 	public void deleteHate(Long rcd);
+	public String getReplyForm(Long rcd);
+	public void updateReply(Map<String, Object> param);
 }

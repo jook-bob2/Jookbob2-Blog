@@ -129,7 +129,7 @@ const Reply = props => {
           return <ReplyTable 
                     replyState={replyState} 
                     key={c.rcd} 
-                    bno={c.bno} updateYn={c.updateYn} createDt={c.createDt} replyer={c.replyer} likeCnt={c.likeCnt} hateCnt={c.hateCnt} avatar={c.avatar} replyText={c.replyText}
+                    bno={c.bno} updateYn={c.updateYn} createDt={c.createDt} updateDt={c.updateDt} replyer={c.replyer} likeCnt={c.likeCnt} hateCnt={c.hateCnt} avatar={c.avatar} replyText={c.replyText}
                     replyerNo={c.replyerNo} rno={c.rno} rcd={c.rcd} callBackApi={callBackApi}
                 />
         });

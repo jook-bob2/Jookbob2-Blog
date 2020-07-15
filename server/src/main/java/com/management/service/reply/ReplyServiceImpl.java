@@ -110,4 +110,9 @@ public class ReplyServiceImpl implements ReplyService {
 		replyMapper.deleteLike(rcd);
 		replyMapper.deleteHate(rcd);
 	}
+
+	@Override
+	public String getReplyForm(Long rcd) {
+		return replyMapper.getReplyForm(rcd);
+	}
 }
