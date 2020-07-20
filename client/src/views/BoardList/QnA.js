@@ -12,7 +12,7 @@ import BoardTable from './components/BoardTable';
 import Button from '@material-ui/core/Button';
 import {post} from 'axios';
 import { Link as RouterLink } from 'react-router-dom';
-import ListIcon from '@material-ui/icons/List';
+import ContactSupport from '@material-ui/icons/ContactSupport';
 import { useSelector, useDispatch } from 'react-redux';
 import { getSessioning } from 'store/actions';
 
@@ -203,7 +203,7 @@ const QnA = props => {
       <div className={classes.row}>
         {props.location === undefined 
           ?
-          <div><h3><ListIcon /> Q&A</h3></div>
+          <div><h3><ContactSupport /> Q&A</h3></div>
           :
           <SearchInput
               placeholder="검색하기"
