@@ -1,16 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { Divider, Drawer } from '@material-ui/core';
 import { Profile, SidebarNav } from './components';
-import {
-    List,
-    AccountBalance,
-    Category,
-    ContactSupport,
-    Dashboard
-} from '@material-ui/icons';
+import { post } from 'axios';
 
 const useStyles = makeStyles(theme => ({
     drawer: {
@@ -43,64 +37,35 @@ const Sidebar = props => {
 
     const classes = useStyles();
 
-    const pages = {
-        menu: [
-            {
-                title: 'Home',
-                href: '/dashboard',
-                icon: <Dashboard />,
-                haveSub: 'N'
-            },
-            {
-                title: '게시판',
-                icon: <List />,
-                haveSub: 'Y'
-            },
-            {
-                title: '게시판2',
-                icon: <List />,
-                haveSub: 'Y'
-            }
-        ],
-        subMenu: [
-            {
-                title: 'Q&A',
-                href: '/qna',
-                icon: <ContactSupport />,
-                subTitle: '게시판'
-            },
-            {
-                title: '취업관련',
-                href: '/aboutJob',
-                icon: <AccountBalance />,
-                subTitle: '게시판'
-            },
-            {
-                title: '일상관련',
-                href: '/talkLife',
-                icon: <Category />,
-                subTitle: '게시판'
-            },
-            {
-                title: '123',
-                href: '/error',
-                icon: <ContactSupport />,
-                subTitle: '게시판2'
-            },
-            {
-                title: '435',
-                href: '/error',
-                icon: <AccountBalance />,
-                subTitle: '게시판2'
-            },
-            {
-                title: '353',
-                href: '/error',
-                icon: <Category />,
-                subTitle: '게시판2'
-            }
-        ]
-    };
+    const [menuState, setMenuState] = useState({
+        menu: [],
+        subMenu: []
+    });
+
+    useEffect(() => {
+        post('/ftmenu/menuList')
+            .then(res => {
+                const menuList = res.data.menuList;
+                const menuArr = [];
+                const subArr = [];
+
+                for (let i = 0; i < menuList.length; i++) {
+                    if (menuList[i].upperMenuCd) {
+                        subArr.push(menuList[i]);
+                    } else {
+                        menuArr.push(menuList[i]);
+                    }
+                }
+                
+                setMenuState({
+                    menu: menuArr,
+                    subMenu: subArr
+                });
+            })
+            .catch(err => {
+                throw(err);
+            })
+    }, []);
     
     return (
         <Drawer
@@ -118,7 +83,7 @@ const Sidebar = props => {
                 
                 <SidebarNav
                     className={classes.nav}
-                    pages={pages}
+                    menuList={menuState}
                 />
             </div>
         </Drawer>

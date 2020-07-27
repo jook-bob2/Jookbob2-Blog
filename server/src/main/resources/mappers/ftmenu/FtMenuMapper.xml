@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.management.mapper.ftmenu.FtMenuMapper">
+	<resultMap type="hashmap" id="selectMap">
+		<result column="menu_cd" property="menuCd"/>
+		<result column="upper_menu_cd" property="upperMenuCd"/>
+		<result column="menu_icon" property="menuIcon"/>
+		<result column="menu_lvl" property="menuLvl"/>
+		<result column="menu_nm" property="menuNm"/>
+		<result column="menu_ordr" property="menuOrdr"/>
+		<result column="path_src" property="pathSrc"/>
+		<result column="create_dt" property="createDt"/>
+		<result column="update_dt" property="updateDt"/>
+		<result column="use_yn" property="useYn"/>
+		<result column="del_yn" property="delYn"/>
+	</resultMap>
+	
+	<select id="menuList" resultMap="selectMap">
+		SELECT
+			*
+		FROM ft_menu;
+	</select>
+</mapper>

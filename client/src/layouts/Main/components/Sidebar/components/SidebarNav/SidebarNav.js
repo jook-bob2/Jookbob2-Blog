@@ -58,20 +58,20 @@ const CustomRouterLink = forwardRef((props, ref) => (
 ));
 
 const SidebarNav = props => {
-  const { pages, className, ...rest } = props;
+  const { menuList, className, ...rest } = props;
 
   const classes = useStyles();
 
   const [selectedIndex, setSelectedIndex] = useState('');
-  const [subTitle, setSubTitle] = useState('');
+  const [upperMenuCd, setUpperMenuCd] = useState('');
 
-  const handleClick = (index, title) => {
+  const handleClick = (index, menuCd) => {
     if (selectedIndex === index) {
       setSelectedIndex('');
-      setSubTitle('');
+      setUpperMenuCd('');
     } else {
       setSelectedIndex(index);
-      setSubTitle(title);
+      setUpperMenuCd(menuCd);
     }
   };
 
@@ -80,51 +80,51 @@ const SidebarNav = props => {
       {...rest}
       className={clsx(classes.root, className)}
     >
-      {pages.menu.map((item, index) => (
+      {menuList.menu.map((item, index) => (
         <List key={index}>
-          {item.haveSub !== 'Y'
+          {item.pathSrc
             ?
             <ListItem disableGutters className={classes.item}>
               <Button
                   activeClassName={classes.active}
                   className={classes.button}
                   component={CustomRouterLink}
-                  to={item.href}
+                  to={item.pathSrc}
                 >
                   <ListItemIcon>
-                    <div className={classes.icon}>{item.icon}</div>
+                    <div className={classes.icon}><img src={item.menuIcon} alt="menu icon"></img></div>
                   </ListItemIcon>
-                  <ListItemText primary={item.title} />
+                  <ListItemText primary={item.menuNm} />
                 </Button>
             </ListItem>
             :
-            <ListItem className={classes.expandItem} button onClick={() => handleClick(index, item.title)} disableGutters>
+            <ListItem className={classes.expandItem} button onClick={() => handleClick(index, item.menuCd)} disableGutters>
               <ListItemIcon>
-                <div className={classes.icon}>{item.icon}</div>
+                <div className={classes.icon}><img src={item.menuIcon} alt="menu icon"></img></div>
               </ListItemIcon>
-              <ListItemText primary={item.title} />
+              <ListItemText primary={item.menuNm} />
               {index === selectedIndex ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
           }
             
           <Collapse in={index === selectedIndex} timeout="auto" unmountOnExit>
             <List component='div' disablePadding>
-              {pages.subMenu.map((sub, index) => {
+              {menuList.subMenu.map((sub, index) => {
                 return (
                   <div key={index}>
-                    {sub.subTitle === subTitle
+                    {sub.upperMenuCd === upperMenuCd
                       ?
                       <ListItem className={classes.nested}>
                         <Button
                           activeClassName={classes.active}
                           className={classes.button}
                           component={CustomRouterLink}
-                          to={sub.href}
+                          to={sub.pathSrc}
                         >
                           <ListItemIcon>
-                            {sub.icon}
+                            <img src={sub.menuIcon} alt="menu icon"></img>
                           </ListItemIcon>
-                          {sub.title}
+                          {sub.menuNm}
                         </Button>
                       </ListItem>
                       :
@@ -143,7 +143,7 @@ const SidebarNav = props => {
 
 SidebarNav.propTypes = {
   className: PropTypes.string,
-  pages: PropTypes.object.isRequired
+  menuList: PropTypes.object.isRequired
 };
 
 export default SidebarNav;

@@ -171,7 +171,7 @@ const AccountDetails = props => {
                 variant="outlined"
               />
             </Grid>
-            <Grid
+            {/* <Grid
               item
               md={4}
               xs={8}
@@ -230,7 +230,7 @@ const AccountDetails = props => {
                 value={values.address2 || ''}
                 variant="outlined"
               />
-            </Grid>
+            </Grid> */}
           </Grid>
         </CardContent>
         <Divider />

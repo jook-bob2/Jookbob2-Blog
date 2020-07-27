@@ -24,16 +24,15 @@ const Footer = props => {
                 &copy;{' '}
                 <Link
                     component="a"
-                    href="https://devias.io/"
+                    href="https://github.com/ehrmaks/SpringBoot-React.git"
                     target="_blank"
                 >
-                    Devias IO
+                    Github
                 </Link>
-                . 2019
+                . 2020
             </Typography>
             <Typography variant="caption">
-                Created with love for the environment. By designers and developers who
-                love to work together in offices!
+                These are spring boot and reacts that I personally made.
             </Typography>
         </div>
     );

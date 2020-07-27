@@ -13,7 +13,7 @@ import {
     Avatar,
     Button
   } from '@material-ui/core';
-import {post} from 'axios';
+import { post } from 'axios';
 import ReplyTable from '../ReplyTable';
 import { useSelector, useDispatch } from 'react-redux';
 import { getBrdSessioning } from 'store/actions';
