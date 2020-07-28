@@ -19,6 +19,6 @@
 	<select id="menuList" resultMap="selectMap">
 		SELECT
 			*
-		FROM ft_menu;
+		FROM ft_menu ORDER BY menu_cd, menu_ordr;
 	</select>
 </mapper>

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Switch, Redirect } from 'react-router-dom';
 import { RouteWithLayout } from './components';
-import { Main as MainLayout, Minimal as MinimalLayout } from './layouts';
+import { Main as MainLayout, Minimal as MinimalLayout, Admin as AdminLayOut } from './layouts';
 import { useSelector, useDispatch } from 'react-redux';
 import { getSessioning } from 'store/actions';
 
@@ -19,6 +19,11 @@ import {
     BoardUpdate as BoardUpdateView
 } from './views';
 
+import {
+    Dashboard as DashboardAdmin,
+    MemberList as MemberListAdmin
+} from './views/Admin';
+
 const Routes = () => {
     const dispatch = useDispatch();
     useEffect(() => {
@@ -35,6 +40,7 @@ const Routes = () => {
                 from="/"
                 to="/dashboard"
             />
+
             <RouteWithLayout
                 component={DashboardView}
                 exact
@@ -124,7 +130,20 @@ const Routes = () => {
                 layout={MinimalLayout}
                 path="/not-found"
             />
-            
+
+            <RouteWithLayout 
+                component={DashboardAdmin}
+                exact
+                layout={AdminLayOut}
+                path="/admin"
+            />
+
+            <RouteWithLayout 
+                component={MemberListAdmin}
+                exact
+                layout={AdminLayOut}
+                path="/memberList"
+            />
 
             <Redirect to="/not-found" />
         </Switch>

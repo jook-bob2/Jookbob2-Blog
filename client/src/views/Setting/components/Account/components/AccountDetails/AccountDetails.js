@@ -65,20 +65,20 @@ const AccountDetails = props => {
     callBackMember();
   },[callBackMember]);
 
-  const states = [
-    {
-      value: 'alabama',
-      label: 'Alabama'
-    },
-    {
-      value: 'new-york',
-      label: 'New York'
-    },
-    {
-      value: 'san-francisco',
-      label: 'San Francisco'
-    }
-  ];
+  // const states = [
+  //   {
+  //     value: 'alabama',
+  //     label: 'Alabama'
+  //   },
+  //   {
+  //     value: 'new-york',
+  //     label: 'New York'
+  //   },
+  //   {
+  //     value: 'san-francisco',
+  //     label: 'San Francisco'
+  //   }
+  // ];
 
   const handleSubmit = event => {
     event.preventDefault();
