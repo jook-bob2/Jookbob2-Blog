@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Getter 
 @Entity 
 @Table(name = "admin_info", uniqueConstraints = {
-		@UniqueConstraint(columnNames = {"userId", "email"})
+		@UniqueConstraint(columnNames = {"adminId", "email"})
 })
 @SequenceGenerator(name = "ADMIN_SEQ_GENERATOR", sequenceName = "ADMIN_SEQ", initialValue = 1, allocationSize = 1)
 public class Admin { 
@@ -35,7 +35,7 @@ public class Admin {
     
     // 아이디
     @Column(length = 30, nullable = false)
-    private String userId;
+    private String adminId;
     
     // 패스워드
     @Column(length = 150, nullable = false)
@@ -57,6 +57,10 @@ public class Admin {
     @UpdateTimestamp
     private LocalDateTime updateDt;
     
+    // 연락처
+    @Column(length = 20, nullable = true)
+    private String phoneNo;
+    
     // 주소1
     @Column(length = 100, nullable = true)
     private String address1;
@@ -69,6 +73,10 @@ public class Admin {
     @Column(length = 20, nullable = true)
     private String postNo;
     
+    // 프로필 이미지
+    @Column(length = 1024)
+    private String profileImg;
+    
     
     public Admin() {
 		super();
@@ -76,18 +84,22 @@ public class Admin {
 	}
 
     @Builder
-	public Admin(Long adminNo, String userId, String passwd, String name, String email, LocalDateTime createDt,
-			LocalDateTime updateDt, String address1, String address2, String postNo) {
+	public Admin(Long adminNo, String adminId, String passwd, String name, String email, LocalDateTime createDt,
+			LocalDateTime updateDt, String phoneNo, String address1, String address2, String postNo,
+			String profileImg) {
+		super();
 		this.adminNo = adminNo;
-		this.userId = userId;
+		this.adminId = adminId;
 		this.passwd = passwd;
 		this.name = name;
 		this.email = email;
 		this.createDt = createDt;
 		this.updateDt = updateDt;
+		this.phoneNo = phoneNo;
 		this.address1 = address1;
 		this.address2 = address2;
 		this.postNo = postNo;
+		this.profileImg = profileImg;
 	}
 
 	public Long getAdminNo() {
@@ -98,12 +110,12 @@ public class Admin {
 		this.adminNo = adminNo;
 	}
 
-	public String getUserId() {
-		return userId;
+	public String getAdminId() {
+		return adminId;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setAdminId(String adminId) {
+		this.adminId = adminId;
 	}
 
 	public String getPasswd() {
@@ -146,6 +158,14 @@ public class Admin {
 		this.updateDt = updateDt;
 	}
 
+	public String getPhoneNo() {
+		return phoneNo;
+	}
+
+	public void setPhoneNo(String phoneNo) {
+		this.phoneNo = phoneNo;
+	}
+
 	public String getAddress1() {
 		return address1;
 	}
@@ -169,5 +189,12 @@ public class Admin {
 	public void setPostNo(String postNo) {
 		this.postNo = postNo;
 	}
-    
+
+	public String getProfileImg() {
+		return profileImg;
+	}
+
+	public void setProfileImg(String profileImg) {
+		this.profileImg = profileImg;
+	}
 }
