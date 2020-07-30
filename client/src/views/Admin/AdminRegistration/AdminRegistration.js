@@ -57,10 +57,13 @@ const useStyles = makeStyles(theme => ({
         display: 'none'
     },
     cardAction: {
-        placeContent: 'center',
+        placeContent: 'center'
     },
     addressBtn: {
         padding: 10
+    },
+    label: {
+        marginRight: 8
     }
 }));
   
@@ -133,13 +136,12 @@ const AdminRegistration = () => {
 
     const handleFileRemove = () => {
         removePicture()
-        .then(res => {
-            setState(state => ({
-                ...state,
-                avatar: ''
-            }));
-            alert("이미지가 삭제되었습니다.");
-        })   
+            .then(res => {
+                setState(state => ({
+                    ...state,
+                    avatar: ''
+                }));
+            });
     };
 
     const removePicture = () => {
@@ -175,6 +177,8 @@ const AdminRegistration = () => {
     }
 
     const handleCancel = () => {
+        if (state.avatar !== '')
+            handleFileRemove();
         window.location.reload();
     }
 
@@ -261,16 +265,15 @@ const AdminRegistration = () => {
                         <Divider />
                         <CardActions className={classes.cardAction}>
                             <input className={classes.hidden} type="file" accept="image/*" id="raised-button-file" file={state.file} value={state.fileName} onChange={handleFileChange}></input>
-                            <label htmlFor="raised-button-file">
-                            
-                            <Button
-                                color="primary"
-                                variant="contained"
-                                component="span" 
-                                name="file"
-                            >
-                                {state.avatar === "" ? "등록" : "수정"}
-                            </Button>
+                            <label htmlFor="raised-button-file" className={classes.label}>
+                                <Button
+                                    color="primary"
+                                    variant="contained"
+                                    component="span" 
+                                    name="file"
+                                >
+                                    {state.avatar === "" ? "등록" : "수정"}
+                                </Button>
                             </label>
                             {state.avatar === "" ? null : <Button variant="outlined" color="secondary" onClick={handleFileRemove}>삭제</Button>}
                         </CardActions>
