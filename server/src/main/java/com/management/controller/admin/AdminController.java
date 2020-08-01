@@ -1,6 +1,7 @@
 package com.management.controller.admin;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,25 +41,47 @@ public class AdminController {
 	private S3Service s3Service;
 	
 	@PostMapping(value = "/registration")
-	public void joinMember(@RequestParam Map<String, Object> map) throws Exception {
+	public int registration(@RequestParam Map<String, Object> param) throws Exception {
 		Admin entity = new Admin();
-		String passwd = passwordEncode.encode(map.get("passwd").toString());
+		String passwd = passwordEncode.encode(param.get("passwd").toString());
+		int result = 0;
 		
 		try {
-			entity.setAddress1(map.get("address1").toString());
-			entity.setAddress2(map.get("address2").toString());
-			entity.setAdminId(map.get("adminId").toString());
-			entity.setEmail(map.get("email").toString());
-			entity.setName(map.get("name").toString());
+			entity.setAddress1(param.get("address1").toString());
+			entity.setAddress2(param.get("address2").toString());
+			entity.setAdminId(param.get("adminId").toString());
+			entity.setEmail(param.get("email").toString());
+			entity.setName(param.get("name").toString());
 			entity.setPasswd(passwd);
-			entity.setPhoneNo(map.get("phoneNo").toString());
-			entity.setPostNo(map.get("postNo").toString());
-			entity.setProfileImg(map.get("profileImg").toString());
+			entity.setPhoneNo(param.get("phoneNo").toString());
+			entity.setPostNo(param.get("postNo").toString());
+			entity.setProfileImg(param.get("profileImg").toString());
+			entity.setUseYn("Y");
+			entity.setSecYn("N");
 			
-			adminService.registration(entity);
+			int idCheckCnt = adminMapper.idCheck(param);
+			int emailCheckCnt = adminMapper.emailCheck(param);
+			int phoneCheckCnt = adminMapper.phoneCheck(param);
+			
+			if (idCheckCnt > 0) {
+				result = -1;
+				return result;
+			} else if (emailCheckCnt > 0) {
+				result = -2;
+				return result;
+			} else if (phoneCheckCnt > 0) {
+				result = -3;
+				return result;
+			} else if (idCheckCnt + emailCheckCnt + phoneCheckCnt == 0) {
+				adminService.registration(entity);
+				result = 1;
+				return result;
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return result;
 	}
 	
 	@PostMapping(value = "/uploadPicture", headers = "content-type=multipart/form-data")
@@ -91,6 +114,28 @@ public class AdminController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@PostMapping(value = "/adminList")
+	public Map<String, Object> adminList(@RequestParam Map<String, Object> param) {
+		Map<String, Object> map = new HashMap<>();
+		
+		int page = Integer.parseInt(param.get("page").toString());
+		int rowsPerPage = Integer.parseInt(param.get("rowsPerPage").toString());
+		
+		int pageBegin = (page - 1) * rowsPerPage; // 0, 5, 10 이런식으로 페이징
+		
+		param.put("pageBegin", pageBegin);
+		param.put("pageEnd", rowsPerPage);
+		
+		List<Map<String, Object>> adminList = adminService.adminList(param);
+		
+		int adminCnt = adminMapper.adminCnt(param);
+		
+		map.put("list", adminList);
+		map.put("adminCnt", adminCnt);
+		
+		return map;
 	}
 	
 }

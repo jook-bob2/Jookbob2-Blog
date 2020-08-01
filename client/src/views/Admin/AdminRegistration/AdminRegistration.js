@@ -156,9 +156,22 @@ const AdminRegistration = () => {
         
         registration()
             .then(res => {
-                alert("저장완료!");
-            window.location.reload();
-        })
+                console.log(res);
+                const result = res.data;
+                if (result === 1) {
+                    alert("등록이 완료 되었습니다.");
+                    window.location.reload();
+                } else if (result === -1) {
+                    alert("아이디가 중복 됩니다.");
+                } else if (result === -2) {
+                    alert("이메일이 중복 됩니다.");
+                } else if (result === -3) {
+                    alert("연락처가 중복 됩니다.");
+                }
+            })
+            .catch(err => {
+                throw(err);
+            })
     }
 
     const registration = () => {

@@ -1,6 +1,7 @@
 package com.management.service.admin;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -32,5 +33,10 @@ public class AdminServiceImpl implements AdminService {
 	@Transactional
 	public void registration(Admin entity) throws SQLException {
 		adminRepository.save(entity);
+	}
+
+	@Override
+	public List<Map<String, Object>> adminList(Map<String, Object> param) {
+		return adminMapper.adminList(param);
 	}
 }

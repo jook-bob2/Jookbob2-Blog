@@ -10,8 +10,12 @@ import {
     CardHeader,
     TextField,
     Select,
-    MenuItem
+    MenuItem,
+    InputLabel,
+    FormControl
 } from '@material-ui/core';
+import { useDispatch } from 'react-redux';
+import { getAdminListing, getAdminFiltering, getAdminPaging } from 'store/actions';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -36,21 +40,54 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const AdminFilter = () => {
+const AdminFilter = (props) => {
     const classes = useStyles();
+    const dispatch = useDispatch();
 
     const [state, setState] = useState({
+        adminId: '',
+        email: '',
+        name: '',
+        phoneNo: '',
         startDate: '',
         endDate: '',
         adminState: ''
     });
 
+    const [open, setOpen] = useState(false);
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+    
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
     const handleChange = (event) => {
-        console.log(event.target.value);
+        event.persist();
+
         setState(state => ({
             ...state,
             [event.target.name] : event.target.value
         }));
+    };
+
+    const handleSubmit = () => {
+        if (state.startDate > state.endDate) {
+            alert("시작 날짜가 마지막 날짜보다 클 수 없습니다.");
+            return false;
+        } else if (state.startDate && state.endDate === '') {
+            alert("마지막 날짜를 입력해주세요.");
+            return false;
+        } else if (state.endDate && state.startDate === '') {
+            alert("시작 날짜를 입력해주세요.");
+            return false;
+        }
+
+        dispatch(getAdminListing(state, 1, 5));
+        dispatch(getAdminFiltering(state));
+        dispatch(getAdminPaging(1));
     };
 
     return (
@@ -89,6 +126,8 @@ const AdminFilter = () => {
                                         <TextField
                                             label="아이디"
                                             margin="dense"
+                                            name="adminId"
+                                            onChange={handleChange}
                                         />
                                     </Grid>
 
@@ -109,6 +148,8 @@ const AdminFilter = () => {
                                         <TextField
                                             label="이메일"
                                             margin="dense"
+                                            name="email"
+                                            onChange={handleChange}
                                         />
                                     </Grid>
                                 </Grid>
@@ -134,6 +175,8 @@ const AdminFilter = () => {
                                         <TextField
                                             label="이름"
                                             margin="dense"
+                                            name="name"
+                                            onChange={handleChange}
                                         />
                                     </Grid>
 
@@ -154,6 +197,9 @@ const AdminFilter = () => {
                                         <TextField
                                             label="연락처"
                                             margin="dense"
+                                            name="phoneNo"
+                                            type="number"
+                                            onChange={handleChange}
                                         />
                                     </Grid>
                                 </Grid>
@@ -211,20 +257,25 @@ const AdminFilter = () => {
                                         item
                                         md={4}
                                     >
-                                        <Select
-                                            labelId="admin-state"
-                                            className={classes.select}
-                                            labelWidth={10}
-                                            //id="demo-simple-select"
-                                            name="adminState"
-                                            value={state.adminState}
-                                            onChange={handleChange}
-                                        >
-                                            <MenuItem value={1}>사용함</MenuItem>
-                                            <MenuItem value={10}>사용안함</MenuItem>
-                                            <MenuItem value={20}>탈퇴함</MenuItem>
-                                            <MenuItem value={30}>탈퇴안함</MenuItem>
-                                        </Select>
+                                        <FormControl>
+                                            <InputLabel id="selectLabel">선택하세요.</InputLabel>
+                                            <Select
+                                                labelId="selectLabel"
+                                                className={classes.select}
+                                                name="adminState"
+                                                value={state.adminState}
+                                                onChange={handleChange}
+                                                open={open}
+                                                onClose={handleClose}
+                                                onOpen={handleOpen}
+                                            >
+                                                <MenuItem value=''>선택하세요.</MenuItem>
+                                                <MenuItem value='UseY'>사용함</MenuItem>
+                                                <MenuItem value='UseN'>사용안함</MenuItem>
+                                                <MenuItem value='SecY'>탈퇴함</MenuItem>
+                                                <MenuItem value='SecN'>탈퇴안함</MenuItem>
+                                            </Select>
+                                        </FormControl>
                                     </Grid>
                                 </Grid>
                             </CardContent>
@@ -233,7 +284,7 @@ const AdminFilter = () => {
                                 <Button
                                     color="primary"
                                     variant="contained"
-                                    type="submit"
+                                    onClick={handleSubmit}
                                 >
                                     검색
                                 </Button>

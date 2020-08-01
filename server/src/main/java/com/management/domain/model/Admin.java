@@ -77,6 +77,13 @@ public class Admin {
     @Column(length = 1024)
     private String profileImg;
     
+    // 사용여부
+    @Column(length = 2)
+    private String useYn;
+    
+    // 탈퇴여부 
+    @Column(length = 2)
+    private String secYn;
     
     public Admin() {
 		super();
@@ -85,8 +92,8 @@ public class Admin {
 
     @Builder
 	public Admin(Long adminNo, String adminId, String passwd, String name, String email, LocalDateTime createDt,
-			LocalDateTime updateDt, String phoneNo, String address1, String address2, String postNo,
-			String profileImg) {
+			LocalDateTime updateDt, String phoneNo, String address1, String address2, String postNo, String profileImg,
+			String useYn, String secYn) {
 		super();
 		this.adminNo = adminNo;
 		this.adminId = adminId;
@@ -100,6 +107,8 @@ public class Admin {
 		this.address2 = address2;
 		this.postNo = postNo;
 		this.profileImg = profileImg;
+		this.useYn = useYn;
+		this.secYn = secYn;
 	}
 
 	public Long getAdminNo() {
@@ -196,5 +205,21 @@ public class Admin {
 
 	public void setProfileImg(String profileImg) {
 		this.profileImg = profileImg;
+	}
+
+	public String getUseYn() {
+		return useYn;
+	}
+
+	public void setUseYn(String useYn) {
+		this.useYn = useYn;
+	}
+
+	public String getSecYn() {
+		return secYn;
+	}
+
+	public void setSecYn(String secYn) {
+		this.secYn = secYn;
 	}
 }
