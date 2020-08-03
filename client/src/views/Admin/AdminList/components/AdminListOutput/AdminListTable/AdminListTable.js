@@ -1,9 +1,9 @@
 import React from 'react';
-//import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles'
 import moment from 'moment';
 //import {post} from 'axios';
-import {TableCell, TableRow, TableBody} from '@material-ui/core'
+import {TableCell, TableRow, TableBody, Button} from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -40,6 +40,15 @@ const AdminListTable = props => {
                 </TableCell>
                 <TableCell align='center'>
                     {props.secYn === 'Y' ? '탈퇴함' : '탈퇴안함'}
+                </TableCell>
+                <TableCell align='center'>
+                    <RouterLink
+                        to={{ pathname: "/admin-update/" + props.adminId, query: { query: props } }}
+                    >
+                        <Button color="primary" variant="contained">
+                            수정
+                        </Button>
+                    </RouterLink>
                 </TableCell>
             </TableRow>
         </TableBody>

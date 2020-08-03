@@ -39,4 +39,9 @@ public class AdminServiceImpl implements AdminService {
 	public List<Map<String, Object>> adminList(Map<String, Object> param) {
 		return adminMapper.adminList(param);
 	}
+
+	@Override
+	public void adminUdpate(Map<String, Object> param) {
+		adminMapper.adminUpdate(param);
+	}
 }

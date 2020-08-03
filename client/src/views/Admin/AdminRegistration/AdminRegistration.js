@@ -111,10 +111,10 @@ const AdminRegistration = () => {
         e.preventDefault();
         addPicture(e)
         .then(res => {
-            setState({
+            setState(state => ({
                 ...state,
                 avatar: res.data.profileImg
-            });
+            }));
         })
         .catch(err => console.log(err));
     };

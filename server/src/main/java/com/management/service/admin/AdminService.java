@@ -9,4 +9,5 @@ import com.management.domain.model.Admin;
 public interface AdminService {
 	public void registration(Admin entity) throws SQLException;
 	public List<Map<String, Object>> adminList(Map<String, Object> param);
+	public void adminUdpate(Map<String, Object> param);
 }

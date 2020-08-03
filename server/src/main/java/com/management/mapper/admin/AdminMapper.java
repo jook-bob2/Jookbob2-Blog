@@ -12,5 +12,6 @@ public interface AdminMapper {
 	public int idCheck(Map<String, Object> param);
 	public int emailCheck(Map<String, Object> param);
 	public int phoneCheck(Map<String, Object> param);
-	
+	public Map<String, Object> adminUpdateList(String adminId);
+	public void adminUpdate(Map<String, Object> param);
 }

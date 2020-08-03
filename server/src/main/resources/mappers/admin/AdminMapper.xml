@@ -116,11 +116,44 @@
 		SELECT count(*) 
 		FROM admin_info 
 		WHERE email = #{email}
+		<if test="updateId != null and !updateId.equals('')">
+			AND admin_id != #{updateId}
+		</if>
 	</select>
 	
 	<select id="phoneCheck" parameterType="hashmap" resultType="int">
 		SELECT count(*) 
 		FROM admin_info 
 		WHERE phone_no = #{phoneNo}
+		<if test="updateId != null and !updateId.equals('')">
+			AND admin_id != #{updateId}
+		</if>
 	</select>
+	
+	<select id="adminUpdateList" parameterType="String" resultMap="selectMap">
+		SELECT
+			name,
+			email,
+			phone_no,
+			address1,
+			address2,
+			post_no,
+			profile_img
+		FROM admin_info
+		WHERE admin_id = #{adminId}
+	</select>
+	
+	<update id="adminUpdate" parameterType="hashmap">
+		UPDATE admin_info SET
+			passwd = #{passwd},
+			name = #{name},
+			email = #{email},
+			phone_no = #{phoneNo},
+			address1 = #{address1},
+			address2 = #{address2},
+			post_no = #{postNo},
+			profile_img = #{profileImg}
+		WHERE
+			admin_id = #{adminId}
+	</update>
 </mapper>

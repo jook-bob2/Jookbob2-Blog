@@ -23,7 +23,8 @@ import {
     Dashboard as DashboardAdmin,
     MemberList as MemberListAdmin,
     AdminRegistration,
-    AdminList
+    AdminList,
+    AdminUpdate
 } from './views/Admin';
 
 const Routes = () => {
@@ -159,6 +160,13 @@ const Routes = () => {
                 exact
                 layout={AdminLayOut}
                 path="/admin-list"
+            />
+
+            <RouteWithLayout 
+                component={AdminUpdate}
+                exact
+                layout={AdminLayOut}
+                path="/admin-update/:id"
             />
 
             <Redirect to="/not-found" />

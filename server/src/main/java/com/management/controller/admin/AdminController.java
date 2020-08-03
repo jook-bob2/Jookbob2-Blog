@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -136,6 +137,45 @@ public class AdminController {
 		map.put("adminCnt", adminCnt);
 		
 		return map;
+	}
+	
+	@PostMapping(value = "/adminUpdateList/{adminId}")
+	public Map<String, Object> adminUpdateList(@PathVariable String adminId) {
+		Map<String, Object> updateList = adminMapper.adminUpdateList(adminId);
+		
+		return updateList;
+	}
+	
+	@PostMapping(value = "/adminUpdate")
+	public int adminUpdate(@RequestParam Map<String, Object> param) throws Exception {
+		String passwd = passwordEncode.encode(param.get("passwd").toString());
+		int result = 0;
+		
+		try {
+			String updateId = param.get("adminId").toString();
+			
+			param.put("updateId", updateId);
+			param.put("passwd", passwd);
+			
+			int emailCheckCnt = adminMapper.emailCheck(param);
+			int phoneCheckCnt = adminMapper.phoneCheck(param);
+			
+			if (emailCheckCnt > 0) {
+				result = -1;
+				return result;
+			} else if (phoneCheckCnt > 0) {
+				result = -2;
+				return result;
+			} else if (emailCheckCnt + phoneCheckCnt == 0) {
+				adminService.adminUdpate(param);
+				result = 1;
+				return result;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
 }

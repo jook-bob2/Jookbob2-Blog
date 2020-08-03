@@ -81,7 +81,7 @@ const AdminListOutput = props => {
             return <AdminListTable
                 key={index} 
                 index={index}
-                adminId={c.adminId} email={c.email} name={c.name} phoneNo={c.phoneNo} createDt={c.createDt} useYn={c.useYn} secYn={c.secYn}
+                adminNo={c.adminNo} adminId={c.adminId} email={c.email} name={c.name} phoneNo={c.phoneNo} createDt={c.createDt} useYn={c.useYn} secYn={c.secYn}
                 page={page} itemsPerPage={itemsPerPage}
             />
         })
@@ -114,6 +114,7 @@ const AdminListOutput = props => {
                             <TableCell align="center" className={classes.tableHead}>등록일</TableCell>
                             <TableCell align="center" className={classes.tableHead}>사용여부</TableCell>
                             <TableCell align="center" className={classes.tableHead}>탈퇴여부</TableCell>
+                            <TableCell align="center" className={classes.tableHead}>비고</TableCell>
                         </TableRow>
                     </TableHead>
                     {
@@ -121,7 +122,7 @@ const AdminListOutput = props => {
                         :
                         <TableBody>
                             <TableRow>
-                                <TableCell colSpan="8" align="center">
+                                <TableCell colSpan="9" align="center">
                                     <CircularProgress className={classes.progress} variant="determinate" value={progress}></CircularProgress>
                                 </TableCell>
                             </TableRow>
