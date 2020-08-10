@@ -77,15 +77,26 @@ public class Member {
     @Column(length = 30)
     private String phoneNo;
     
+    // 사용여부
+    @Column(length = 2)
+    private String useYn;
+    
+    // 탈퇴여부 
+    @Column(length = 2)
+    private String secYn;
+    
     
     public Member() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
+
     @Builder
 	public Member(Long memberNo, String userId, String passwd, String name, String email, LocalDateTime createDt,
-			LocalDateTime updateDt, String address1, String address2, String postNo, String profileImg, String phoneNo) {
+			LocalDateTime updateDt, String address1, String address2, String postNo, String profileImg, String phoneNo,
+			String useYn, String secYn) {
+		super();
 		this.memberNo = memberNo;
 		this.userId = userId;
 		this.passwd = passwd;
@@ -98,101 +109,147 @@ public class Member {
 		this.postNo = postNo;
 		this.profileImg = profileImg;
 		this.phoneNo = phoneNo;
+		this.useYn = useYn;
+		this.secYn = secYn;
 	}
+
 
 	public Long getMemberNo() {
 		return memberNo;
 	}
 
+
 	public void setMemberNo(Long memberNo) {
 		this.memberNo = memberNo;
 	}
+
 
 	public String getUserId() {
 		return userId;
 	}
 
+
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
+
 
 	public String getPasswd() {
 		return passwd;
 	}
 
+
 	public void setPasswd(String passwd) {
 		this.passwd = passwd;
 	}
+
 
 	public String getName() {
 		return name;
 	}
 
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 
 	public String getEmail() {
 		return email;
 	}
 
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
 
 	public LocalDateTime getCreateDt() {
 		return createDt;
 	}
 
+
 	public void setCreateDt(LocalDateTime createDt) {
 		this.createDt = createDt;
 	}
+
 
 	public LocalDateTime getUpdateDt() {
 		return updateDt;
 	}
 
+
 	public void setUpdateDt(LocalDateTime updateDt) {
 		this.updateDt = updateDt;
 	}
+
 
 	public String getAddress1() {
 		return address1;
 	}
 
+
 	public void setAddress1(String address1) {
 		this.address1 = address1;
 	}
+
 
 	public String getAddress2() {
 		return address2;
 	}
 
+
 	public void setAddress2(String address2) {
 		this.address2 = address2;
 	}
+
 
 	public String getPostNo() {
 		return postNo;
 	}
 
+
 	public void setPostNo(String postNo) {
 		this.postNo = postNo;
 	}
+
 
 	public String getProfileImg() {
 		return profileImg;
 	}
 
+
 	public void setProfileImg(String profileImg) {
 		this.profileImg = profileImg;
 	}
+
 
 	public String getPhoneNo() {
 		return phoneNo;
 	}
 
+
 	public void setPhoneNo(String phoneNo) {
 		this.phoneNo = phoneNo;
+	}
+
+
+	public String getUseYn() {
+		return useYn;
+	}
+
+
+	public void setUseYn(String useYn) {
+		this.useYn = useYn;
+	}
+
+
+	public String getSecYn() {
+		return secYn;
+	}
+
+
+	public void setSecYn(String secYn) {
+		this.secYn = secYn;
 	}
 }

@@ -8,10 +8,9 @@ import TableHead from '@material-ui/core/TableHead'
 import { makeStyles } from '@material-ui/core/styles'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Pagination from '@material-ui/lab/Pagination';
-import AdminListTable from './AdminListTable/AdminListTable';
+import MemberListTable from './MemberListTable/MemberListTable';
 import { useSelector, useDispatch } from 'react-redux';
-import { getAdminListing, getAdminPaging } from 'store/actions/admin/adminList';
-// import Button from '@material-ui/core/Button';
+import { getMemberListing, getMemberPaging } from 'store/actions/admin/memberList';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -37,13 +36,13 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const AdminListOutput = props => {
+const MemberListOutput = props => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    const adminList = useSelector(state => state.adminList) || '';
-    const filterValues = useSelector(state => state.adminFilter) || '';
-    const page = useSelector(state => state.adminListPage.page) || 1;
+    const memberList = useSelector(state => state.memberList) || '';
+    const filterValues = useSelector(state => state.memberFilter) || '';
+    const page = useSelector(state => state.memberListPage.page) || 1;
 
     const itemsPerPage = 5;
     
@@ -54,9 +53,9 @@ const AdminListOutput = props => {
 
     useEffect(() => {
         if (filterValues === '') {
-            dispatch(getAdminListing(false, page, itemsPerPage));
+            dispatch(getMemberListing(false, page, itemsPerPage));
         } else {
-            dispatch(getAdminListing(filterValues.values, page, itemsPerPage));
+            dispatch(getMemberListing(filterValues.values, page, itemsPerPage));
         }
     }, [dispatch, page, filterValues]);
 
@@ -69,8 +68,8 @@ const AdminListOutput = props => {
     }, []);
 
     useEffect(() => {
-        setNoOfPages(Math.ceil(adminList.adminCnt / itemsPerPage));
-    }, [adminList.adminCnt]);
+        setNoOfPages(Math.ceil(memberList.userCnt / itemsPerPage));
+    }, [memberList.userCnt]);
 
     const progressCount = () => {
         setProgress(oldProgress => (oldProgress >= 100 ? 0 : oldProgress + 1));
@@ -78,29 +77,29 @@ const AdminListOutput = props => {
 
     const callbackComponents = (data) => {
         return data.map((c, index) => {
-            return <AdminListTable
+            return <MemberListTable
                 key={index} 
                 index={index}
-                adminNo={c.adminNo} adminId={c.adminId} email={c.email} name={c.name} phoneNo={c.phoneNo} createDt={c.createDt} useYn={c.useYn} secYn={c.secYn}
+                memberNo={c.memberNo} userId={c.userId} email={c.email} name={c.name} phoneNo={c.phoneNo} createDt={c.createDt} useYn={c.useYn} secYn={c.secYn}
                 page={page} itemsPerPage={itemsPerPage}
             />
         })
     }
 
     const handlePaging = (e, value) => {
-        dispatch(getAdminPaging(value));
+        dispatch(getMemberPaging(value));
         
         if (filterValues === '') {
-            dispatch(getAdminListing(false, value, itemsPerPage));
+            dispatch(getMemberListing(false, value, itemsPerPage));
         } else {
-            dispatch(getAdminListing(filterValues.values, value, itemsPerPage));
+            dispatch(getMemberListing(filterValues.values, value, itemsPerPage));
         }
     }
 
     return (
         <div className={classes.root}>
             <h3 className={classes.paper}>
-                ★ {adminList.adminCnt}명의 관리자가 조회 되었습니다.
+                ★ {memberList.userCnt}명의 회원이 조회 되었습니다.
             </h3>
             <Paper className={classes.paper}>
                 <Table>
@@ -118,7 +117,7 @@ const AdminListOutput = props => {
                         </TableRow>
                     </TableHead>
                     {
-                        adminList.values ? callbackComponents(adminList.values)
+                        memberList.values ? callbackComponents(memberList.values)
                         :
                         <TableBody>
                             <TableRow>
@@ -148,4 +147,4 @@ const AdminListOutput = props => {
     );
 };
 
-export default AdminListOutput;
+export default MemberListOutput;

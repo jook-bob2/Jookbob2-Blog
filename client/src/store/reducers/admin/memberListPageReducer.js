@@ -1,8 +1,8 @@
-import { GET_ADMINPAGE } from '../actions/index';
+import { GET_MEMBERPAGE } from '../../actions/admin/memberList';
 
 export default function (state = 1, action) {
     switch (action.type) {
-        case GET_ADMINPAGE:
+        case GET_MEMBERPAGE:
             return {
                 page: Number(action.data)
             } 

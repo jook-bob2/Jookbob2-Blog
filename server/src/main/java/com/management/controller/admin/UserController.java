@@ -14,39 +14,40 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.management.domain.model.Admin;
-import com.management.mapper.admin.AdminMapper;
-import com.management.service.admin.AdminService;
+import com.management.domain.model.Member;
+import com.management.mapper.admin.UserMapper;
+import com.management.service.admin.UserService;
 import com.management.util.S3Service;
 
 import lombok.AllArgsConstructor;
 
 @RestController
-@RequestMapping("admin")
+@RequestMapping("user")
 @AllArgsConstructor
-public class AdminController {
+public class UserController {
+	
 	@Autowired
-	private AdminService adminService;
+	private UserService userService;
 	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncode;
 	
 	@Autowired
-	private AdminMapper adminMapper;
+	private UserMapper userMapper;
 	
 	@Autowired
 	private S3Service s3Service;
 	
 	@PostMapping(value = "/registration")
 	public int registration(@RequestParam Map<String, Object> param) throws Exception {
-		Admin entity = new Admin();
+		Member entity = new Member();
 		String passwd = passwordEncode.encode(param.get("passwd").toString());
 		int result = 0;
 		
 		try {
 			entity.setAddress1(param.get("address1").toString());
 			entity.setAddress2(param.get("address2").toString());
-			entity.setAdminId(param.get("adminId").toString());
+			entity.setUserId(param.get("userId").toString());
 			entity.setEmail(param.get("email").toString());
 			entity.setName(param.get("name").toString());
 			entity.setPasswd(passwd);
@@ -56,9 +57,9 @@ public class AdminController {
 			entity.setUseYn("Y");
 			entity.setSecYn("N");
 			
-			int idCheckCnt = adminMapper.idCheck(param);
-			int emailCheckCnt = adminMapper.emailCheck(param);
-			int phoneCheckCnt = adminMapper.phoneCheck(param);
+			int idCheckCnt = userMapper.userIdCheck(param);
+			int emailCheckCnt = userMapper.userEmailCheck(param);
+			int phoneCheckCnt = userMapper.userPhoneCheck(param);
 			
 			if (idCheckCnt > 0) {
 				result = -1;
@@ -70,7 +71,7 @@ public class AdminController {
 				result = -3;
 				return result;
 			} else if (idCheckCnt + emailCheckCnt + phoneCheckCnt == 0) {
-				adminService.registration(entity);
+				userService.registration(entity);
 				result = 1;
 				return result;
 			}
@@ -113,8 +114,8 @@ public class AdminController {
 		}
 	}
 	
-	@PostMapping(value = "/adminList")
-	public Map<String, Object> adminList(@RequestParam Map<String, Object> param) {
+	@PostMapping(value = "/userList")
+	public Map<String, Object> memberList(@RequestParam Map<String, Object> param) {
 		Map<String, Object> map = new HashMap<>();
 		
 		int page = Integer.parseInt(param.get("page").toString());
@@ -125,36 +126,36 @@ public class AdminController {
 		param.put("pageBegin", pageBegin);
 		param.put("pageEnd", rowsPerPage);
 		
-		List<Map<String, Object>> adminList = adminService.adminList(param);
+		List<Map<String, Object>> userList = userService.userList(param);
 		
-		int adminCnt = adminMapper.adminCnt(param);
+		int userCnt = userMapper.userCnt(param);
 		
-		map.put("list", adminList);
-		map.put("adminCnt", adminCnt);
+		map.put("list", userList);
+		map.put("userCnt", userCnt);
 		
 		return map;
 	}
 	
-	@PostMapping(value = "/adminUpdateList/{adminId}")
-	public Map<String, Object> adminUpdateList(@PathVariable String adminId) {
-		Map<String, Object> updateList = adminMapper.adminUpdateList(adminId);
+	@PostMapping(value = "/userUpdateList/{userId}")
+	public Map<String, Object> userUpdateList(@PathVariable String userId) {
+		Map<String, Object> updateList = userMapper.userUpdateList(userId);
 		
 		return updateList;
 	}
 	
-	@PostMapping(value = "/adminUpdate")
-	public int adminUpdate(@RequestParam Map<String, Object> param) throws Exception {
+	@PostMapping(value = "/userUpdate")
+	public int userUpdate(@RequestParam Map<String, Object> param) throws Exception {
 		String passwd = passwordEncode.encode(param.get("passwd").toString());
 		int result = 0;
 		
 		try {
-			String updateId = param.get("adminId").toString();
+			String updateId = param.get("userId").toString();
 			
 			param.put("updateId", updateId);
 			param.put("passwd", passwd);
 			
-			int emailCheckCnt = adminMapper.emailCheck(param);
-			int phoneCheckCnt = adminMapper.phoneCheck(param);
+			int emailCheckCnt = userMapper.userEmailCheck(param);
+			int phoneCheckCnt = userMapper.userPhoneCheck(param);
 			
 			if (emailCheckCnt > 0) {
 				result = -1;
@@ -163,7 +164,7 @@ public class AdminController {
 				result = -2;
 				return result;
 			} else if (emailCheckCnt + phoneCheckCnt == 0) {
-				adminService.adminUdpate(param);
+				userService.userUpdate(param);
 				result = 1;
 				return result;
 			}

@@ -1,12 +1,12 @@
-import { GET_ADMINLIST } from '../actions/index';
+import { GET_MEMBERLIST } from '../../actions/admin/memberList';
 
 export default function (state = { values: '', adminCnt: 0}, action) {
     switch (action.type) {
-        case GET_ADMINLIST:
+        case GET_MEMBERLIST:
             return {
                 ...state,
                 values: action.data.list,
-                adminCnt: action.data.adminCnt
+                userCnt: action.data.userCnt
             } 
         default:
             return state;

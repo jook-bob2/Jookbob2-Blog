@@ -87,12 +87,10 @@ const ReplyTable = props => {
             return false;
         }
         if (state.likeYn === 'Y') {
-            alert("좋아요를 취소합니다.");
             updateRecom('LIKE_CANCEL');
             return false;
         }
         if (state.likeYn === 'N') {
-            alert("좋아요를 선택하셨습니다.");
             updateRecom('LIKE_OK');
             return false;
         }
@@ -109,12 +107,10 @@ const ReplyTable = props => {
             return false;
         }
         if (state.hateYn === 'Y') {
-            alert("싫어요를 취소합니다.");
             updateRecom('HATE_CANCEL');
             return false;
         }
         if (state.hateYn === 'N') {
-            alert("싫어요를 선택하셨습니다.");
             updateRecom('HATE_OK');
             return false;
         }
@@ -131,7 +127,6 @@ const ReplyTable = props => {
         formData.append('likeYn', state.likeYn);
         post('/reply/updateRecom', formData)
             .then(res => {
-                console.log(res.data.data);
                 const data = res.data.data;
                 setState({
                     likeYn: data.likeMember === memberNo && data.likeYn === 'Y' ? 'Y' : 'N',

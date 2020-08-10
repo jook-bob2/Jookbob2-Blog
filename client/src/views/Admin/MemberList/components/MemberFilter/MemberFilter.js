@@ -15,7 +15,7 @@ import {
     FormControl
 } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
-import { getAdminListing, getAdminFiltering, getAdminPaging } from 'store/actions/admin/adminList';
+import { getMemberListing, getMemberFiltering, getMemberPaging } from 'store/actions/admin/memberList';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -40,18 +40,18 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const AdminFilter = (props) => {
+const MemberFilter = (props) => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
     const [state, setState] = useState({
-        adminId: '',
+        userId: '',
         email: '',
         name: '',
         phoneNo: '',
         startDate: '',
         endDate: '',
-        adminState: ''
+        userState: ''
     });
 
     const [open, setOpen] = useState(false);
@@ -85,9 +85,9 @@ const AdminFilter = (props) => {
             return false;
         }
 
-        dispatch(getAdminListing(state, 1, 5));
-        dispatch(getAdminFiltering(state));
-        dispatch(getAdminPaging(1));
+        dispatch(getMemberListing(state, 1, 5));
+        dispatch(getMemberFiltering(state));
+        dispatch(getMemberPaging(1));
     };
 
     return (
@@ -99,7 +99,7 @@ const AdminFilter = (props) => {
                     <Card>
                         <form>
                             <CardHeader
-                                title="관리자 목록"
+                                title="회원 목록"
                                 subheader="검색 내용을 입력해주세요."
                             />
                             <Divider />
@@ -126,7 +126,7 @@ const AdminFilter = (props) => {
                                         <TextField
                                             label="아이디"
                                             margin="dense"
-                                            name="adminId"
+                                            name="userId"
                                             onChange={handleChange}
                                         />
                                     </Grid>
@@ -250,7 +250,7 @@ const AdminFilter = (props) => {
                                         item
                                         md={2}
                                     >
-                                        <h3>관리자 상태 :</h3>
+                                        <h3>회원 상태 :</h3>
                                     </Grid>
 
                                     <Grid
@@ -262,8 +262,8 @@ const AdminFilter = (props) => {
                                             <Select
                                                 labelId="selectLabel"
                                                 className={classes.select}
-                                                name="adminState"
-                                                value={state.adminState}
+                                                name="userState"
+                                                value={state.userState}
                                                 onChange={handleChange}
                                                 open={open}
                                                 onClose={handleClose}
@@ -297,5 +297,5 @@ const AdminFilter = (props) => {
     )
 };
 
-export default AdminFilter;
+export default MemberFilter;
 

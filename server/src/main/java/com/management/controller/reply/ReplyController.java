@@ -66,6 +66,7 @@ public class ReplyController {
 		String msg = "error";
 		Reply replyEntity = new Reply();
 		//Recommendation recomEntity = new Recommendation();
+		System.out.println(param.toString());
 		
 		int bno = Integer.parseInt(param.get("bno").toString());
 		int memberNo = Integer.parseInt(session.getAttribute("memberNo").toString());
