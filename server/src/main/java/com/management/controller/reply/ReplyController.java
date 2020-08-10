@@ -1,6 +1,5 @@
 package com.management.controller.reply;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +51,6 @@ public class ReplyController {
 	@PostMapping(value = "/getLikeState")
 	public Map<String, Object> getLikeState (@RequestParam Map<String, Object> param) {
 		Map<String, Object> map = new HashMap<>();
-		System.out.println("=============================== " + param.toString());
 		
 		Map<String, Object> data = replyService.getLikeState(param);
 		
@@ -65,8 +63,6 @@ public class ReplyController {
 	public String replyInsert (@RequestParam Map<String, Object> param, HttpSession session) {
 		String msg = "error";
 		Reply replyEntity = new Reply();
-		//Recommendation recomEntity = new Recommendation();
-		System.out.println(param.toString());
 		
 		int bno = Integer.parseInt(param.get("bno").toString());
 		int memberNo = Integer.parseInt(session.getAttribute("memberNo").toString());
