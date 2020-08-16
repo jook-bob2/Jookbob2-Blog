@@ -8,6 +8,13 @@ import adminListPageReducer from './admin/adminListPageReducer';
 import memberListReducer from './admin/memberListReducer';
 import memberFilterReducer from './admin/memberFilterReducer';
 import memberListPageReducer from './admin/memberListPageReducer';
+import boardListReducer from './admin/boardListReducer';
+import boardFilterReducer from './admin/boardFilterReducer';
+import boardListPageReducer from './admin/boardListPageReducer';
+import adminAuthReducer from './admin/adminAuthReducer';
+import noticeListReducer from './admin/noticeListReducer';
+import noticeFilterReducer from './admin/noticeFilterReducer';
+import noticeListPageReducer from './admin/noticeListPageReducer';
 
 const rootReducer = combineReducers({
     session: sessionReducer,
@@ -18,7 +25,14 @@ const rootReducer = combineReducers({
     adminListPage: adminListPageReducer,
     memberList: memberListReducer,
     memberFilter: memberFilterReducer,
-    memberListPage: memberListPageReducer
+    memberListPage: memberListPageReducer,
+    boardList: boardListReducer,
+    boardFilter: boardFilterReducer,
+    boardListPage: boardListPageReducer,
+    adminAuth: adminAuthReducer,
+    noticeList: noticeListReducer,
+    noticeFilter: noticeFilterReducer,
+    noticeListPage: noticeListPageReducer,
 });
 
 export default rootReducer;

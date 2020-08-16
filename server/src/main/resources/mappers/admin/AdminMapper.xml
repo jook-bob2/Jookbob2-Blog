@@ -54,13 +54,13 @@
 		FROM admin_info
 		WHERE 1=1
 		<if test="adminId != null and !adminId.equals('')">
-			AND BINARY admin_id = #{adminId}
+			AND BINARY admin_id LIKE CONCAT('%', #{adminId}, '%')
 		</if>
 		<if test="email != null and !email.equals('')">
-			AND email = #{email}
+			AND email LIKE CONCAT('%', #{email}, '%')
 		</if>
 		<if test="name != null and !name.equals('')">
-			AND name = #{name}
+			AND name LIKE CONCAT('%', #{name}, '%')
 		</if>
 		<if test="phoneNo != null and !phoneNo.equals('')">
 			AND phone_no = #{phoneNo}
@@ -93,13 +93,13 @@
 		FROM admin_info
 		WHERE 1=1
 		<if test="adminId != null and !adminId.equals('')">
-			AND BINARY admin_id = #{adminId}
+			AND BINARY admin_id LIKE CONCAT('%', #{adminId}, '%')
 		</if>
 		<if test="email != null and !email.equals('')">
-			AND email = #{email}
+			AND email LIKE CONCAT('%', #{email}, '%')
 		</if>
 		<if test="name != null and !name.equals('')">
-			AND name = #{name}
+			AND name LIKE CONCAT('%', #{name}, '%')
 		</if>
 		<if test="phoneNo != null and !phoneNo.equals('')">
 			AND phone_no = #{phoneNo}
@@ -285,6 +285,56 @@
 		WHERE phone_no = #{phoneNo}
 		<if test="updateId != null and !updateId.equals('')">
 			AND user_id != #{updateId}
+		</if>
+	</select>
+	
+	<select id="pwCheck" parameterType="hashmap" resultType="String">
+		SELECT passwd FROM admin_info 
+		WHERE 1=1 AND
+		<if test="adminId != null and !adminId.equals('')">
+			admin_id=#{adminId}
+		</if>
+		<if test="email != null and !email.equals('')">
+			email=#{email}
+		</if>
+	</select>
+	
+	<select id="loginCheck" parameterType="com.management.domain.model.Admin" resultType="Boolean">
+		SELECT IF(SUM(admin_no) > 0 ,'true', 'false') as name FROM admin_info 
+		WHERE 1=1 
+		<if test="adminId != null and !adminId.equals('')">
+			AND admin_id=#{adminId}
+		</if>
+		<if test="email != null and !email.equals('')">
+			AND email=#{email}
+		</if>
+		AND passwd=#{passwd}
+	</select>
+	
+	<select id="viewMember" parameterType="hashmap" resultMap="adminListMap">
+		SELECT 
+			admin_no
+			,create_dt
+			,email
+			,name
+			,passwd
+			,update_dt
+			,admin_id
+			,profile_img
+			,phone_no
+			,post_no
+			,address1
+			,address2
+		FROM admin_info
+		WHERE 1=1 
+		<if test="adminNo != null">
+			AND admin_no = #{adminNo}
+		</if>
+		<if test="adminId != null and !adminId.equals('')">
+			AND admin_id=#{adminId}
+		</if>
+		<if test="email != null and !email.equals('')">
+			AND email=#{email}
 		</if>
 	</select>
 </mapper>

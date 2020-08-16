@@ -69,7 +69,6 @@ const styles = makeStyles(theme => ({
 const BoardUpdate = props => {
     const classes = styles();
     const { className, location, history } = props;
-    console.log(location);
 
     const [state, setState] = useState({
         list: location.query !== undefined ? location.query.state : {},
@@ -78,7 +77,6 @@ const BoardUpdate = props => {
         brdCode: location.query !== undefined ? location.query.state.bKinds : '',
         brdText: location.query !== undefined ? location.query.state.brdText : ''
     });
-    console.log(state.brdText);
 
     const [member, setMember] = useState({
         userName: '',

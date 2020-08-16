@@ -114,7 +114,17 @@ const BoardInsert = props => {
 
     const handleSubmit = event => {
         event.preventDefault();
-        if (state.brdCode === '' || state.title === '' || state.content === '') {
+        if (state.brdCode === '') {
+            alert("게시판 유형을 선택하세요.");
+            document.getElementsByName('brdCode')[0].focus();
+            return false;
+        }
+        if (state.title === '') {
+            alert("제목을 입력하세요.");
+            document.getElementsByName('title')[0].focus();
+            return false;
+        }
+        if (state.content === '') {
             alert("내용을 입력하세요.");
             return false;
         }

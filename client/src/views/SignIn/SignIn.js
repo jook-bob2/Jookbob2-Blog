@@ -201,6 +201,10 @@ const SignIn = (props) => {
     return post(url, formData);
   };
 
+  const handleDevelope = () => {
+    alert('개발중입니다.');
+  };
+
   return (
     <div className={classes.root}>
       <Grid
@@ -275,7 +279,7 @@ const SignIn = (props) => {
                   <Grid item>
                     <Button
                       color="primary"
-                      onClick={handleSignIn}
+                      onClick={handleDevelope}
                       size="large"
                       variant="contained"
                     >
@@ -285,7 +289,7 @@ const SignIn = (props) => {
                   </Grid>
                   <Grid item>
                     <Button
-                      onClick={handleSignIn}
+                      onClick={handleDevelope}
                       size="large"
                       variant="contained"
                     >

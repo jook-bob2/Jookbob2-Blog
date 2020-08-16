@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -40,5 +42,15 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public void adminUdpate(Map<String, Object> param) {
 		adminMapper.adminUpdate(param);
+	}
+
+	@Override
+	public String pwCheck(Map<String, Object> map) {
+		return adminMapper.pwCheck(map);
+	}
+
+	@Override
+	public Boolean loginCheck(Admin entity, HttpSession session) {
+		return adminMapper.loginCheck(entity);
 	}
 }

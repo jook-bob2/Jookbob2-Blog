@@ -3,6 +3,26 @@ import { post } from 'axios';
 export const GET_ADMINLIST = 'GET_ADMINLIST';
 export const GET_ADMINFILTER = 'GET_ADMINFILTER';
 export const GET_ADMINPAGE = 'GET_ADMINPAGE';
+export const GET_ADMINAUTH = 'GET_ADMINAUTH';
+
+export const getAdminAuthData = (data) => {
+    return {
+        type: GET_ADMINAUTH,
+        data
+    }
+}
+
+export const getAdminAuth = () => {
+    return (dispatch) => {
+        return post('/admin/getSession')
+            .then(res => {
+                dispatch(getAdminAuthData(res.data));
+            })
+            .catch(err => {
+                throw(err);
+            });
+    }
+}
 
 export const getAdminListData = (data) => {
     return {

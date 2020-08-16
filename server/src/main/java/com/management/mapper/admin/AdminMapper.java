@@ -3,7 +3,10 @@ package com.management.mapper.admin;
 
 import java.util.List;
 import java.util.Map;
+
 import org.apache.ibatis.annotations.Mapper;
+
+import com.management.domain.model.Admin;
 
 @Mapper
 public interface AdminMapper {
@@ -15,4 +18,7 @@ public interface AdminMapper {
 	public int phoneCheck(Map<String, Object> param);
 	public Map<String, Object> adminUpdateList(String adminId);
 	public void adminUpdate(Map<String, Object> param);
+	public String pwCheck(Map<String, Object> param);
+	public Boolean loginCheck(Admin entity);
+	public Map<String, Object> viewMember(Map<String, Object> map);
 }

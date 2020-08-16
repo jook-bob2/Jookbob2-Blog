@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,6 +38,66 @@ public class AdminController {
 	
 	@Autowired
 	private S3Service s3Service;
+	
+	@PostMapping(value = "/login")
+	public Map<String, Object> login(@RequestParam Map<String, Object> param, HttpSession session) {
+		String auth = null;
+		String password = param.get("password").toString();
+		String pwCheck = null;
+		Admin entity = new Admin();
+		Map<String, Object> map = new HashMap<>();
+		
+		
+		// @ 가 있으면 email 값으로 비밀번호를 가져옴.
+		if (param.get("email").toString().indexOf("@") > -1) {
+			auth = param.get("email").toString();
+			entity.setEmail(auth);
+			map.put("email", entity.getEmail());
+			pwCheck = adminService.pwCheck(map);
+		} else {
+			auth = param.get("email").toString();
+			entity.setAdminId(auth);
+			map.put("adminId", entity.getAdminId());
+			pwCheck = adminService.pwCheck(map);
+		}
+		
+		if (passwordEncode.matches(password, pwCheck)) {
+			entity.setPasswd(pwCheck);
+			boolean result = adminService.loginCheck(entity, session);
+			
+			if(result) {
+				Map<String, Object> memberList = adminMapper.viewMember(map);
+				Long adminNo = (Long) memberList.get("adminNo");
+				String adminName = memberList.get("name").toString();
+				
+				session.setAttribute("adminId", auth);
+				session.setAttribute("adminNo", adminNo);
+				session.setAttribute("adminName", adminName);
+				
+				map.put("adminNo", adminNo);
+				map.put("message", "succeed");
+				
+				return map;
+			}
+		} else {
+			map.put("message", "error");
+			return map;
+		}
+		return map;
+	}
+	
+	@PostMapping(value = "/getSession")
+	public Long getSession(HttpSession session) {
+		if (session.getAttribute("adminNo") != null)
+			return (long) Integer.parseInt(session.getAttribute("adminNo").toString());
+		else
+			return (long) -1;
+	}
+	
+	@PostMapping(value = "/logout")
+	public void logout(HttpSession session) {
+		session.invalidate();
+	}
 	
 	@PostMapping(value = "/registration")
 	public int registration(@RequestParam Map<String, Object> param) throws Exception {
@@ -172,6 +234,19 @@ public class AdminController {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	
+	@PostMapping(value = "/viewAdmin")
+	public Map<String, Object> viewAdmin(HttpSession session) {
+		Map<String, Object> map = new HashMap<>();
+		
+		if(session.getAttribute("adminId") != null) {
+			map.put("adminNo", session.getAttribute("adminNo").toString());
+			
+			map.put("data", adminMapper.viewMember(map));
+		}
+		
+		return map;
 	}
 	
 }

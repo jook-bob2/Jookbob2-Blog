@@ -28,8 +28,12 @@ public class Upload {
     private Long uploadCd; 
     
     // 작성자 코드
-    @Column(nullable = false)
+    @Column
     private Long memberNo;
+    
+    // 관리자 코드
+    @Column
+    private Long adminNo;
     
     // 파일 URL
     @Column(length = 1024, nullable = false)
@@ -58,11 +62,12 @@ public class Upload {
 	}
 
     @Builder
-	public Upload(Long uploadCd, Long memberNo, String fileUrl, LocalDateTime createDt,
+	public Upload(Long uploadCd, Long memberNo, Long adminNo, String fileUrl, LocalDateTime createDt,
 			LocalDateTime updateDt, String useYn, String delYn) {
 		super();
 		this.uploadCd = uploadCd;
 		this.memberNo = memberNo;
+		this.adminNo = adminNo;
 		this.fileUrl = fileUrl;
 		this.createDt = createDt;
 		this.updateDt = updateDt;
@@ -84,6 +89,14 @@ public class Upload {
 
 	public void setMemberNo(Long memberNo) {
 		this.memberNo = memberNo;
+	}
+
+	public Long getAdminNo() {
+		return adminNo;
+	}
+
+	public void setAdminNo(Long adminNo) {
+		this.adminNo = adminNo;
 	}
 
 	public String getFileUrl() {

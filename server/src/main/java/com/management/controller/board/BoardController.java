@@ -126,8 +126,8 @@ public class BoardController {
 			entity.setUpdateYn("N");
 			entity.setUseYn("Y");
 			entity.setDelYn("N");
+			boardService.saveBoard(entity);
 		}
-		boardService.saveBoard(entity);
 	}
 	
 	@PostMapping(value = "/updateBoard")
@@ -137,8 +137,8 @@ public class BoardController {
 			bno = (Long) session.getAttribute("bno");
 			entity.setBno(bno);
 			entity.setUpdateYn("Y");
+			boardService.updateBoard(entity);
 		}
-		boardService.updateBoard(entity);
 	}
 	
 	@DeleteMapping(value = "/deleteBoard/{bno}")

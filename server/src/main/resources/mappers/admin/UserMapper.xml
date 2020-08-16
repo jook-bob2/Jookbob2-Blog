@@ -37,13 +37,13 @@
 		FROM member_info
 		WHERE 1=1
 		<if test="userId != null and !userId.equals('')">
-			AND BINARY user_id = #{userId}
+			AND BINARY user_id LIKE CONCAT('%', #{userId}, '%')
 		</if>
 		<if test="email != null and !email.equals('')">
-			AND email = #{email}
+			AND email LIKE CONCAT('%', #{email}, '%')
 		</if>
 		<if test="name != null and !name.equals('')">
-			AND name = #{name}
+			AND name LIKE CONCAT('%', #{name}, '%')
 		</if>
 		<if test="phoneNo != null and !phoneNo.equals('')">
 			AND phone_no = #{phoneNo}
@@ -76,13 +76,13 @@
 		FROM member_info
 		WHERE 1=1
 		<if test="userId != null and !userId.equals('')">
-			AND BINARY user_id = #{userId}
+			AND BINARY user_id LIKE CONCAT('%', #{userId}, '%')
 		</if>
 		<if test="email != null and !email.equals('')">
-			AND email = #{email}
+			AND email LIKE CONCAT('%', #{email}, '%')
 		</if>
 		<if test="name != null and !name.equals('')">
-			AND name = #{name}
+			AND name LIKE CONCAT('%', #{name}, '%')
 		</if>
 		<if test="phoneNo != null and !phoneNo.equals('')">
 			AND phone_no = #{phoneNo}

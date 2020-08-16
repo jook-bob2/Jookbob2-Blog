@@ -6,7 +6,6 @@ import Hidden from '@material-ui/core/Hidden';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Navigator from './components/Navigator';
-//import Content from './components/Content';
 import Header from './components/Header';
 
 function Copyright() {
@@ -169,7 +168,7 @@ const Admin = (props) => {
       setMobileOpen(!mobileOpen);
     };
 
-    return (
+    return (  
       <ThemeProvider theme={theme}>
         <div className={classes.root}>
           <CssBaseline />

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.management.mapper.admin.BoardManagementMapper">
+	<resultMap type="hashmap" id="boardListMap">
+		<result column="bno" property="bno"/>
+		<result column="content" property="content"/>
+		<result column="title" property="title"/>
+		<result column="writer" property="writer"/>
+		<result column="create_dt" property="createDt"/>
+		<result column="update_dt" property="updateDt"/>
+		<result column="use_yn" property="useYn"/>
+		<result column="del_yn" property="delYn"/>
+		<result column="update_yn" property="updateYn"/>
+		<result column="b_kinds_no" property="bKindsNo"/>
+		<result column="brd_code" property="brdCode"/>
+		<result column="show_text" property="showText"/>
+	</resultMap>
+	
+	<select id="boardList" parameterType="hashmap" resultMap="boardListMap">
+		SELECT
+			b.bno,
+			b.content,
+			b.title,
+			b.writer,
+			DATE_FORMAT(b.create_dt, '%Y-%m-%d %T') AS create_dt,
+			DATE_FORMAT(b.update_dt, '%Y-%m-%d %T') AS update_dt,
+			b.del_yn,
+			b.use_yn,
+			b.update_yn,
+			k.b_kinds_no,
+			k.brd_code,
+			k.show_text
+		FROM board b INNER JOIN board_kinds k
+		ON b.brd_code = k.brd_code
+		WHERE 1=1
+		<if test="bno != null and !bno.equals('')">
+			AND BINARY b.bno = #{bno}
+		</if>
+		<if test="content != null and !content.equals('')">
+			AND b.content LIKE CONCAT('%', #{content}, '%')
+		</if>
+		<if test="title != null and !title.equals('')">
+			AND b.title LIKE CONCAT('%', #{title}, '%')
+		</if>
+		<if test="writer != null and !writer.equals('')">
+			AND b.writer LIKE CONCAT('%', #{writer}, '%')
+		</if>
+		<if test="boardState != null and !boardState.equals('')">
+			<if test="boardState.equals('DelY')">
+				AND b.del_yn = 'Y'
+			</if>
+			<if test="boardState.equals('DelN')">
+				AND b.del_yn = 'N'
+			</if>
+			<if test="boardState.equals('UpdateY')">
+				AND b.update_yn = 'Y'
+			</if>
+			<if test="boardState.equals('UpdateN')">
+				AND b.update_yn = 'N'
+			</if>
+		</if>
+		<if test="createStartDate != null and createEndDate != null and !createStartDate.equals('') and !createEndDate.equals('')">
+			AND b.create_dt BETWEEN DATE(#{createStartDate}) AND DATE_ADD(#{createEndDate}, INTERVAL 1 DAY)
+		</if>
+		<if test="updateStartDate != null and updateEndDate != null and !updateStartDate.equals('') and !updateEndDate.equals('')">
+			AND b.update_dt BETWEEN DATE(#{updateStartDate}) AND DATE_ADD(#{updateEndDate}, INTERVAL 1 DAY)
+		</if>
+		
+		<if test="brdCode != null and !brdCode.equals('')">
+			AND b.brd_code = #{brdCode}
+		</if>
+		
+		ORDER BY b.bno DESC
+		
+		<if test="pageBegin != null and pageEnd != null">
+			LIMIT #{pageBegin}, #{pageEnd}
+		</if>
+	</select>
+	
+	<select id="boardCnt" parameterType="hashmap" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM board b INNER JOIN board_kinds k
+		ON b.brd_code = k.brd_code
+		WHERE 1=1
+		<if test="bno != null and !bno.equals('')">
+			AND BINARY b.bno = #{bno}
+		</if>
+		<if test="content != null and !content.equals('')">
+			AND b.content LIKE CONCAT('%', #{content}, '%')
+		</if>
+		<if test="title != null and !title.equals('')">
+			AND b.title LIKE CONCAT('%', #{title}, '%')
+		</if>
+		<if test="writer != null and !writer.equals('')">
+			AND b.writer LIKE CONCAT('%', #{writer}, '%')
+		</if>
+		<if test="boardState != null and !boardState.equals('')">
+			<if test="boardState.equals('DelY')">
+				AND b.del_yn = 'Y'
+			</if>
+			<if test="boardState.equals('DelN')">
+				AND b.del_yn = 'N'
+			</if>
+			<if test="boardState.equals('UpdateY')">
+				AND b.update_yn = 'Y'
+			</if>
+			<if test="boardState.equals('UpdateN')">
+				AND b.update_yn = 'N'
+			</if>
+		</if>
+		<if test="createStartDate != null and createEndDate != null and !createStartDate.equals('') and !createEndDate.equals('')">
+			AND b.create_dt BETWEEN DATE(#{createStartDate}) AND DATE_ADD(#{createEndDate}, INTERVAL 1 DAY)
+		</if>
+		<if test="updateStartDate != null and updateEndDate != null and !updateStartDate.equals('') and !updateEndDate.equals('')">
+			AND b.update_dt BETWEEN DATE(#{updateStartDate}) AND DATE_ADD(#{updateEndDate}, INTERVAL 1 DAY)
+		</if>
+		
+		<if test="brdCode != null and !brdCode.equals('')">
+			AND b.brd_code = #{brdCode}
+		</if>
+	</select>
+	
+	<update id="boardDelete" parameterType="Long">
+		UPDATE board SET
+			use_yn = 'N',
+			del_yn = 'Y',
+			update_dt = SYSDATE()
+		WHERE bno = #{bno}
+	</update>
+	
+	<update id="boardRestore" parameterType="Long">
+		UPDATE board SET
+			use_yn = 'Y',
+			del_yn = 'N',
+			update_dt = SYSDATE()
+		WHERE bno = #{bno}
+	</update>
+	
+	<select id="getShowText" resultType="hashmap">
+		SELECT 
+			b_kinds_no as bKindsNo,
+			brd_code as brdCode,
+			show_text as showText
+		FROM board_kinds
+	</select>
+	
+	<select id="boardUpdateList" parameterType="Long" resultType="hashmap">
+		SELECT
+			b.title,
+        	b.content,
+        	k.brd_code as brdCode,
+        	m.name,
+        	m.profile_img as profileImg,
+        	m.member_no as memberNo
+        FROM board b INNER JOIN board_kinds k
+        ON b.brd_code = k.brd_code
+        INNER JOIN member_info m
+        ON b.writer_no = m.member_no
+        WHERE b.bno = #{bno}
+	</select>
+	
+	<update id="updateBoard" parameterType="hashmap">
+		UPDATE board SET
+			title = #{title},
+			content = #{content},
+			brd_code = #{brdCode},
+			update_yn = 'Y',
+			update_dt = NOW()
+		WHERE bno = #{bno}
+	</update>
+</mapper>
