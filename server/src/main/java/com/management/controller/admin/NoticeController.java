@@ -47,8 +47,7 @@ public class NoticeController {
 	@PostMapping(value = "/uploadImg", headers = "content-type=multipart/form-data")
 	public Map<String, Object> uploadImg (@RequestPart("upload") MultipartFile file, HttpSession session) throws Exception {
 		Map<String, Object> map = new HashMap<>();
-		System.out.println(file.toString());
-		System.out.println(session.getAttribute("adminNo").toString());
+		
 		if (file != null && session.getAttribute("adminNo") != null) {
 			Upload entity = new Upload();
 			entity.setAdminNo((Long) session.getAttribute("adminNo"));
@@ -124,5 +123,20 @@ public class NoticeController {
 	@PostMapping(value = "/noticeRestore/{noticeNo}")
 	public void noticeRestore(@PathVariable("noticeNo") Long noticeNo) {
 		noticeMapper.noticeRestore(noticeNo);
+	}
+	
+	@PostMapping(value = "/noticeUpdateList/{noticeNo}")
+	public Map<String, Object> noticeUpdateList(@PathVariable("noticeNo") Long noticeNo, HttpSession session) {
+		Map<String, Object> map = noticeMapper.noticeUpdateList(noticeNo);
+		
+		session.setAttribute("noticeNo", noticeNo);
+		session.setAttribute("adminNo", map.get("adminNo"));
+		
+		return map;
+	}
+	
+	@PostMapping(value = "/updateNotice")
+	public void updateNotice(@RequestParam Map<String, Object> param) {
+		noticeMapper.updateNotice(param);
 	}
 }

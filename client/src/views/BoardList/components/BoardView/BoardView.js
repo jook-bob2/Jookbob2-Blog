@@ -53,7 +53,7 @@ const styles = makeStyles(theme => ({
 
 const BoardView = props => {
     const classes = styles();
-    const { className, location, match } = props;
+    const { className, location, match, history } = props;
 
     const [state, setState] = useState({
         bno: match.params !== undefined ? match.params.bno : '',
@@ -139,7 +139,7 @@ const BoardView = props => {
                             </TableBody> 
                             
                         </Table>
-                        <BoardDelete state={state} bno={state.bno} writerNo={state.writerNo} memberNo={state.memberNo} brdText={state.brdText} bKinds={state.bKinds}></BoardDelete>
+                        <BoardDelete history={history} state={state} bno={state.bno} writerNo={state.writerNo} memberNo={state.memberNo} brdText={state.brdText} bKinds={state.bKinds}></BoardDelete>
                     
                 </CardContent>
             </Card>

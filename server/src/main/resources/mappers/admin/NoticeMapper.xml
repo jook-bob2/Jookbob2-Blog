@@ -137,4 +137,29 @@
 			update_dt = SYSDATE()
 		WHERE notice_no = #{noticeNo}
 	</update>
+	
+	<select id="noticeUpdateList" parameterType="Long" resultType="hashmap">
+		SELECT
+			n.title,
+        	n.content,
+        	k.brd_code as brdCode,
+        	a.name,
+        	a.profile_img as profileImg,
+        	a.admin_no as adminNo
+        FROM notice n INNER JOIN board_kinds k
+        ON n.brd_code = k.brd_code
+        INNER JOIN admin_info a
+        ON n.writer_no = a.admin_no
+        WHERE n.notice_no = #{noticeNo}
+	</select>
+	
+	<update id="updateNotice" parameterType="hashmap">
+		UPDATE notice SET
+			title = #{title},
+			content = #{content},
+			brd_code = #{brdCode},
+			update_yn = 'Y',
+			update_dt = NOW()
+		WHERE notice_no = #{noticeNo}
+	</update>
 </mapper>

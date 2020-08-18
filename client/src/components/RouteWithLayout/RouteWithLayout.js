@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
 const RouteWithLayout = props => {
   const { layout: Layout, component: Component, fallback: Fallback, isAllow, admin, user, ...rest } = props;
   const classes = useStyles();
-
+  
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {

@@ -41,9 +41,10 @@ public class ReplyController {
 			param.put("memberNo", (long) Integer.parseInt(session.getAttribute("memberNo").toString()));
 		}
 		
-		List<Map<String, Object>> list = replyService.replyList(param);
-		
-		map.put("list", list);
+		if (param.get("bno") != null || param.get("noticeNo") != null) {
+			List<Map<String, Object>> list = replyService.replyList(param);
+			map.put("list", list);
+		}
 		
 		return map;
 	}
@@ -63,14 +64,25 @@ public class ReplyController {
 	public String replyInsert (@RequestParam Map<String, Object> param, HttpSession session) {
 		String msg = "error";
 		Reply replyEntity = new Reply();
+		int bno = 0;
+		int noticeNo = 0;
+		int rno = 0;
 		
-		int bno = Integer.parseInt(param.get("bno").toString());
+		if(param.get("bno") != null) {
+			bno = Integer.parseInt(param.get("bno").toString());
+			replyEntity.setBno((long) bno);
+			rno = replyService.selectMaxRno(bno);
+		}
+		if(param.get("noticeNo") != null) {
+			noticeNo = Integer.parseInt(param.get("noticeNo").toString());;
+			replyEntity.setNoticeNo((long) noticeNo);
+			rno = replyService.selectMaxRno2(noticeNo);
+		}
+		
 		int memberNo = Integer.parseInt(session.getAttribute("memberNo").toString());
 		String replyer = param.get("replyer").toString();
 		String replyText = param.get("replyText").toString();
 		
-		int rno = replyService.selectMaxRno(bno);
-		replyEntity.setBno((long) bno);
 		replyEntity.setReplyer(replyer);
 		replyEntity.setReplyText(replyText);
 		replyEntity.setReplyerNo((long) memberNo);
@@ -81,19 +93,10 @@ public class ReplyController {
 		replyEntity.setLikeCnt((long) 0);
 		replyEntity.setHateCnt((long) 0);
 		
-//		recomEntity.setBno((long) bno);
-//		recomEntity.setUseYn("Y");
-//		recomEntity.setDelYn("N");
-//		recomEntity.setHateYn("N");
-//		recomEntity.setLikeYn("N");
-//		recomEntity.setMemberNo((long) memberNo);
-		
 		if (rno == 0) {
 			rno = rno + 1;
 			replyEntity.setRno((long) rno);
-			Long rcd = replyService.replyInsert(replyEntity);
-			//recomEntity.setRcd(rcd);
-			//recommendationService.recomInsert(recomEntity);
+			replyService.replyInsert(replyEntity);
 			
 			msg = "succeed";
 			return msg;
@@ -101,9 +104,7 @@ public class ReplyController {
 		} else if (rno >= 1) {
 			rno = rno + 1;
 			replyEntity.setRno((long) rno);
-			Long rcd = replyService.replyInsert(replyEntity);
-			//recomEntity.setRcd(rcd);
-			//recommendationService.recomInsert(recomEntity);
+			replyService.replyInsert(replyEntity);
 			
 			msg = "succeed";
 			return msg;

@@ -9,6 +9,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import { SearchInput } from '../../components';
 import BoardTable from './components/BoardTable';
+import NoticeTable from './components/NoticeTable';
 import Button from '@material-ui/core/Button';
 import {post} from 'axios';
 import { Link as RouterLink } from 'react-router-dom';
@@ -79,22 +80,30 @@ const useStyles = makeStyles(theme => ({
     padding: 10,
     paddingTop: 20,
     fontSize: 'xx-small'
+  },
+  noticeArea: {
+    marginBottom: 20
   }
 }));
 
 const QnA = props => {
   const classes = useStyles();
+
+  const { match } = props;
   
   const [boardState, setBoardState] = useState({
     values: '',
     searchKeyword: '',
     count: 0,
-    brdText: props.location === undefined ? 'qna' : props.location.pathname.split("/")[1],
+    brdText: match === undefined ? 'qna' : match.url.split("/")[1],
     bKinds: '00'
   });
 
-  const [progress, setProgress] = useState(0);
+  const [noticeState, setNoticeState] = useState({
+    values: ''
+  });
 
+  const [progress, setProgress] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(props.count !== undefined ? 5 : 10);
   const [page, setPage] = useState(0);
 
@@ -123,6 +132,26 @@ const QnA = props => {
     })
     .catch(err => console.log(err));
   }, [boardState.brdText, page, rowsPerPage]);
+
+  const callBackNotice = useCallback(() => {
+    const formData = new FormData();
+    formData.append('brdText', boardState.brdText);
+    
+    post(`/board/noticeList`, formData)
+      .then(res => {
+        setNoticeState(noticeState => ({
+          ...noticeState,
+          values: res.data.list
+        }));
+      })
+      .catch(err => {
+        throw(err);
+      })
+  }, [boardState.brdText]);
+
+  useEffect(() => {
+    callBackNotice();
+  }, [callBackNotice]);
 
   useEffect(() => {
     callBackApi();
@@ -153,16 +182,22 @@ const QnA = props => {
         ...boardState,
         searchKeyword: e.target.value
     }));
-  }
+  };
 
-  const filteredComponents = (data) => {
+  const boardComponents = (data) => {
     data = data.filter((c) => {
       return c.title.indexOf(boardState.searchKeyword) > -1 || c.writer.indexOf(boardState.searchKeyword) > -1 || c.createDt.indexOf(boardState.searchKeyword) > -1;
     });
     return data.map((c) => {
       return <BoardTable boardState={boardState} key={c.bno} bno={c.bno} title={c.title} writer={c.writer} createDt={c.createDt} updateDt={c.updateDt} viewcnt={c.viewcnt} memberNo={memberNo} profileImg={c.profileImg} bKinds={c.bKinds} />
     });
-  }
+  };
+
+  const noticeComponents = (data) => {
+    return data.map((c) => {
+      return <NoticeTable boardState={boardState} key={c.noticeNo} noticeNo={c.noticeNo} title={c.title} writer={c.writer} createDt={c.createDt} updateDt={c.updateDt} viewcnt={c.viewcnt} adminNo={c.adminNo} profileImg={c.profileImg} bKinds={c.bKinds} />
+    });
+  };
   
   const handlePageChange = (event, page) => {
     event.preventDefault();
@@ -235,9 +270,31 @@ const QnA = props => {
           }
           
       </div>
+      {props.location === undefined
+        ?
+        null
+        :
+        <div>
+          <Paper className={classes.paper}>
+            <Table>
+                  {noticeState.values ?  noticeComponents(noticeState.values) :
+                    <TableBody>
+                      <TableRow>
+                        <TableCell colSpan="6" align="center">
+                          <CircularProgress className={classes.progress} variant="determinate" value={progress}></CircularProgress>
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  }
+            </Table>
+          </Paper>
+          <br></br>
+        </div>
+      }
+      
       <Paper className={classes.paper}>
         <Table>
-              {boardState.values ?  filteredComponents(boardState.values) :
+              {boardState.values ?  boardComponents(boardState.values) :
                 <TableBody>
                   <TableRow>
                     <TableCell colSpan="6" align="center">

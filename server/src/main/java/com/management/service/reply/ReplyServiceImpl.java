@@ -115,4 +115,9 @@ public class ReplyServiceImpl implements ReplyService {
 	public String getReplyForm(Long rcd) {
 		return replyMapper.getReplyForm(rcd);
 	}
+
+	@Override
+	public int selectMaxRno2(int noticeNo) {
+		return replyMapper.selectMaxRno2(noticeNo);
+	}
 }

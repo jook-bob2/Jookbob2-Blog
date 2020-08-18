@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import CircularProgress from '@material-ui/core/CircularProgress'
+import CircularProgress from '@material-ui/core/CircularProgress';
 import {
     Card,
     CardContent,
@@ -98,7 +98,9 @@ const Reply = props => {
     const callBackApi = useCallback(() => {
         const url = '/reply/replyList';
         const formData = new FormData();
-        formData.append('bno', props.bno);
+        if (props.bno !== undefined) formData.append('bno', props.bno);
+        if (props.noticeNo !== undefined) formData.append('noticeNo', props.noticeNo);
+        
         post(url, formData).then(res => {
             setReplyState(replyState => ({
                 ...replyState,
@@ -106,7 +108,7 @@ const Reply = props => {
             }));
         })
         .catch(err => console.log(err));
-    }, [props.bno]);
+    }, [props.bno, props.noticeNo]);
 
     const [progress, setProgress] = useState(0);
 
@@ -174,8 +176,10 @@ const Reply = props => {
     const insertReply = () => {
         const url = "/reply/replyInsert";
         const formData = new FormData();
-        formData.append("bno", Number(brdSession.bno));
-        // formData.append("memberNo", Number(brdSession.memberNo));
+
+        if (props.bno !== undefined) formData.append('bno', props.bno);
+        if (props.noticeNo !== undefined) formData.append('noticeNo', props.noticeNo);
+
         formData.append("replyer", state.replyer);
         formData.append("replyText", state.replyText);
         return post(url, formData);

@@ -17,7 +17,8 @@ import {
     Setting as SettingView,
     BoardView,
     BoardInsert as BoardInsertView,
-    BoardUpdate as BoardUpdateView
+    BoardUpdate as BoardUpdateView,
+    NoticeView
 } from './views';
 
 import {
@@ -29,24 +30,26 @@ import {
     AdminList,
     AdminUpdate,
     BoardList as BoardListAdmin,
-    BoardRegistration as NoticeRegistrationAdmin,
+    NoticeRegistration as NoticeRegistrationAdmin,
     BoardUpdate as BoardUpdateAdmin,
     SignIn as SignInAdmin,
-    NoticeList as NoticeListAdmin
+    NoticeList as NoticeListAdmin,
+    NoticeUpdate as NoticeUpdateAdmin
 } from './views/Admin';
 
 const Routes = () => {
     const dispatch = useDispatch();
+
     useEffect(() => {
         dispatch(getSessioning());
+    }, [dispatch]);
+    
+    useEffect(() => {
+        dispatch(getAdminAuth());
     }, [dispatch]);
 
     const userSession = useSelector(state => state.session, '') || '';
     const userAuth = userSession.authenticated;
-
-    useEffect(() => {
-        dispatch(getAdminAuth());
-    }, [dispatch]);
 
     const adminSession = useSelector(state => state.adminAuth, '') || '';
     const adminAuth = adminSession.authenticated;
@@ -95,11 +98,21 @@ const Routes = () => {
                 isAllow={true}
                 user={true}
             />
+
             <RouteWithLayout
                 component={BoardView}
                 exact
                 layout={MainLayout}
                 path="/boardView/:bno"
+                isAllow={true}
+                user={true}
+            />
+
+            <RouteWithLayout
+                component={NoticeView}
+                exact
+                layout={MainLayout}
+                path="/noticeView/:noticeNo"
                 isAllow={true}
                 user={true}
             />
@@ -286,6 +299,16 @@ const Routes = () => {
                 exact
                 layout={AdminLayOut}
                 path="/noticeList"
+                fallback={GoToAdminSignPage}
+                isAllow={adminAuth}
+                admin={true}
+            />     
+
+            <RouteWithLayout 
+                component={NoticeUpdateAdmin}
+                exact
+                layout={AdminLayOut}
+                path="/notice-update/:id"
                 fallback={GoToAdminSignPage}
                 isAllow={adminAuth}
                 admin={true}
