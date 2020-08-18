@@ -1,4 +1,4 @@
-export { default as QnA } from './QnA';
+export { default as QnA } from './QnA.js';
 export { default as AboutJob } from './AboutJob';
 export { default as TalkLife } from './TalkLife';
 export { default as BoardView } from './components/BoardView';

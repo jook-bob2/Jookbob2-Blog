@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.management.domain.model.Board;
 import com.management.domain.model.BoardKinds;
+import com.management.domain.model.Notice;
 import com.management.domain.model.Upload;
 import com.management.domain.repository.board.BoardRepository;
 import com.management.domain.repository.boardKinds.BoardKindsRepository;
@@ -173,4 +174,31 @@ public class BoardController {
 			return map;
 		}
 	}
+	
+	@PostMapping(value = "/noticeList")
+	public Map<String, Object> noticeList(@RequestParam Map<String, Object> param) {
+		List<Map<String, Object>> noticeList = boardMapper.noticeList(param);
+		
+		param.put("list", noticeList);
+		
+		return param;
+	}
+	
+	@PostMapping(value = "/noticeDetail/{noticeNo}")
+	public Map<String, Object> noticeDetail(@PathVariable("noticeNo") Long noticeNo ) {
+		Map<String, Object> map = new HashMap<>();
+		if (noticeNo != null) {
+			Notice entity = new Notice();
+			Long viewcnt = boardService.getNoticeViewCnt(noticeNo);
+			entity.setNoticeNo(noticeNo);
+			entity.setViewcnt(viewcnt);
+			boardService.updateNotice(entity);
+			map.put("noticeNo", noticeNo);
+			List<Map<String, Object>> noticeList = boardMapper.noticeList(map);
+			
+			map.put("list", noticeList);
+		}
+		return map;
+	}
+	
 }

@@ -43,7 +43,7 @@ const styles = makeStyles(theme => ({
 const ITEM_HEIGHT = 48;
 
 const BoardDelete = (props) => {
-    const { className } = props;
+    const { className, history } = props;
 
     const classes = styles();
 
@@ -95,7 +95,7 @@ const BoardDelete = (props) => {
     };
 
     const goList = () => {
-        window.location.href = '/' + state.brdText;
+        history.push(`/${state.brdText}`);
     };
 
     return (

@@ -122,8 +122,83 @@
 	<select id="getFileUrl" parameterType="com.management.domain.model.Upload" resultType="String">
 		SELECT file_url as fileUrl
 		FROM upload
-		WHERE 
-		member_no = #{memberNo}
+		WHERE 1=1
+		<if test="memberNo != null and !memberNo.equals('')">
+			AND member_no = #{memberNo}
+		</if>
+		<if test="adminNo != null and !adminNo.equals('')">
+			AND admin_no = #{adminNo}
+		</if>
 		AND upload_cd = #{uploadCd}
+	</select>
+	
+	<select id="noticeList" parameterType="hashmap" resultType="hashmap">
+		SELECT 
+			n.notice_no as noticeNo,
+			n.content,
+			n.create_dt as createDt,
+			n.update_dt as updateDt,
+			n.title,
+			n.update_yn as updateYn,
+			n.viewcnt,
+			n.writer,
+			n.writer_no as writerNo,
+			n.write_yn as writeYn,
+			n.brd_code as bKinds,
+			a.profile_img as profileImg,
+			k.show_text as showText,
+			k.brd_text as brdText
+		FROM 
+		notice n INNER JOIN admin_info a
+		ON n.writer_no = a.admin_no
+		INNER JOIN board_kinds k
+		ON n.brd_code = k.brd_code
+		AND n.use_yn = 'Y'
+		AND del_yn = 'N'
+		<if test="brdText != null and !brdText.equals('')">
+			AND k.brd_code = (SELECT brd_code FROM board_kinds WHERE brd_text = #{brdText})
+		</if>
+		<if test="noticeNo != null">
+			AND notice_no = #{noticeNo}
+		</if>
+		
+		ORDER BY n.notice_no DESC
+			
+	</select>
+	
+	<update id="updateNotice" parameterType="com.management.domain.model.Notice">
+		UPDATE notice SET
+			<if test="title != null and !title.equals('')">
+				title = #{title},
+			</if>
+			<if test="content != null and !content.equals('')">
+				content = #{content},
+			</if>
+			<if test="brdCode != null and !brdCode.equals('')">
+				brd_code = #{brdCode},
+			</if>
+			<if test="updateYn != null and !updateYn.equals('')">
+				update_yn = #{updateYn},
+			</if>
+			<if test="title != null and !title.equals('')">
+				update_dt = SYSDATE()
+			</if>
+			<if test="viewcnt != null">
+				viewcnt = #{viewcnt} + 1
+			</if>
+			<if test="writer != null and !writer.equals('')">
+				writer = #{writer}
+			</if>
+		WHERE 1=1
+		<if test="noticeNo != null">
+			AND notice_no = #{noticeNo}
+		</if>
+		<if test="writerNo != null">
+			AND writer_no = #{writerNo}
+		</if>
+	</update>
+	
+	<select id="getNoticeViewCnt" parameterType="Long" resultType="Long">
+		SELECT viewcnt FROM notice WHERE notice_no = #{noticeNo}
 	</select>
 </mapper>

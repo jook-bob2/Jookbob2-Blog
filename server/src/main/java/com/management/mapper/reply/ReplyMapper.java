@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface ReplyMapper {
 	public List<Map<String, Object>> replyList(Map<String, Object> map);
 	public int selectMaxRno(int bno);
+	public int selectMaxRno2(int noticeNo);
 	public Map<String, Object> getLikeState(Map<String, Object> param);
 	public Map<String, Object> getHateState(Map<String, Object> param);
 	public void hateDownLikeUp (Map<String, Object> param);

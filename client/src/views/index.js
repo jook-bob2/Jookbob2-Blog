@@ -1,6 +1,6 @@
 export { default as Dashboard } from './Dashboard';
 export { default as NotFound } from './NotFound';
-export { default as QnA } from './BoardList/QnA';
+export { default as QnA } from './BoardList/QnA.js';
 export { default as AboutJob } from './BoardList/AboutJob';
 export { default as TalkLife } from './BoardList/TalkLife';
 export { default as SignIn } from './SignIn';
@@ -9,3 +9,4 @@ export { default as Setting } from './Setting';
 export { default as BoardView } from './BoardList/components/BoardView';
 export { default as BoardInsert } from './BoardList/components/BoardInsert';
 export { default as BoardUpdate } from './BoardList/components/BoardUpdate';
+export { default as NoticeView } from './BoardList/components/NoticeView';

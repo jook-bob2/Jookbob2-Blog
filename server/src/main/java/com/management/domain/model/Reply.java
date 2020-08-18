@@ -34,8 +34,12 @@ public class Reply {
 	private Long rcd;
 	
 	// 게시판번호
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Long bno; 
+    
+    // 공지번호
+    @Column(nullable = true)
+    private Long noticeNo; 
     
     // 댓글번호
     @Column(nullable = false)
@@ -90,12 +94,13 @@ public class Reply {
 	}
 
     @Builder
-	public Reply(Long rcd, Long bno, Long rno, String replyText, String replyer, Long replyerNo, LocalDateTime createDt,
-			LocalDateTime updateDt, String writeYn, String updateYn, String useYn, String delYn, Long likeCnt,
-			Long hateCnt) {
+	public Reply(Long rcd, Long bno, Long noticeNo, Long rno, String replyText, String replyer, Long replyerNo,
+			LocalDateTime createDt, LocalDateTime updateDt, String writeYn, String updateYn, String useYn, String delYn,
+			Long likeCnt, Long hateCnt) {
 		super();
 		this.rcd = rcd;
 		this.bno = bno;
+		this.noticeNo = noticeNo;
 		this.rno = rno;
 		this.replyText = replyText;
 		this.replyer = replyer;
@@ -124,6 +129,14 @@ public class Reply {
 
 	public void setBno(Long bno) {
 		this.bno = bno;
+	}
+
+	public Long getNoticeNo() {
+		return noticeNo;
+	}
+
+	public void setNoticeNo(Long noticeNo) {
+		this.noticeNo = noticeNo;
 	}
 
 	public Long getRno() {

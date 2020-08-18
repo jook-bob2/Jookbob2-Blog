@@ -11,6 +11,7 @@ public interface ReplyService {
 	public List<Map<String, Object>> replyList(Map<String, Object> map);
 	public Long replyInsert(Reply entity);
 	public int selectMaxRno(int bno);
+	public int selectMaxRno2(int noticeNo);
 	public Map<String, Object> getLikeState(Map<String, Object> param);
 	public Map<String, Object> getHateState(Map<String, Object> param);
 	public void updateRecom(Map<String, Object> param);

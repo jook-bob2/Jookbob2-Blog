@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.management.domain.model.Board;
 import com.management.domain.model.Member;
+import com.management.domain.model.Notice;
 import com.management.domain.model.Upload;
 import com.management.domain.repository.board.BoardRepository;
 import com.management.domain.repository.upload.UploadRepository;
@@ -62,5 +63,15 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public String getFileUrl(Upload entity) {
 		return boardMapper.getFileUrl(entity);
+	}
+
+	@Override
+	public void updateNotice(Notice entity) {
+		boardMapper.updateNotice(entity);
+	}
+
+	@Override
+	public Long getNoticeViewCnt(Long noticeNo) {
+		return boardMapper.getNoticeViewCnt(noticeNo);
 	}
 }

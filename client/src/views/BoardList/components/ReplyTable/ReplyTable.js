@@ -13,6 +13,7 @@ import {post} from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { getSessioning } from 'store/actions';
 import ReplyDelete from '../ReplyDelete';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 
 const styles = makeStyles(theme => ({
@@ -54,10 +55,15 @@ const ReplyTable = props => {
         hateCnt: props.hateCnt !== undefined ? props.hateCnt : 0
     });
 
+    const [progress, setProgress] = useState(0);
+    const [open, setOpen] = useState(false);
+
     useEffect(() => {
         try {
             const formData = new FormData();
+            
             formData.append('rcd', props.rcd);
+
             post('/reply/confirmRecom', formData)
                 .then(res => {
                     const data = res.data;
@@ -73,8 +79,19 @@ const ReplyTable = props => {
         } catch (error) {
             throw(error);
         }
-        
     }, [props.rcd, memberNo]);
+
+    useEffect(() => {
+        const timer = setInterval(progressCount, 20);
+    
+        return () => {
+        clearInterval(timer);
+        };
+    }, []);
+
+    const progressCount = () => {
+        setProgress(oldProgress => (oldProgress >= 100 ? 0 : oldProgress + 1));
+    }
 
     const handleRecomLike = (event) => {
         event.preventDefault();
@@ -86,6 +103,9 @@ const ReplyTable = props => {
             alert("댓글 작성자는 추천할 수 없습니다.");
             return false;
         }
+
+        setOpen(true);
+
         if (state.likeYn === 'Y') {
             updateRecom('LIKE_CANCEL');
             return false;
@@ -106,6 +126,9 @@ const ReplyTable = props => {
             alert("댓글 작성자는 추천할 수 없습니다.");
             return false;
         }
+
+        setOpen(true);
+
         if (state.hateYn === 'Y') {
             updateRecom('HATE_CANCEL');
             return false;
@@ -128,12 +151,15 @@ const ReplyTable = props => {
         post('/reply/updateRecom', formData)
             .then(res => {
                 const data = res.data.data;
+
                 setState({
                     likeYn: data.likeMember === memberNo && data.likeYn === 'Y' ? 'Y' : 'N',
                     hateYn: data.hateMember === memberNo && data.hateYn === 'Y' ? 'Y' : 'N',
                     likeCnt: data.likeCnt,
                     hateCnt: data.hateCnt
-                })
+                });
+
+                setOpen(false);
             })
             .catch(err => console.log(err));
     }
@@ -163,31 +189,38 @@ const ReplyTable = props => {
                 <td colSpan="3" className={classes.title}>{props.replyText}</td>
             </TableRow>
             <TableRow>
-                <TableCell colSpan="3">
-                    {state.likeYn === 'Y'
-                        ? 
-                        <IconButton onClick={handleRecomLike}>
-                            <ThumbUpAlt />
-                        </IconButton>
-                        :
-                        <IconButton onClick={handleRecomLike}>
-                            <ThumbUpOutlined />
-                        </IconButton>
-                    }
-                    {state.likeCnt}
+                {open 
+                    ?
+                    <TableCell colSpan="1" align="center">
+                        <CircularProgress className={classes.progress} variant="determinate" value={progress}></CircularProgress>
+                    </TableCell>
+                    :
+                    <TableCell colSpan="3">
+                        {state.likeYn === 'Y'
+                            ? 
+                            <IconButton onClick={handleRecomLike}>
+                                <ThumbUpAlt />
+                            </IconButton>
+                            :
+                            <IconButton onClick={handleRecomLike}>
+                                <ThumbUpOutlined />
+                            </IconButton>
+                        }
+                        {state.likeCnt}
 
-                    {state.hateYn === 'Y'
-                        ? 
-                        <IconButton onClick={handleRecomHate}>
-                            <ThumbDownAlt />
-                        </IconButton>
-                        :
-                        <IconButton onClick={handleRecomHate}>
-                            <ThumbDownOutlined />
-                        </IconButton>
-                    }
-                    {state.hateCnt}
-                </TableCell>
+                        {state.hateYn === 'Y'
+                            ? 
+                            <IconButton onClick={handleRecomHate}>
+                                <ThumbDownAlt />
+                            </IconButton>
+                            :
+                            <IconButton onClick={handleRecomHate}>
+                                <ThumbDownOutlined />
+                            </IconButton>
+                        }
+                        {state.hateCnt}
+                    </TableCell>
+                }
             </TableRow>
         </TableBody>
     );
