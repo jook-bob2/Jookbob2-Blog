@@ -90,12 +90,15 @@ const BoardDelete = (props) => {
         fetch(url, {
             method: 'DELETE'
         })
-            .then(window.location.href = '/' + state.brdText)
+            .then(res => {
+                alert("게시물이 삭제 되었습니다.\n목록으로 이동합니다.");
+                history.goBack();
+            })
             .catch(err => console.log(err));
     };
 
     const goList = () => {
-        history.push(`/${state.brdText}`);
+        history.push(`${state.brdText}`);
     };
 
     return (

@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Switch, Redirect } from 'react-router-dom';
+import { post } from 'axios';
 import { RouteWithLayout } from './components';
 import { Main as MainLayout, Minimal as MinimalLayout, Admin as AdminLayOut } from './layouts';
 import { useSelector, useDispatch } from 'react-redux';
@@ -9,9 +10,7 @@ import { getAdminAuth } from 'store/actions/admin/adminList';
 import {
     Dashboard as DashboardView,
     NotFound as NotFoundView,
-    QnA as QnAView,
-    AboutJob as AboutJobView,
-    TalkLife as TalkLifeView,
+    BoardList as BoardListView,
     SignIn as SignInView,
     SignUp as SignUpView,
     Setting as SettingView,
@@ -40,6 +39,26 @@ import {
 const Routes = () => {
     const dispatch = useDispatch();
 
+    const [pathFlag, setFlag] = useState(0);
+
+    const [boardKind, setBoardKind] = useState({
+        path: []
+    });
+
+    useEffect(() => {
+        post(`/board/getBoardKind`)
+            .then(res => {
+                const pathList = Array.from(res.data.pathList);
+                setBoardKind({
+                    path: pathList
+                });
+                setFlag(1);
+            })
+            .catch(err => {
+                throw(err);
+            });
+    }, []);
+
     useEffect(() => {
         dispatch(getSessioning());
     }, [dispatch]);
@@ -56,6 +75,20 @@ const Routes = () => {
 
     const GoToUserSignPage = () => <Redirect to="/sign-in" />;
     const GoToAdminSignPage = () => <Redirect to="/admin/sign-in" />;
+
+    const mappingRoute = (paths) => {
+        return paths.map((path, index) => {
+            return <RouteWithLayout
+                key={index}
+                component={BoardListView}
+                exact
+                layout={MainLayout}
+                path={path.brdText}
+                isAllow={true}
+                user={true}
+            />;
+        })
+    };
 
     return (
         <Switch>
@@ -74,30 +107,7 @@ const Routes = () => {
                 user={true}
             />
 
-            <RouteWithLayout
-                component={QnAView}
-                exact
-                layout={MainLayout}
-                path="/qna"
-                isAllow={true}
-                user={true}
-            />
-            <RouteWithLayout
-                component={AboutJobView}
-                exact
-                layout={MainLayout}
-                path="/aboutJob"
-                isAllow={true}
-                user={true}
-            />
-            <RouteWithLayout
-                component={TalkLifeView}
-                exact
-                layout={MainLayout}
-                path="/talkLife"
-                isAllow={true}
-                user={true}
-            />
+            {boardKind.path.length > -1 ? mappingRoute(boardKind.path) : null}
 
             <RouteWithLayout
                 component={BoardView}
@@ -314,7 +324,11 @@ const Routes = () => {
                 admin={true}
             />     
 
-            <Redirect to="/not-found" />
+            {
+                pathFlag !== 0 
+                ? <Redirect to="/not-found" />
+                : null
+            }
         </Switch>
     );
 };

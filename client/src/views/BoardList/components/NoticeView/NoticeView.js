@@ -62,7 +62,6 @@ const NoticeView = props => {
 
     const [state, setState] = useState({
         noticeNo: match.params.noticeNo,
-        memberNo: location.query !== undefined ? location.query.memberNo : '',
         brdText: location.query !== undefined ? location.query.brdText : '',
         bKinds: location.query !== undefined ? location.query.bKinds : '',
         title: '',
@@ -114,7 +113,7 @@ const NoticeView = props => {
     };
 
     const goList = () => {
-        history.push(`/${state.brdText}`);
+        history.push(`${state.brdText}`);
     };
 
     return (

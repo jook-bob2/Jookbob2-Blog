@@ -67,7 +67,7 @@ const styles = makeStyles(theme => ({
 
 const BoardInsert = props => {
     const classes = styles();
-    const { className, location } = props;
+    const { className, location, history } = props;
     const [state, setState] = useState({
         memberNo: location.query !== undefined ? location.query.memberNo : '',
         brdText: location.query !== undefined ? location.query.brdText : '',
@@ -132,7 +132,7 @@ const BoardInsert = props => {
         saveBoard(event)
             .then(res => {
                 alert("게시물이 등록 되었습니다.\n게시판 목록으로 이동합니다.");
-                window.location.href = "/" + state.brdText;
+                history.goBack();
             });
     };
 
@@ -199,6 +199,7 @@ const BoardInsert = props => {
                                 <option value="00">Q&A</option>
                                 <option value="01">취업관련</option>
                                 <option value="02">일상관련</option>
+                                <option value="03">게시판</option>
                             </select>
                         </div>
                         <div className={classes.input}>

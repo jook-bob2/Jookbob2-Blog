@@ -201,4 +201,9 @@
 	<select id="getNoticeViewCnt" parameterType="Long" resultType="Long">
 		SELECT viewcnt FROM notice WHERE notice_no = #{noticeNo}
 	</select>
+	
+	<select id="getBoardKind" resultType="hashmap">
+		SELECT brd_text as brdText
+		FROM board_kinds;
+	</select>
 </mapper>

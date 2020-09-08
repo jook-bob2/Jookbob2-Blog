@@ -3,7 +3,7 @@ import { NavLink as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
-import { List, ListItem, Button, colors, ListItemIcon, ListItemText, Collapse } from '@material-ui/core';
+import { List, ListItem, Button, colors, ListItemIcon, Collapse } from '@material-ui/core';
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 
 const useStyles = makeStyles(theme => ({
@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(1)
   },
   active: {
-    color: theme.palette.primary.main,
+    color: '#f50057',
     fontWeight: theme.typography.fontWeightMedium,
     '& $icon': {
       color: theme.palette.primary.main
@@ -46,6 +46,9 @@ const useStyles = makeStyles(theme => ({
   nested: {
     paddingLeft: theme.spacing(4),
   },
+  listItem: {
+    fontWeight: 'bold'
+  }
 }));
 
 const CustomRouterLink = forwardRef((props, ref) => (
@@ -94,7 +97,7 @@ const SidebarNav = props => {
                   <ListItemIcon>
                     <div className={classes.icon}><img src={item.menuIcon} alt="menu icon"></img></div>
                   </ListItemIcon>
-                  <ListItemText primary={item.menuNm} />
+                  <div className={classes.listItem}>{item.menuNm}</div>
                 </Button>
             </ListItem>
             :
@@ -102,7 +105,7 @@ const SidebarNav = props => {
               <ListItemIcon>
                 <div className={classes.icon}><img src={item.menuIcon} alt="menu icon"></img></div>
               </ListItemIcon>
-              <ListItemText primary={item.menuNm} />
+              <div className={classes.listItem}>{item.menuNm}</div>
               {index === selectedIndex ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
           }
@@ -124,7 +127,7 @@ const SidebarNav = props => {
                           <ListItemIcon>
                             <img src={sub.menuIcon} alt="menu icon"></img>
                           </ListItemIcon>
-                          {sub.menuNm}
+                          <div className={classes.listItem}>{sub.menuNm}</div>
                         </Button>
                       </ListItem>
                       :

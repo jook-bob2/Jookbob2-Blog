@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -180,6 +181,7 @@ public class BoardController {
 		List<Map<String, Object>> noticeList = boardMapper.noticeList(param);
 		
 		param.put("list", noticeList);
+		param.put("count", noticeList.size());
 		
 		return param;
 	}
@@ -198,6 +200,17 @@ public class BoardController {
 			
 			map.put("list", noticeList);
 		}
+		return map;
+	}
+	
+	@PostMapping(value = "/getBoardKind")
+	public Map<String, Object> getBoardKind() {
+		Map<String, Object> map = new HashMap<>();
+		
+		List<Map<String, Object>> pathList = boardMapper.getBoardKind();
+		
+		map.put("pathList", pathList);
+		
 		return map;
 	}
 	

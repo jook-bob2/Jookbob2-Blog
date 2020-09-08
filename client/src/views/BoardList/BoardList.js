@@ -16,6 +16,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import ContactSupport from '@material-ui/icons/ContactSupport';
 import { useSelector, useDispatch } from 'react-redux';
 import { getSessioning } from 'store/actions';
+import { getFrontBoardListing } from 'store/actions/front/boardList';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -86,87 +87,68 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const QnA = props => {
+const BoardList = props => {
   const classes = useStyles();
 
-  const { match } = props;
-  
-  const [boardState, setBoardState] = useState({
-    values: '',
-    searchKeyword: '',
-    count: 0,
-    brdText: match === undefined ? 'qna' : match.url.split("/")[1],
-    bKinds: '00'
-  });
+  const dispatch = useDispatch();
+
+  const { match, history } = props;
+
+  const [brdText] = useState(match.url);
+
+  const boardState = useSelector(state => state.frontBoardList, '') || '';
+
+  const [searchKeyword, setKeyword] = useState('');
 
   const [noticeState, setNoticeState] = useState({
-    values: ''
+    values: '',
+    count: 0
   });
 
   const [progress, setProgress] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(props.count !== undefined ? 5 : 10);
   const [page, setPage] = useState(0);
+  
+  const callApi = ((page, rowsPerPage) => {
+    dispatch(getFrontBoardListing(brdText, page, rowsPerPage));
+  });
 
-  const callApi = (rowPerPageNo, pageNo) => {
-    const url = '/board/boardList';
-    const formData = new FormData();
-    formData.append('brdText', boardState.brdText);
-    formData.append('page', pageNo !== undefined ? pageNo : page);
-    formData.append('rowsPerPage', (rowPerPageNo !== undefined && rowPerPageNo !== null) ? rowPerPageNo : rowsPerPage);
-    return post(url, formData);
-  }
-
-  const callBackApi = useCallback(() => {
-    const url = '/board/boardList';
-    const formData = new FormData();
-    formData.append('brdText', boardState.brdText);
-    formData.append('page', page);
-    formData.append('rowsPerPage', rowsPerPage);
-    post(url, formData).then(res => {
-      setBoardState(boardState => ({
-        ...boardState,
-        values:res.data.list,
-        searchKeyword: '',
-        count: res.data.count
-      }));
-    })
-    .catch(err => console.log(err));
-  }, [boardState.brdText, page, rowsPerPage]);
+  useEffect(() => {
+    dispatch(getFrontBoardListing(brdText, page, rowsPerPage));
+  }, [brdText, dispatch, page, rowsPerPage]);
 
   const callBackNotice = useCallback(() => {
     const formData = new FormData();
-    formData.append('brdText', boardState.brdText);
+    formData.append('brdText', brdText);
     
     post(`/board/noticeList`, formData)
       .then(res => {
         setNoticeState(noticeState => ({
           ...noticeState,
-          values: res.data.list
+          values: res.data.list,
+          count: res.data.count
         }));
       })
       .catch(err => {
         throw(err);
       })
-  }, [boardState.brdText]);
+  }, [brdText]);
 
   useEffect(() => {
     callBackNotice();
   }, [callBackNotice]);
 
   useEffect(() => {
-    callBackApi();
-
     const timer = setInterval(progressCount, 20);
     
     return () => {
       clearInterval(timer);
     };
-  }, [callBackApi]);
-
-  const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(getSessioning());
-    }, [dispatch]);
+  }, []);
+  
+  useEffect(() => {
+      dispatch(getSessioning());
+  }, [dispatch]);
 
   const session = useSelector(state => state.session, []) || [];
   const authenticated = session.authenticated;
@@ -178,24 +160,21 @@ const QnA = props => {
 
   const handleValueChange = (e) => {
     e.persist();
-    setBoardState(boardState => ({
-        ...boardState,
-        searchKeyword: e.target.value
-    }));
+    setKeyword(e.target.value);
   };
 
   const boardComponents = (data) => {
     data = data.filter((c) => {
-      return c.title.indexOf(boardState.searchKeyword) > -1 || c.writer.indexOf(boardState.searchKeyword) > -1 || c.createDt.indexOf(boardState.searchKeyword) > -1;
+      return c.title.indexOf(searchKeyword) > -1 || c.writer.indexOf(searchKeyword) > -1 || c.createDt.indexOf(searchKeyword) > -1;
     });
     return data.map((c) => {
-      return <BoardTable boardState={boardState} key={c.bno} bno={c.bno} title={c.title} writer={c.writer} createDt={c.createDt} updateDt={c.updateDt} viewcnt={c.viewcnt} memberNo={memberNo} profileImg={c.profileImg} bKinds={c.bKinds} />
+      return <BoardTable boardState={boardState} history={history} key={c.bno} bno={c.bno} title={c.title} writer={c.writer} createDt={c.createDt} updateDt={c.updateDt} viewcnt={c.viewcnt} memberNo={memberNo} profileImg={c.profileImg} bKinds={c.bKinds} brdText={c.brdText} />
     });
   };
 
   const noticeComponents = (data) => {
     return data.map((c) => {
-      return <NoticeTable boardState={boardState} key={c.noticeNo} noticeNo={c.noticeNo} title={c.title} writer={c.writer} createDt={c.createDt} updateDt={c.updateDt} viewcnt={c.viewcnt} adminNo={c.adminNo} profileImg={c.profileImg} bKinds={c.bKinds} />
+      return <NoticeTable noticeState={noticeState} key={c.noticeNo} noticeNo={c.noticeNo} title={c.title} writer={c.writer} createDt={c.createDt} updateDt={c.updateDt} viewcnt={c.viewcnt} adminNo={c.adminNo} profileImg={c.profileImg} bKinds={c.bKinds} brdText={c.brdText} />;
     });
   };
   
@@ -204,16 +183,7 @@ const QnA = props => {
 
     setPage(Number(page));
 
-    callApi(rowsPerPage, page)
-      .then(res => {
-        setBoardState({
-          ...boardState,
-          values:res.data.list,
-          searchKeyword: '',
-          count: res.data.count
-        });
-      })
-      .catch(err => console.log(err));
+    callApi(brdText, rowsPerPage, page);
   };
 
   const handleRowsPerPageChange = event => {
@@ -221,16 +191,7 @@ const QnA = props => {
     setPage(Number(0));
     setRowsPerPage(Number(event.target.value));
 
-    callApi(event.target.value, 0)
-      .then(res => {
-        setBoardState({
-          ...boardState,
-          values:res.data.list,
-          searchKeyword: '',
-          count: res.data.count
-        });
-      })
-      .catch(err => console.log(err));
+    callApi(brdText, event.target.value, 0);
   };
 
   return (
@@ -259,7 +220,7 @@ const QnA = props => {
                 </RouterLink>
                 :
                 <RouterLink
-                  to={ { pathname: "/boardInsert", query: {memberNo: memberNo, brdText: boardState.brdText, bKinds: boardState.bKinds} }}
+                  to={ { pathname: "/boardInsert", query: {history: history ,memberNo: memberNo, brdText: brdText, bKinds: boardState.bKinds} }}
                 >
                   <Button variant="contained" color="primary"><h5>글쓰기</h5></Button>
                 </RouterLink>
@@ -277,11 +238,14 @@ const QnA = props => {
         <div>
           <Paper className={classes.paper}>
             <Table>
-                  {noticeState.values ?  noticeComponents(noticeState.values) :
+                  {noticeState.values.length > 0 ?  noticeComponents(noticeState.values) :
                     <TableBody>
                       <TableRow>
                         <TableCell colSpan="6" align="center">
-                          <CircularProgress className={classes.progress} variant="determinate" value={progress}></CircularProgress>
+                          {noticeState.count !== 0 && progress !== 100
+                            ? <CircularProgress className={classes.progress} variant="determinate" value={progress}></CircularProgress> 
+                            : '데이터가 없습니다.'
+                          }
                         </TableCell>
                       </TableRow>
                     </TableBody>
@@ -294,11 +258,14 @@ const QnA = props => {
       
       <Paper className={classes.paper}>
         <Table>
-              {boardState.values ?  boardComponents(boardState.values) :
+              {boardState.values.length ?  boardComponents(boardState.values) :
                 <TableBody>
                   <TableRow>
                     <TableCell colSpan="6" align="center">
-                      <CircularProgress className={classes.progress} variant="determinate" value={progress}></CircularProgress>
+                      {boardState.count !== 0 && progress !== 100
+                        ? <CircularProgress className={classes.progress} variant="determinate" value={progress}></CircularProgress> 
+                        : '데이터가 없습니다.'
+                      }
                     </TableCell>
                   </TableRow>
                 </TableBody>
@@ -329,4 +296,4 @@ const QnA = props => {
   );
 };
 
-export default QnA;
+export default BoardList;

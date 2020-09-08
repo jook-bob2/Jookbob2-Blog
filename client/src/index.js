@@ -1,3 +1,7 @@
+// import 'core-js/stable';
+// import 'regenerator-runtime/runtime';
+// import 'react-app-polyfill/ie9';
+// import 'react-app-polyfill/stable';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -7,6 +11,7 @@ import { Provider } from 'react-redux';
 import rootReducer from './store/reducers';
 import thunk from 'redux-thunk';
 import { createStore, applyMiddleware, compose } from 'redux';
+import './File';
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(rootReducer, composeEnhancer(applyMiddleware(thunk)));

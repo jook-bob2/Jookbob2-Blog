@@ -15,6 +15,7 @@ import adminAuthReducer from './admin/adminAuthReducer';
 import noticeListReducer from './admin/noticeListReducer';
 import noticeFilterReducer from './admin/noticeFilterReducer';
 import noticeListPageReducer from './admin/noticeListPageReducer';
+import frontBoardListReducer from './front/frontBoardListReducer';
 
 const rootReducer = combineReducers({
     session: sessionReducer,
@@ -33,6 +34,7 @@ const rootReducer = combineReducers({
     noticeList: noticeListReducer,
     noticeFilter: noticeFilterReducer,
     noticeListPage: noticeListPageReducer,
+    frontBoardList: frontBoardListReducer
 });
 
 export default rootReducer;

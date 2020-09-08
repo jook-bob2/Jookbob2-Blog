@@ -71,7 +71,7 @@ const Header = (props) => {
 
     const handleLogout = () => {
       post(`/admin/logout`)
-        .then(window.location.href = '/admin/sign-in')
+        .then(window.location.href = '/admin')
         .catch(err => {
           throw(err);
         });

@@ -22,4 +22,5 @@ public interface BoardMapper {
 	public List<Map<String, Object>> brdKindsList(Map<String, Object> map);
 	public void updateNotice(Notice entity);
 	public Long getNoticeViewCnt(Long noticeNo);
+	public List<Map<String, Object>> getBoardKind();
 }

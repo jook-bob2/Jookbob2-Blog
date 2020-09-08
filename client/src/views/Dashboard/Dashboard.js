@@ -2,11 +2,9 @@ import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Grid } from '@material-ui/core';
 
-import {
-    QnA,
-    AboutJob,
-    TalkLife
-} from '../BoardList';
+// import {
+//     BoardList
+// } from '../BoardList';
 
 
 const useStyles = makeStyles(theme => ({
@@ -31,11 +29,11 @@ const Dashboard = () => {
                 xl={3}
                 xs={12}
                 >  
-                    <div>
-                        <QnA count={5}></QnA>
-                    </div>
+                    {/* <div>
+                        <BoardList count={5}></BoardList>
+                    </div> */}
                 </Grid>
-               <Grid
+               {/* <Grid
                 item
                 lg={3}
                 sm={6}
@@ -52,7 +50,7 @@ const Dashboard = () => {
                 xs={12}
                 >
                     <TalkLife count={5} />
-                </Grid>
+                </Grid> */}
                 {/* <Grid
                 item
                 lg={3}

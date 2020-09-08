@@ -35,10 +35,6 @@ const useStyles = makeStyles(theme => ({
 
 const NoticeTable = props => {
     const classes = useStyles();
-    // const setSession = () => {
-    //     const url = "/board/setSession/" + props.noticeNo;
-    //     return post(url);
-    // }
 
     return (
         <TableBody>
@@ -56,7 +52,7 @@ const NoticeTable = props => {
                 <TableCell className={classes.title}>
                     {/* RouterLink를 통해 bno를 boardView에 넘겨준다. */}
                     <RouterLink
-                        to={{ pathname: `/noticeView/${props.noticeNo}`, query: {data: props} }}
+                        to={{ pathname: `/noticeView/${props.noticeNo}`, query: { brdText: props.brdText, bKinds: props.bKinds } }}
                     >
                         <h4 className={classes.titleColor}>{props.title}</h4>
                     </RouterLink>
