@@ -33,7 +33,8 @@ import {
     BoardUpdate as BoardUpdateAdmin,
     SignIn as SignInAdmin,
     NoticeList as NoticeListAdmin,
-    NoticeUpdate as NoticeUpdateAdmin
+    NoticeUpdate as NoticeUpdateAdmin,
+    MenuList as MenuListAdmin
 } from './views/Admin';
 
 const Routes = () => {
@@ -191,6 +192,8 @@ const Routes = () => {
                 user={true}
             />
 
+            {/* Admin Router Area*/}
+
             {adminAuth ? 
                 <Redirect exact from="/" to="/not-found" />
                 :
@@ -239,6 +242,16 @@ const Routes = () => {
                 exact
                 layout={AdminLayOut}
                 path="/admin-update/:id"
+                fallback={GoToAdminSignPage}
+                isAllow={adminAuth}
+                admin={true}
+            />
+
+            <RouteWithLayout 
+                component={MenuListAdmin}
+                exact
+                layout={AdminLayOut}
+                path="/menuList"
                 fallback={GoToAdminSignPage}
                 isAllow={adminAuth}
                 admin={true}

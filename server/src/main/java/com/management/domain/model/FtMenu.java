@@ -58,6 +58,10 @@ public class FtMenu {
     @UpdateTimestamp
     private LocalDateTime updateDt;
     
+    // 수정여부
+    @Column(length = 2)
+    private String updateYn;
+    
     // 사용여부
     @Column(length = 2)
     private String useYn;
@@ -70,10 +74,11 @@ public class FtMenu {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-
+    
     @Builder
 	public FtMenu(String menuCd, String upperMenuCd, String menuNm, String menuIcon, int menuOrdr, int menuLvl,
-			String pathSrc, LocalDateTime createDt, LocalDateTime updateDt, String useYn, String delYn) {
+			String pathSrc, LocalDateTime createDt, LocalDateTime updateDt, String updateYn, String useYn,
+			String delYn) {
 		super();
 		this.menuCd = menuCd;
 		this.upperMenuCd = upperMenuCd;
@@ -84,6 +89,7 @@ public class FtMenu {
 		this.pathSrc = pathSrc;
 		this.createDt = createDt;
 		this.updateDt = updateDt;
+		this.updateYn = updateYn;
 		this.useYn = useYn;
 		this.delYn = delYn;
 	}
@@ -158,6 +164,14 @@ public class FtMenu {
 
 	public void setUpdateDt(LocalDateTime updateDt) {
 		this.updateDt = updateDt;
+	}
+
+	public String getUpdateYn() {
+		return updateYn;
+	}
+
+	public void setUpdateYn(String updateYn) {
+		this.updateYn = updateYn;
 	}
 
 	public String getUseYn() {

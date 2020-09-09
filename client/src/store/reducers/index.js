@@ -15,6 +15,9 @@ import adminAuthReducer from './admin/adminAuthReducer';
 import noticeListReducer from './admin/noticeListReducer';
 import noticeFilterReducer from './admin/noticeFilterReducer';
 import noticeListPageReducer from './admin/noticeListPageReducer';
+import menuListReducer from './admin/menuListReducer';
+import menuFilterReducer from './admin/menuFilterReducer';
+import menuListPageReducer from './admin/menuListPageReducer';
 import frontBoardListReducer from './front/frontBoardListReducer';
 
 const rootReducer = combineReducers({
@@ -34,7 +37,10 @@ const rootReducer = combineReducers({
     noticeList: noticeListReducer,
     noticeFilter: noticeFilterReducer,
     noticeListPage: noticeListPageReducer,
-    frontBoardList: frontBoardListReducer
+    frontBoardList: frontBoardListReducer,
+    menuList: menuListReducer,
+    menuFilter: menuFilterReducer,
+    menuListPage: menuListPageReducer
 });
 
 export default rootReducer;

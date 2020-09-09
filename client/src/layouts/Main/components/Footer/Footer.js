@@ -29,6 +29,14 @@ const Footer = props => {
                 >
                     Github
                 </Link>
+                {' '}&copy;{' '}
+                <Link
+                    component="a"
+                    href={'/admin'}
+                >
+                    Admin
+                </Link>
+                
                 . 2020
             </Typography>
             <Typography variant="caption">

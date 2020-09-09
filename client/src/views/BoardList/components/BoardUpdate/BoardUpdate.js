@@ -41,10 +41,6 @@ const styles = makeStyles(theme => ({
     content: {
         padding: 30
     },
-    contentWt: {
-        height: 300,
-        width: '100%'
-    },
     buttonArea: {
         textAlign: 'center',
         margin: 20,
@@ -201,7 +197,6 @@ const BoardUpdate = props => {
                             <input className={classes.inputWt} placeholder="제목을 입력해 주세요." onChange={handleChange} name="title" value={state.title}></input>
                         </div>
                         <div className={classes.textArea}>
-                            {/* <textarea className={classes.contentWt} onChange={handleChange} name="content" value={state.content}></textarea> */}
                             <CKEditor 
                                 editor={ClassicEditor} 
                                 onChange={handleChange} 
@@ -226,7 +221,7 @@ const BoardUpdate = props => {
                         >
                             수정
                         </Button>
-                        <RouterLink to={"/" + state.brdText}>
+                        <RouterLink to={state.brdText}>
                             <Button 
                                 color="secondary"
                                 variant="contained"
