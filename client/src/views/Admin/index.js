@@ -4,6 +4,7 @@ export { default as MemberRegistration } from './MemberRegistration';
 export { default as MemberUpdate } from './MemberUpdate';
 
 export { default as MenuList } from './MenuList';
+export { default as BoardKinds } from './BoardKinds';
 
 export { default as AdminRegistration } from './AdminRegistration';
 export { default as AdminList } from './AdminList';

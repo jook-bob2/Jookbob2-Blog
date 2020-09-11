@@ -18,5 +18,10 @@ public class MenuServiceImpl implements MenuService {
 	public List<Map<String, Object>> menuList(Map<String, Object> param) {
 		return menuMapper.menuList(param);
 	}
+
+	@Override
+	public boolean dupMenuCdCheck(String menuCd) {
+		return menuMapper.dupMenuCdCheck(menuCd);
+	}
 	
 }

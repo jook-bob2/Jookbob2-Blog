@@ -206,4 +206,17 @@
 		SELECT brd_text as brdText
 		FROM board_kinds;
 	</select>
+	
+	<select id="selectLowerBoardKind" resultType="hashmap">
+		SELECT
+			b_kinds_no as bKindsNo,
+			brd_code as brdCode,
+			brd_text as brdText,
+			show_text as showText
+		FROM board_kinds WHERE b_kinds_no = (SELECT MAX(b_kinds_no) FROM board_kinds)
+	</select>
+	
+	<select id="dupPathCheck" parameterType="String" resultType="boolean">
+		SELECT IF(SUM(b_kinds_no) > 0 ,'true', 'false') FROM board_kinds WHERE brd_text = #{pathSrc}
+	</select>
 </mapper>

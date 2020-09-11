@@ -13,4 +13,6 @@ public interface MenuMapper {
 	public void menuUpdate(Map<String, Object> param);
 	public void menuDelete(String menuCd);
 	public void menuRestore(String menuCd);
+	public boolean dupMenuCdCheck(String menuCd);
+	public void createMenu(Map<String, Object> param);
 }

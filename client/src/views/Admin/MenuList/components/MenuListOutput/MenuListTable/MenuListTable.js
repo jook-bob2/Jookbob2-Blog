@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
     },
     updateDiv: {
         width: '100%',
-        height: 250,
+        height: 325,
         border: '1px solid #000'
     },
     left: {
@@ -47,6 +47,13 @@ const useStyles = makeStyles(theme => ({
         width: '50%',
         float: 'right',
         boxSizing: "border-box"
+    },
+    updateSelect: {
+        width: '100%',
+        border: '1px solid skyblue',
+        height: 25,
+        backgroundColor: 'ivory',
+        color: 'red'
     }
 }));
 
@@ -67,7 +74,8 @@ const MenuListTable = props => {
         menuNm: '',
         menuLvl: '',
         menuOrdr: '',
-        pathSrc: ''
+        pathSrc: '',
+        menuType: ''
     });
 
 
@@ -149,23 +157,34 @@ const MenuListTable = props => {
 
         const formData = new FormData();
 
+        if (updateMenuList.menuCd === undefined || updateMenuList.menuCd === '') {
+            alert('메뉴코드를 입력하세요.');
+            return false;
+        }
+
+        formData.append('orgMenuCd', props.menuCd);
         formData.append('menuCd', updateMenuList.menuCd);
         formData.append('menuLvl', updateMenuList.menuLvl);
         formData.append('menuNm', updateMenuList.menuNm);
         formData.append('menuOrdr', updateMenuList.menuOrdr);
         formData.append('pathSrc', updateMenuList.pathSrc);
         formData.append('upperMenuCd', updateMenuList.upperMenuCd);
+        formData.append('menuType', updateMenuList.menuType);
 
         Axios.post(`/menu/menuUpdate`, formData)
             .then(res => {
-                setState(state => ({
-                    ...state,
-                    updateOpen: false
-                }));
-
-                dispatch(getMenuListing(null, props.page, 5));
-                dispatch(getMenuFiltering());
-                dispatch(getMenuPaging(props.page));
+                if (res.data === 'succeed') {
+                    setState(state => ({
+                        ...state,
+                        updateOpen: false
+                    }));
+    
+                    dispatch(getMenuListing(null, props.page, 5));
+                    dispatch(getMenuFiltering());
+                    dispatch(getMenuPaging(props.page));
+                } else {
+                    alert('메뉴코드가 중복 됩니다.');
+                }
             })
             .catch(err => {
                 throw(err);
@@ -206,7 +225,7 @@ const MenuListTable = props => {
                     {props.menuCd}
                 </TableCell>
                 <TableCell align='center'>
-                    {props.upperMenuCd === undefined ? '최상위메뉴' : props.upperMenuCd}
+                    {props.upperMenuCd === undefined || props.upperMenuCd === '' ? '최상위메뉴' : props.upperMenuCd}
                 </TableCell>
                 <TableCell align='center'>
                     {props.menuNm}
@@ -338,6 +357,15 @@ const MenuListTable = props => {
                                     <h4>메뉴이름</h4>
                                     <input type="text" defaultValue={updateMenuList.menuNm} name="menuNm"
                                     className={classes.updateInput} onChange={handleUpdateChange}></input>
+                                </div>
+                                <div className={classes.updateContent}>
+                                    <h4>메뉴유형</h4>
+                                    <select defaultValue={updateMenuList.menuType} onChange={handleUpdateChange} 
+                                        name="menuType" className={classes.updateSelect}>
+                                        <option value="" selected>선택해주세요.</option>
+                                        <option value="list">리스트형</option>
+                                        <option value="board">게시판형</option>
+                                    </select>
                                 </div>
                             </div>
                             <div className={classes.right}>

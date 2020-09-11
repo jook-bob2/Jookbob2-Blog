@@ -23,4 +23,6 @@ public interface BoardMapper {
 	public void updateNotice(Notice entity);
 	public Long getNoticeViewCnt(Long noticeNo);
 	public List<Map<String, Object>> getBoardKind();
+	public Map<String, Object> selectLowerBoardKind();
+	public boolean dupPathCheck(String pathSrc);
 }

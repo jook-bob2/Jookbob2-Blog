@@ -25,6 +25,7 @@
 			menu_nm,
 			menu_ordr,
 			path_src,
+			menu_icon,
 			create_dt,
 			update_dt,
 			update_yn,
@@ -126,11 +127,24 @@
 	<update id="menuUpdate" parameterType="hashmap">
 		UPDATE ft_menu SET
 			menu_cd = #{menuCd},
-			upper_menu_cd = #{upperMenuCd},
-			menu_nm = #{menuNm},
-			menu_lvl = #{menuLvl},
-			menu_ordr = #{menuOrdr},
-			path_src = #{pathSrc},
+			<if test="!upperMenuCd.equals('undefined') and upperMenuCd != null">
+				upper_menu_cd = #{upperMenuCd},
+			</if>
+			<if test="!menuNm.equals('undefined') and menuNm != null">
+				menu_nm = #{menuNm},
+			</if>
+			<if test="!menuOrdr.equals('undefined') and menuOrdr != null">
+				menu_ordr = #{menuOrdr},
+			</if>
+			<if test="!menuLvl.equals('undefined') and menuLvl != null">
+				menu_lvl = #{menuLvl},
+			</if>
+			<if test="!pathSrc.equals('undefined') and pathSrc != null">
+				path_src = #{pathSrc},
+			</if>
+			<if test="menuIcon != null and !menuIcon.equals('')">
+				menu_icon = #{menuIcon},
+			</if>
 			update_dt = SYSDATE(),
 			update_yn = 'Y'
 		WHERE menu_cd = #{menuCd}
@@ -151,4 +165,36 @@
 			update_dt = SYSDATE()
 		WHERE menu_cd = #{menuCd}
 	</update>
+	
+	<select id="dupMenuCdCheck" parameterType="String" resultType="boolean">
+		SELECT IF(SUM(menu_cd) > 0 ,'true', 'false') FROM ft_menu WHERE menu_cd = #{menuCd}
+	</select>
+	
+	<insert id="createMenu" parameterType="hashmap">
+		INSERT INTO ft_menu (
+			menu_cd,
+			upper_menu_cd,
+			menu_nm,
+			menu_lvl,
+			menu_ordr,
+			path_src,
+			menu_icon,
+			create_dt,
+			use_yn,
+			del_yn,
+			update_yn
+		) VALUES (
+			#{menuCd},
+			#{upperMenuCd},
+			#{menuNm},
+			#{menuLvl},
+			#{menuOrdr},
+			#{pathSrc},
+			#{menuIcon},
+			SYSDATE(),
+			'Y',
+			'N',
+			'N'
+		)
+	</insert>
 </mapper>

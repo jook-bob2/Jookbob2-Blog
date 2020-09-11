@@ -49,11 +49,11 @@ const Sidebar = props => {
                 const menuArr = [];
                 const subArr = [];
 
-                for (let i = 0; i < menuList.length; i++) {
-                    if (menuList[i].upperMenuCd) {
-                        subArr.push(menuList[i]);
+                for (let menu of menuList) {
+                    if (menu.upperMenuCd) {
+                        subArr.push(menu);
                     } else {
-                        menuArr.push(menuList[i]);
+                        menuArr.push(menu);
                     }
                 }
                 

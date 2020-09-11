@@ -34,7 +34,8 @@ import {
     SignIn as SignInAdmin,
     NoticeList as NoticeListAdmin,
     NoticeUpdate as NoticeUpdateAdmin,
-    MenuList as MenuListAdmin
+    MenuList as MenuListAdmin,
+    BoardKinds
 } from './views/Admin';
 
 const Routes = () => {
@@ -108,7 +109,7 @@ const Routes = () => {
                 user={true}
             />
 
-            {boardKind.path.length > -1 ? mappingRoute(boardKind.path) : null}
+            {Array.isArray(boardKind.path) && boardKind.path.length !== 0 ? mappingRoute(boardKind.path) : null}
 
             <RouteWithLayout
                 component={BoardView}
@@ -251,7 +252,17 @@ const Routes = () => {
                 component={MenuListAdmin}
                 exact
                 layout={AdminLayOut}
-                path="/menuList"
+                path="/front-menuList"
+                fallback={GoToAdminSignPage}
+                isAllow={adminAuth}
+                admin={true}
+            />
+
+            <RouteWithLayout 
+                component={BoardKinds}
+                exact
+                layout={AdminLayOut}
+                path="/boardKind-list"
                 fallback={GoToAdminSignPage}
                 isAllow={adminAuth}
                 admin={true}
@@ -337,11 +348,7 @@ const Routes = () => {
                 admin={true}
             />     
 
-            {
-                pathFlag !== 0 
-                ? <Redirect to="/not-found" />
-                : null
-            }
+            {pathFlag !== 0 ? <Redirect to="/not-found" /> : null}
         </Switch>
     );
 };
