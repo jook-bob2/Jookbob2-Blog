@@ -54,30 +54,25 @@ public class BoardController {
 
 	@PostMapping("/boardList")
 	public Map<String, Object> boardList(@RequestParam Map<String, Object> param) {
-		Map<String, Object> map = new HashMap<>();
-		
 		int page = Integer.parseInt(param.get("page").toString());
 		int rowsPerPage = Integer.parseInt(param.get("rowsPerPage").toString());
-		String brdText = param.get("brdText").toString();
-		
-		map.put("brdText", brdText);
 		
 		// 게시판 글 수 가져오기
-		int count = boardMapper.boardCount(map);
+		int count = boardMapper.boardCount(param);
 		
-		int start = page * rowsPerPage;
-	    
-		map.put("start", start);
-		map.put("end", rowsPerPage);
+		// 페이지 수 계산
+		int pageBegin = (page - 1) * rowsPerPage; // 0, 5, 10 이런식으로 페이징
 		
-		
+		param.put("pageBegin", pageBegin);
+		param.put("pageEnd", rowsPerPage);
+
 		// 게시판 리스트 가져오기
-		List<Map<String, Object>> boardList = boardMapper.boardList(map);
+		List<Map<String, Object>> boardList = boardMapper.boardList(param);
 		
-		map.put("list", boardList);
-		map.put("count", count);
+		param.put("list", boardList);
+		param.put("count", count);
 		
-		return map;
+		return param;
 	}
 	
 	@PostMapping(value = "/boardDetail/{bno}")

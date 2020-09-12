@@ -8,7 +8,11 @@ import {
     Avatar,
     Table,
     TableBody,
-    TableRow
+    TableRow,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem
   } from '@material-ui/core';
 import {post} from 'axios';
 import { Link as RouterLink } from 'react-router-dom';
@@ -23,10 +27,6 @@ const styles = makeStyles(theme => ({
     },
     select: {
         marginBottom: 10
-    },
-    selectWt: {
-        width: '100%',
-        height: 30
     },
     input: {
         marginBottom: 10
@@ -62,7 +62,11 @@ const styles = makeStyles(theme => ({
     },
     avatarTd: {
         padding: 10
-    }
+    },
+    selectWt: {
+        width: 400,
+        marginTop: 20
+    },
 }));
 
 const BoardInsert = props => {
@@ -75,6 +79,9 @@ const BoardInsert = props => {
         content: '',
         brdCode: location.query !== undefined ? location.query.bKinds : ''
     });
+
+    const [showText, setShowText] = useState([]);
+    const [typeOpen, setTypeOpen] = useState(false);
 
     const [member, setMember] = useState({
         userName: '',
@@ -92,25 +99,37 @@ const BoardInsert = props => {
             });
     },[]);
 
+    useEffect(() => {
+        post(`/boardManagement/getShowText`)
+            .then(res => {
+                setShowText(res.data.list);
+            })
+            .catch(err => {
+                throw(err);
+            });
+    }, []);
+
     const callMember = async() => {
         const url = 'member/viewMember';
         return post(url);
     }
 
-    const handleChange = (event, editor) => {
+    const handleChange = (event) => {
+        event.persist();
         if (event.target !== undefined) {
-            setState({
+            setState(state => ({
                 ...state,
                 [event.target.name]: event.target.value
-            });
-        }
-        if (editor !== undefined) {
-            setState({
-                ...state,
-                content: editor.getData()
-            });
+            }));
         }
     };
+    
+    const handleEditor = (event, editor) => {
+        setState(state => ({
+            ...state,
+            content: editor.getData()
+        }));
+    }
 
     const handleSubmit = event => {
         event.preventDefault();
@@ -146,20 +165,15 @@ const BoardInsert = props => {
         return post(url, formData);
     }
     
-    document.onkeydown = function(e){
-        /* F5, Ctrl+r, Ctrl+F5 */
-        if((e.keyCode === 116) || (e.ctrlKey === true)){
-            if (e.keyCode === 82) {
-                e.cancelBubble = true; 
-                e.returnValue = false; 
-                alert("새로고침하면 데이터가 저장되지 않습니다.");
-                setTimeout(function(){
-                    window.location.reload();
-                }, 1000);
-                return false;
-            }
-        }
-    }
+    const handleBrdTypeClose = () => {
+        setTypeOpen(false);
+    };
+
+    const handleBrdTypeOpen = (event) => {
+        event.preventDefault();
+        
+        setTypeOpen(true);
+    };
     
     return (
         <div className={classes.main}>
@@ -194,22 +208,32 @@ const BoardInsert = props => {
                 >  
                     <div className={classes.content}>
                         <div className={classes.select}>
-                            <select className={classes.selectWt} onChange={handleChange} name="brdCode" value={state.brdCode}>
-                                <option value>게시판 유형을 선택하세요.</option>
-                                <option value="00">Q&A</option>
-                                <option value="01">취업관련</option>
-                                <option value="02">일상관련</option>
-                                <option value="03">게시판</option>
-                            </select>
+                            <FormControl>
+                                <InputLabel id="selectBrdTypeLabel">게시판 유형을 선택하세요.</InputLabel>
+                                <Select
+                                    labelId="selectBrdTypeLabel"
+                                    className={classes.selectWt}
+                                    name="brdCode"
+                                    value={state.brdCode}
+                                    onChange={handleChange}
+                                    open={typeOpen}
+                                    onClose={handleBrdTypeClose}
+                                    onOpen={handleBrdTypeOpen}
+                                >
+                                    <MenuItem value=''>선택하세요.</MenuItem>
+                                    {showText.map(c => 
+                                        <MenuItem key={c.bKindsNo} value={c.brdCode}>{c.showText}</MenuItem>
+                                    )}
+                                </Select>
+                            </FormControl>
                         </div>
                         <div className={classes.input}>
                             <input className={classes.inputWt} placeholder="제목을 입력해 주세요." onChange={handleChange} name="title"></input>
                         </div>
                         <div className={classes.textArea}>
-                            {/* <textarea className={classes.contentWt} onChange={handleChange} name="content"></textarea> */}
                             <CKEditor 
                                 editor={ClassicEditor} 
-                                onChange={handleChange} 
+                                onChange={handleEditor} 
                                 name="content" 
                                 config={
                                     {

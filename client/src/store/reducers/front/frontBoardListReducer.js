@@ -11,7 +11,7 @@ export default function (state = {
                 ...state,
                 values: action.data.list,
                 count: action.data.count,
-                bKinds: action.data.list[0].bKinds
+                bKinds: action.data.list.length > 0 ? action.data.list[0].bKinds : ''
             } 
         default:
             return state;

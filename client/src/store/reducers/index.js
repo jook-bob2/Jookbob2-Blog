@@ -19,6 +19,8 @@ import menuListReducer from './admin/menuListReducer';
 import menuFilterReducer from './admin/menuFilterReducer';
 import menuListPageReducer from './admin/menuListPageReducer';
 import frontBoardListReducer from './front/frontBoardListReducer';
+import frontBoardListPageReducer from './front/frontBoardListPageReducer';
+import frontBoardFilterReducer from './front/frontBoardFilterReducer';
 
 const rootReducer = combineReducers({
     session: sessionReducer,
@@ -38,6 +40,8 @@ const rootReducer = combineReducers({
     noticeFilter: noticeFilterReducer,
     noticeListPage: noticeListPageReducer,
     frontBoardList: frontBoardListReducer,
+    frontBoardListPage: frontBoardListPageReducer,
+    frontBoardFilter: frontBoardFilterReducer,
     menuList: menuListReducer,
     menuFilter: menuFilterReducer,
     menuListPage: menuListPageReducer

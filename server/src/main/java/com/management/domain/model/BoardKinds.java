@@ -53,20 +53,36 @@ public class BoardKinds {
     @UpdateTimestamp
     private LocalDateTime updateDt;
     
+    // 수정여부
+    @Column(length = 2)
+    private String updateYn;
+    
+    // 사용여부
+    @Column(length = 2)
+    private String useYn;
+    
+    // 삭제여부
+    @Column(length = 2)
+    private String delYn;
+    
     public BoardKinds() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
     @Builder
-    public BoardKinds(Long bKindsNo, String brdCode, String brdText, String showText, LocalDateTime createDt,
-			LocalDateTime updateDt) {
+	public BoardKinds(Long bKindsNo, String brdCode, String brdText, String showText, LocalDateTime createDt,
+			LocalDateTime updateDt, String updateYn, String useYn, String delYn) {
+		super();
 		this.bKindsNo = bKindsNo;
 		this.brdCode = brdCode;
 		this.brdText = brdText;
 		this.showText = showText;
 		this.createDt = createDt;
 		this.updateDt = updateDt;
+		this.updateYn = updateYn;
+		this.useYn = useYn;
+		this.delYn = delYn;
 	}
 
 	public Long getbKindsNo() {
@@ -115,5 +131,29 @@ public class BoardKinds {
 
 	public void setUpdateDt(LocalDateTime updateDt) {
 		this.updateDt = updateDt;
+	}
+
+	public String getUpdateYn() {
+		return updateYn;
+	}
+
+	public void setUpdateYn(String updateYn) {
+		this.updateYn = updateYn;
+	}
+
+	public String getUseYn() {
+		return useYn;
+	}
+
+	public void setUseYn(String useYn) {
+		this.useYn = useYn;
+	}
+
+	public String getDelYn() {
+		return delYn;
+	}
+
+	public void setDelYn(String delYn) {
+		this.delYn = delYn;
 	}
 }

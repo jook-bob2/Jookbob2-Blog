@@ -8,7 +8,11 @@ import {
     Avatar,
     Table,
     TableBody,
-    TableRow
+    TableRow,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem
   } from '@material-ui/core';
 import {post} from 'axios';
 import CKEditor from '@ckeditor/ckeditor5-react';
@@ -24,8 +28,8 @@ const styles = makeStyles(theme => ({
         marginBottom: 10
     },
     selectWt: {
-        width: '100%',
-        height: 30
+        width: 400,
+        marginTop: 20
     },
     input: {
         marginBottom: 10
@@ -79,6 +83,9 @@ const BoardUpdate = props => {
         memberNo: ''
     });
 
+    const [showText, setShowText] = useState([]);
+    const [typeOpen, setTypeOpen] = useState(false);
+
     useEffect(() => {
         post(`/boardManagement/boardUpdateList/${state.bno}`)
             .then(res => {
@@ -96,6 +103,16 @@ const BoardUpdate = props => {
                 throw(err);
             });
     }, [state.bno]);
+
+    useEffect(() => {
+        post(`/boardManagement/getShowText`)
+            .then(res => {
+                setShowText(res.data.list);
+            })
+            .catch(err => {
+                throw(err);
+            });
+    }, []);
     
     const handleChange = (event) => {
         event.persist();
@@ -154,18 +171,15 @@ const BoardUpdate = props => {
         history.goBack();
     }
     
-    // document.onkeydown = function(e){
-    //     /* F5, Ctrl+r, Ctrl+F5 */
-    //     if((e.keyCode === 116) || (e.ctrlKey === true && e.keyCode === 82)){
-    //         e.cancelBubble = true; 
-    //         e.returnValue = false; 
-    //         alert("새로고침하면 데이터가 저장되지 않습니다.");
-    //         setTimeout(function(){
-    //             window.location.reload();
-    //         }, 1000);
-    //         return false;
-    //     }
-    // }
+    const handleBrdTypeClose = () => {
+        setTypeOpen(false);
+    };
+
+    const handleBrdTypeOpen = (event) => {
+        event.preventDefault();
+        
+        setTypeOpen(true);
+    };
     
     return (
         <div className={classes.main}>
@@ -195,12 +209,24 @@ const BoardUpdate = props => {
                 <form onSubmit={handleSubmit}>  
                     <div className={classes.content}>
                         <div className={classes.select}>
-                            <select className={classes.selectWt} onChange={handleChange} name="brdCode" value={state.brdCode}>
-                                <option value>게시판 유형을 선택하세요.</option>
-                                <option value="00">Q&A</option>
-                                <option value="01">취업관련</option>
-                                <option value="02">일상관련</option>
-                            </select>
+                        <FormControl>
+                                <InputLabel id="selectBrdTypeLabel">게시판 유형을 선택하세요.</InputLabel>
+                                <Select
+                                    labelId="selectBrdTypeLabel"
+                                    className={classes.selectWt}
+                                    name="brdCode"
+                                    value={state.brdCode}
+                                    onChange={handleChange}
+                                    open={typeOpen}
+                                    onClose={handleBrdTypeClose}
+                                    onOpen={handleBrdTypeOpen}
+                                >
+                                    <MenuItem value=''>선택하세요.</MenuItem>
+                                    {showText.map(c => 
+                                        <MenuItem key={c.bKindsNo} value={c.brdCode}>{c.showText}</MenuItem>
+                                    )}
+                                </Select>
+                            </FormControl>
                         </div>
                         <div className={classes.input}>
                             <input className={classes.inputWt} placeholder="제목을 입력해 주세요." onChange={handleChange} name="title" value={state.title}></input>

@@ -48,7 +48,7 @@
 		INNER JOIN board_kinds k
 		ON b.brd_code = k.brd_code
 		AND b.use_yn = 'Y'
-		AND del_yn = 'N'
+		AND b.del_yn = 'N'
 		<if test="brdText != null and !brdText.equals('')">
 			AND k.brd_code = (SELECT brd_code FROM board_kinds WHERE brd_text = #{brdText})
 		</if>
@@ -58,8 +58,8 @@
 		
 		ORDER BY b.bno DESC
 		
-		<if test="start != null and end != null">
-			LIMIT #{start}, #{end}
+		<if test="pageBegin != null and pageEnd != null">
+			LIMIT #{pageBegin}, #{pageEnd}
 		</if>
 	</select>
 	
@@ -154,7 +154,7 @@
 		INNER JOIN board_kinds k
 		ON n.brd_code = k.brd_code
 		AND n.use_yn = 'Y'
-		AND del_yn = 'N'
+		AND n.del_yn = 'N'
 		<if test="brdText != null and !brdText.equals('')">
 			AND k.brd_code = (SELECT brd_code FROM board_kinds WHERE brd_text = #{brdText})
 		</if>

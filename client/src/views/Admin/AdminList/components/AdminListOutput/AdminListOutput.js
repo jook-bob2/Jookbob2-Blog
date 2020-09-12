@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import Paper from '@material-ui/core/Paper'
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableRow from '@material-ui/core/TableRow'
-import TableCell from '@material-ui/core/TableCell'
-import TableHead from '@material-ui/core/TableHead'
+import {
+    Paper,
+    Table,
+    TableBody,
+    TableRow,
+    TableCell,
+    TableHead,
+    CircularProgress,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem
+  } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles'
-import CircularProgress from '@material-ui/core/CircularProgress'
 import Pagination from '@material-ui/lab/Pagination';
 import AdminListTable from './AdminListTable/AdminListTable';
 import { useSelector, useDispatch } from 'react-redux';
@@ -16,6 +22,12 @@ import { getAdminListing, getAdminPaging } from 'store/actions/admin/adminList';
 const useStyles = makeStyles(theme => ({
     root: {
         paddingTop: 50
+    },
+    row: {
+        height: '42px',
+        display: 'flex',
+        alignItems: 'center',
+        margin: '18px'
     },
     paper: {
         paddingTop: 10,
@@ -34,6 +46,22 @@ const useStyles = makeStyles(theme => ({
     tableHead: {
         fontWeight: 'bold',
         fontSize: 'initial'
+    },
+    selectWt: {
+        width: 150,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        height: 35
+    },
+    pageDiv: {
+        padding: 20,
+        marginBottom: 10,
+        textAlign: 'right',
+        marginRight: '10%'
+    },
+    selectLable:{
+        fontSize: '15pt',
+        fontWeight: 'bold'
     }
 }));
 
@@ -45,12 +73,10 @@ const AdminListOutput = props => {
     const filterValues = useSelector(state => state.adminFilter) || '';
     const page = useSelector(state => state.adminListPage.page) || 1;
 
-    const itemsPerPage = 5;
-    
+    const [itemsPerPage, setItemPerPage] = useState(5);
+    const [pageOpen, setPageOpen] = useState(false);
     const [progress, setProgress] = useState(0);
     const [noOfPages, setNoOfPages] = useState(0);
-
-    
 
     useEffect(() => {
         if (filterValues === '') {
@@ -58,7 +84,7 @@ const AdminListOutput = props => {
         } else {
             dispatch(getAdminListing(filterValues.values, page, itemsPerPage));
         }
-    }, [dispatch, page, filterValues]);
+    }, [dispatch, page, filterValues, itemsPerPage]);
 
     useEffect(() => {
         const timer = setInterval(progressCount, 20);
@@ -70,7 +96,7 @@ const AdminListOutput = props => {
 
     useEffect(() => {
         setNoOfPages(Math.ceil(adminList.adminCnt / itemsPerPage));
-    }, [adminList.adminCnt]);
+    }, [adminList.adminCnt, itemsPerPage]);
 
     const progressCount = () => {
         setProgress(oldProgress => (oldProgress >= 100 ? 0 : oldProgress + 1));
@@ -97,11 +123,55 @@ const AdminListOutput = props => {
         }
     }
 
+    const handleChange = (event) => {
+        event.persist();
+        setItemPerPage(event.target.value);
+        dispatch(getAdminPaging(page));
+
+        if (filterValues === '') {
+            dispatch(getAdminListing(false, page, event.target.value));
+        } else {
+            dispatch(getAdminListing(filterValues.values, page, event.target.value));
+        }
+    };
+
+    const handlePageClose = () => {
+        setPageOpen(false);
+    };
+
+    const handlePageOpen = (event) => {
+        event.preventDefault();
+        
+        setPageOpen(true);
+    };
+
     return (
         <div className={classes.root}>
-            <h3 className={classes.paper}>
-                ★ {adminList.adminCnt}명의 관리자가 조회 되었습니다.
-            </h3>
+            <div className={classes.row}>
+                <h3 className={classes.paper}>
+                    ★ {adminList.adminCnt}명의 관리자가 조회 되었습니다.
+                </h3>
+                <div className={classes.pageDiv}>
+                    <form>
+                        <FormControl>
+                            <InputLabel id="selectPageLabel" className={classes.selectLable}>페이지 수</InputLabel>
+                            <Select
+                                labelId="selectPageLabel"
+                                className={classes.selectWt}
+                                value={itemsPerPage}
+                                onChange={handleChange}
+                                open={pageOpen}
+                                onClose={handlePageClose}
+                                onOpen={handlePageOpen}
+                            >
+                                <MenuItem value={5}>5</MenuItem>
+                                <MenuItem value={10}>10</MenuItem>
+                                <MenuItem value={20}>20</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </form>
+                </div>
+            </div>
             <Paper className={classes.paper}>
                 <Table>
                     <TableHead>
