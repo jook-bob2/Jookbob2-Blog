@@ -53,23 +53,8 @@ public class ManagementController {
 			String url = s3Service.upload(file, "upload/", file.getBytes());
 			dto.setImage(url);
 			managementService.customerAdd(dto);
-		} else {
-			System.out.println("파일이 없습니다.");
 		}
 	}
-	
-//	private String uploadFile(String originalName, byte[] fileData) throws Exception {
-//		// uuid 생성
-//		UUID uuid = UUID.randomUUID();
-//		// 랜덤생성+파일이름 저장
-//		String savedName = uuid.toString()+"_"+originalName;
-//		File target = new File("src/main/resources/static/upload/", savedName);
-//		// 임시디렉토리에 저장된 업로드된 파일을 지정된 디렉토리로 복사
-//		FileCopyUtils.copy(fileData, target);
-//		
-//		
-//		return savedName;
-//	}
 	
 	@RequestMapping(value = "customers/{id}", method = RequestMethod.DELETE)
 	public void customerDelete(@PathVariable("id") Long id) {

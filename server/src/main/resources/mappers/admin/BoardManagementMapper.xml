@@ -144,6 +144,8 @@
 			brd_code as brdCode,
 			show_text as showText
 		FROM board_kinds
+		WHERE use_yn = 'Y'
+		AND del_yn = 'N'
 	</select>
 	
 	<select id="boardUpdateList" parameterType="Long" resultType="hashmap">

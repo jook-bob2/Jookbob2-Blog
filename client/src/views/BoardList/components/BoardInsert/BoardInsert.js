@@ -71,13 +71,13 @@ const styles = makeStyles(theme => ({
 
 const BoardInsert = props => {
     const classes = styles();
-    const { className, location, history } = props;
+    const { className, location, history, match } = props;
     const [state, setState] = useState({
         memberNo: location.query !== undefined ? location.query.memberNo : '',
         brdText: location.query !== undefined ? location.query.brdText : '',
         title: '',
         content: '',
-        brdCode: location.query !== undefined ? location.query.bKinds : ''
+        brdCode: match.params.brdCode
     });
 
     const [showText, setShowText] = useState([]);

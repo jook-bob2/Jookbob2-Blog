@@ -83,7 +83,6 @@ const AccountProfile = props => {
     e.preventDefault();
     addPicture(e)
       .then(res => {
-        console.log(res);
         setState({
           ...state,
           avatar: res.data.profileImg

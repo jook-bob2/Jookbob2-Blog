@@ -167,6 +167,7 @@ const MenuListTable = props => {
         formData.append('menuLvl', updateMenuList.menuLvl);
         formData.append('menuNm', updateMenuList.menuNm);
         formData.append('menuOrdr', updateMenuList.menuOrdr);
+        formData.append('orgPathSrc', props.pathSrc);
         formData.append('pathSrc', updateMenuList.pathSrc);
         formData.append('upperMenuCd', updateMenuList.upperMenuCd);
         formData.append('menuType', updateMenuList.menuType);
@@ -182,8 +183,10 @@ const MenuListTable = props => {
                     dispatch(getMenuListing(null, props.page, 5));
                     dispatch(getMenuFiltering());
                     dispatch(getMenuPaging(props.page));
-                } else {
+                } else if (res.data === 'error') {
                     alert('메뉴코드가 중복 됩니다.');
+                } else if (res.data === 'dupPath') {
+                    alert('메뉴경로가 중복 됩니다.');
                 }
             })
             .catch(err => {
@@ -303,7 +306,7 @@ const MenuListTable = props => {
 
             <Dialog
                 open={state.restoreOpen}
-                onClose={handleUpdateClose}
+                onClose={handleRestoreClose}
             >
                 <DialogTitle>
                     복구 경고

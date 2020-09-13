@@ -25,4 +25,5 @@ public interface BoardMapper {
 	public List<Map<String, Object>> getBoardKind();
 	public Map<String, Object> selectLowerBoardKind();
 	public boolean dupPathCheck(String pathSrc);
+	public String getBkinds(String brdText);
 }

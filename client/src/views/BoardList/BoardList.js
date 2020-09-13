@@ -126,7 +126,7 @@ const BoardList = props => {
   const session = useSelector(state => state.session, []) || [];
   const authenticated = session.authenticated;
   const memberNo = session.memberNo;
-
+  
   useEffect(() => {
     dispatch(getFrontBoardListing(brdText, page, rowsPerPage));
   }, [brdText, dispatch, page, rowsPerPage]);
@@ -230,7 +230,7 @@ const BoardList = props => {
         {authenticated ? 
           <div className={classes.menu}>
             <RouterLink
-                to={ { pathname: "/boardInsert", query: {history: history ,memberNo: memberNo, brdText: brdText, bKinds: boardState.bKinds} }}
+                to={ { pathname: `/boardInsert/${boardState.bKinds}`, query: {history: history ,memberNo: memberNo, brdText: brdText} }}
             >
               <Button variant="contained" color="primary"><h5>글쓰기</h5></Button>
             </RouterLink>

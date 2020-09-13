@@ -156,7 +156,6 @@ const AdminRegistration = () => {
         
         registration()
             .then(res => {
-                console.log(res);
                 const result = res.data;
                 if (result === 1) {
                     alert("등록이 완료 되었습니다.");

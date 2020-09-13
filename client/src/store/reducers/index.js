@@ -18,6 +18,9 @@ import noticeListPageReducer from './admin/noticeListPageReducer';
 import menuListReducer from './admin/menuListReducer';
 import menuFilterReducer from './admin/menuFilterReducer';
 import menuListPageReducer from './admin/menuListPageReducer';
+import boardKindsListReducer from './admin/boardKindsListReducer';
+import boardKindsFilterReducer from './admin/boardKindsFilterReducer';
+import boardKindsListPageReducer from './admin/boardKindsListPageReducer';
 import frontBoardListReducer from './front/frontBoardListReducer';
 import frontBoardListPageReducer from './front/frontBoardListPageReducer';
 import frontBoardFilterReducer from './front/frontBoardFilterReducer';
@@ -44,7 +47,10 @@ const rootReducer = combineReducers({
     frontBoardFilter: frontBoardFilterReducer,
     menuList: menuListReducer,
     menuFilter: menuFilterReducer,
-    menuListPage: menuListPageReducer
+    menuListPage: menuListPageReducer,
+    boardKindsList: boardKindsListReducer,
+    boardKindsFilter: boardKindsFilterReducer,
+    boardKindsListPage: boardKindsListPageReducer
 });
 
 export default rootReducer;

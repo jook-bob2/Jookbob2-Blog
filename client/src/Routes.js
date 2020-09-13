@@ -133,7 +133,7 @@ const Routes = () => {
                 component={BoardInsertView}
                 exact
                 layout={MainLayout}
-                path="/boardInsert"
+                path="/boardInsert/:brdCode"
                 user={true}
                 isAllow={userAuth}
                 fallback={GoToUserSignPage}

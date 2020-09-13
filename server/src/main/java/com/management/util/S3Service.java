@@ -72,7 +72,6 @@ public class S3Service {
 		String fileNm = "";
 		int j = 0;
 		for (int i = 0; i<imgKey.length; i++) {
-			System.out.println("몇번째부터인가 ? " + i + "번째 ==> " + imgKey[i]);
 			if (imgKey[i].equals("upload")) {
 				j += i;
 				fileNm = imgKey[i];
@@ -81,7 +80,6 @@ public class S3Service {
 				fileNm += "/" + imgKey[i];
 			}
 		}
-		System.out.println(fileNm);
 		if (fileNm != null && !fileNm.equals("")) s3Client.deleteObject(new DeleteObjectRequest(bucket, fileNm));
 	}
 	

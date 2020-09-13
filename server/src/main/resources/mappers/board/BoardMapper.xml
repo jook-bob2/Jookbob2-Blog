@@ -204,7 +204,9 @@
 	
 	<select id="getBoardKind" resultType="hashmap">
 		SELECT brd_text as brdText
-		FROM board_kinds;
+		FROM board_kinds
+		WHERE use_yn = 'Y' 
+		AND del_yn = 'N'
 	</select>
 	
 	<select id="selectLowerBoardKind" resultType="hashmap">
@@ -217,6 +219,14 @@
 	</select>
 	
 	<select id="dupPathCheck" parameterType="String" resultType="boolean">
-		SELECT IF(SUM(b_kinds_no) > 0 ,'true', 'false') FROM board_kinds WHERE brd_text = #{pathSrc}
+		SELECT IF(SUM(b_kinds_no) > 0 ,'true', 'false') 
+		FROM board_kinds 
+		WHERE brd_text = REPLACE(#{pathSrc}, CHAR(9), '')
+	</select>
+	
+	<select id="getBkinds" parameterType="String" resultType="String">
+		SELECT brd_code as brdCode
+		FROM board_kinds
+		WHERE brd_text = #{brdText}
 	</select>
 </mapper>

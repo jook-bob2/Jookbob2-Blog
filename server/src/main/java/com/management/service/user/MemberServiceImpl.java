@@ -31,7 +31,6 @@ public class MemberServiceImpl implements MemberService {
 	@Transactional
 	public Long joinMember(Member entity) throws SQLException {
 		entity.setPasswd(passwordEncoder.encode(entity.getPasswd()));
-		System.out.println("Passwd : " + entity.getPasswd());
 		return memberRepository.save(entity).getMemberNo();
 	}
 

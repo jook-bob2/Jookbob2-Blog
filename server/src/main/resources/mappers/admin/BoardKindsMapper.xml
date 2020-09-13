@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.management.mapper.admin.BoardKindsMapper">
+	<resultMap type="hashmap" id="selectMap">
+		<result column="b_kinds_no" property="bKindsNo"/>
+		<result column="brd_code" property="brdCode"/>
+		<result column="brd_text" property="brdText"/>
+		<result column="show_text" property="showText"/>
+		<result column="create_dt" property="createDt"/>
+		<result column="update_dt" property="updateDt"/>
+		<result column="update_yn" property="updateYn"/>
+		<result column="use_yn" property="useYn"/>
+		<result column="del_yn" property="delYn"/>
+	</resultMap>
+	
+	<select id="boardKindsList" parameterType="hashmap" resultMap="selectMap">
+		SELECT
+			b_kinds_no,
+			brd_code,
+			brd_text,
+			show_text,
+			create_dt,
+			update_dt,
+			update_yn,
+			use_yn,
+			del_yn
+		FROM board_kinds
+		WHERE 1=1
+		<if test="brdCode != null and !brdCode.equals('')">
+			AND brd_code LIKE CONCAT('%', #{brdCode}, '%')
+		</if>
+		<if test="brdText != null and !brdText.equals('')">
+			AND brd_text LIKE CONCAT('%', #{brdText}, '%')
+		</if>
+		<if test="showText != null and !showText.equals('')">
+			AND show_text LIKE CONCAT('%', #{showText}, '%')
+		</if>
+		<if test="boardKindsState != null and !boardKindsState.equals('')">
+			<if test="boardKindsState.equals('DelY')">
+				AND del_yn = 'Y'
+			</if>
+			<if test="boardKindsState.equals('DelN')">
+				AND del_yn = 'N'
+			</if>
+			<if test="boardKindsState.equals('UpdateY')">
+				AND update_yn = 'Y'
+			</if>
+			<if test="boardKindsState.equals('UpdateN')">
+				AND update_yn = 'N'
+			</if>
+		</if>
+		<if test="createStartDate != null and createEndDate != null and !createStartDate.equals('') and !createEndDate.equals('')">
+			AND create_dt BETWEEN DATE(#{createStartDate}) AND DATE_ADD(#{createEndDate}, INTERVAL 1 DAY)
+		</if>
+		<if test="updateStartDate != null and updateEndDate != null and !updateStartDate.equals('') and !updateEndDate.equals('')">
+			AND update_dt BETWEEN DATE(#{updateStartDate}) AND DATE_ADD(#{updateEndDate}, INTERVAL 1 DAY)
+		</if>
+		
+		ORDER BY b_kinds_no, brd_code
+		
+		<if test="pageBegin != null and pageEnd != null">
+			LIMIT #{pageBegin}, #{pageEnd}
+		</if>
+	</select>
+	
+	<select id="boardKindsCnt" parameterType="hashmap" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM board_kinds
+		WHERE 1=1
+		<if test="brdCode != null and !brdCode.equals('')">
+			AND brd_code LIKE CONCAT('%', #{brdCode}, '%')
+		</if>
+		<if test="brdText != null and !brdText.equals('')">
+			AND brd_text LIKE CONCAT('%', #{brdText}, '%')
+		</if>
+		<if test="showText != null and !showText.equals('')">
+			AND show_text LIKE CONCAT('%', #{showText}, '%')
+		</if>
+		<if test="boardKindsState != null and !boardKindsState.equals('')">
+			<if test="boardKindsState.equals('DelY')">
+				AND del_yn = 'Y'
+			</if>
+			<if test="boardKindsState.equals('DelN')">
+				AND del_yn = 'N'
+			</if>
+			<if test="boardKindsState.equals('UpdateY')">
+				AND update_yn = 'Y'
+			</if>
+			<if test="boardKindsState.equals('UpdateN')">
+				AND update_yn = 'N'
+			</if>
+		</if>
+		<if test="createStartDate != null and createEndDate != null and !createStartDate.equals('') and !createEndDate.equals('')">
+			AND create_dt BETWEEN DATE(#{createStartDate}) AND DATE_ADD(#{createEndDate}, INTERVAL 1 DAY)
+		</if>
+		<if test="updateStartDate != null and updateEndDate != null and !updateStartDate.equals('') and !updateEndDate.equals('')">
+			AND update_dt BETWEEN DATE(#{updateStartDate}) AND DATE_ADD(#{updateEndDate}, INTERVAL 1 DAY)
+		</if>
+	</select>
+	
+	<update id="boardKindsUpdate" parameterType="hashmap">
+		UPDATE board_kinds SET
+			brd_code = #{brdCode},
+			<if test="!showText.equals('undefined') and showText != null">
+				show_text = #{showText},
+			</if>
+			<if test="!brdText.equals('undefined') and brdText != null">
+				brd_text = #{brdText},
+			</if>
+			update_dt = SYSDATE(),
+			update_yn = 'Y'
+		WHERE brd_code = #{brdCode}
+	</update>
+	
+	<update id="boardKindsDelete" parameterType="String">
+		UPDATE board_kinds SET
+			del_yn = 'Y',
+			use_yn = 'N',
+			update_dt = SYSDATE()
+		WHERE brd_code = #{brdCode}
+	</update>
+	
+	<update id="boardKindsRestore" parameterType="String">
+		UPDATE board_kinds SET
+			del_yn = 'N',
+			use_yn = 'Y',
+			update_dt = SYSDATE()
+		WHERE brd_code = #{brdCode}
+	</update>
+	
+	<select id="dupBrdCodeCheck" parameterType="String" resultType="boolean">
+		SELECT IF(SUM(brd_code) > 0 ,'true', 'false') FROM board_kinds WHERE brd_code = #{brdCode}
+	</select>
+</mapper>

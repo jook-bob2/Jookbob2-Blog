@@ -167,7 +167,9 @@
 	</update>
 	
 	<select id="dupMenuCdCheck" parameterType="String" resultType="boolean">
-		SELECT IF(SUM(menu_cd) > 0 ,'true', 'false') FROM ft_menu WHERE menu_cd = #{menuCd}
+		SELECT IF(SUM(menu_cd) > 0 ,'true', 'false') 
+		FROM ft_menu 
+		WHERE menu_cd = REPLACE(#{menuCd}, CHAR(9), '')
 	</select>
 	
 	<insert id="createMenu" parameterType="hashmap">

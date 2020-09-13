@@ -231,8 +231,10 @@ const MenuListOutput = props => {
                     dispatch(getMenuListing(null, page, 5));
                     dispatch(getMenuFiltering());
                     dispatch(getMenuPaging(page));
-                } else {
+                } else if (res.data === 'error') {
                     alert('메뉴코드가 중복 됩니다.');
+                } else if (res.data === 'dupPath') {
+                    alert('메뉴경로가 중복 됩니다.');
                 }
             })
             .catch(error => {
@@ -348,7 +350,7 @@ const MenuListOutput = props => {
             >
                 <form>
                     <DialogTitle>
-                        메뉴 수정
+                        메뉴 등록
                     </DialogTitle>
                     <DialogContent>
                         <div className={classes.createDiv}>
