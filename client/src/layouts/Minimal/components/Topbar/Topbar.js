@@ -1,10 +1,10 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { AppBar, Toolbar } from '@material-ui/core';
-import SvgIcon from '@material-ui/core/SvgIcon';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -14,14 +14,6 @@ const useStyles = makeStyles(theme => ({
     }
   }
 }));
-
-function HomeIcon(props) {
-  return (
-      <SvgIcon {...props}>
-          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-      </SvgIcon>
-  );
-}
 
 const Topbar = props => {
   const { className, ...rest } = props;
@@ -37,7 +29,7 @@ const Topbar = props => {
     >
       <Toolbar>
         <RouterLink to="/">
-          <HomeIcon fontSize="large" color="action"></HomeIcon>
+          <img src="/images/home.png" width="40"></img>
         </RouterLink>
       </Toolbar>
     </AppBar>

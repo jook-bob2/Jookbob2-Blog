@@ -89,7 +89,7 @@ const BoardInsert = props => {
     });
 
     useEffect(() => {
-        callMember()
+        post(`/member/viewMember`)
             .then(res => {
                 const list = res.data.list;
                 setMember({
@@ -108,11 +108,6 @@ const BoardInsert = props => {
                 throw(err);
             });
     }, []);
-
-    const callMember = async() => {
-        const url = 'member/viewMember';
-        return post(url);
-    }
 
     const handleChange = (event) => {
         event.persist();

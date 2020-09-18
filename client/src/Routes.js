@@ -86,6 +86,7 @@ const Routes = () => {
                 exact
                 layout={MainLayout}
                 path={path.brdText}
+                group={path.showText}
                 isAllow={true}
                 user={true}
             />;
@@ -94,17 +95,11 @@ const Routes = () => {
 
     return (
         <Switch>
-            <Redirect
-                exact
-                from="/"
-                to="/dashboard"
-            />
-
             <RouteWithLayout
                 component={DashboardView}
                 exact
                 layout={MainLayout}
-                path="/dashboard"
+                path="/"
                 isAllow={true}
                 user={true}
             />

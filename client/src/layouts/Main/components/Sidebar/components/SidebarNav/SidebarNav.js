@@ -65,8 +65,11 @@ const SidebarNav = props => {
 
   const classes = useStyles();
 
+  const path = window.location.href.split('/');
+
   const [selectedIndex, setSelectedIndex] = useState('');
   const [upperMenuCd, setUpperMenuCd] = useState('');
+  const [active] = useState(path[path.length - 1])
 
   const handleClick = (index, menuCd) => {
     if (selectedIndex === index) {
@@ -89,16 +92,16 @@ const SidebarNav = props => {
             ?
             <ListItem disableGutters className={classes.item}>
               <Button
-                  activeClassName={classes.active}
-                  className={classes.button}
-                  component={CustomRouterLink}
-                  to={item.pathSrc}
-                >
-                  <ListItemIcon>
-                    <div className={classes.icon}><img src={item.menuIcon} alt="menu icon"></img></div>
-                  </ListItemIcon>
-                  <div className={classes.listItem}>{item.menuNm}</div>
-                </Button>
+                activeClassName={active === '' ? classes.active : ''}
+                className={classes.button}
+                component={CustomRouterLink}
+                to={item.pathSrc}
+              >
+                <ListItemIcon>
+                  <div className={classes.icon}><img src={item.menuIcon} alt="menu icon"></img></div>
+                </ListItemIcon>
+                <div className={classes.listItem}>{item.menuNm}</div>
+              </Button>
             </ListItem>
             :
             <ListItem className={classes.expandItem} button onClick={() => handleClick(index, item.menuCd)} disableGutters>

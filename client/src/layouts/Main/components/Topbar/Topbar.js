@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React, { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
@@ -7,7 +8,6 @@ import { AppBar, Toolbar, Badge, Hidden, IconButton } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import InputIcon from '@material-ui/icons/Input';
-import SvgIcon from '@material-ui/core/SvgIcon';
 import LockOpenIcon from '@material-ui/icons/LockOpen'; 
 import {post} from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
@@ -28,15 +28,6 @@ const useStyles = makeStyles(theme => ({
         color: '#FFFFFF'
     }
 }));
-
-
-function HomeIcon(props) {
-    return (
-        <SvgIcon {...props}>
-            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-        </SvgIcon>
-    );
-}
 
 const Topbar = props => {
     const { className, onSidebarOpen } = props;
@@ -65,7 +56,7 @@ const Topbar = props => {
         >
             <Toolbar>
                 <RouterLink to="/">
-                    <HomeIcon fontSize="large" color="action"></HomeIcon>
+                    <img src="/images/home.png" width="40"></img>
                 </RouterLink>
                 <div className={classes.flexGrow}/>
                 <Hidden mdDown>

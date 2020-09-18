@@ -86,6 +86,9 @@ public class MenuController {
 					brdKindEntity.setBrdCode(lastBrdCode);
 					brdKindEntity.setBrdText(param.get("pathSrc").toString());
 					brdKindEntity.setShowText(param.get("menuNm").toString());
+					brdKindEntity.setDelYn("N");
+					brdKindEntity.setUseYn("Y");
+					brdKindEntity.setUpdateYn("N");
 					boardKindsRepo.save(brdKindEntity);
 					
 					param.put("menuIcon", "/images/icons/note-24px.svg");
@@ -144,6 +147,9 @@ public class MenuController {
 				brdKindEntity.setBrdCode(lastBrdCode);
 				brdKindEntity.setBrdText(param.get("pathSrc").toString());
 				brdKindEntity.setShowText(param.get("menuNm").toString());
+				brdKindEntity.setDelYn("N");
+				brdKindEntity.setUseYn("Y");
+				brdKindEntity.setUpdateYn("N");
 				boardKindsRepo.save(brdKindEntity);
 				
 				param.put("menuIcon", "/images/icons/note-24px.svg");

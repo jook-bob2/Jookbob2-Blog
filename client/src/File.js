@@ -6,3 +6,4 @@ import '../public/images/icons/list-24px.svg';
 import '../public/images/icons/note-24px.svg';
 import '../public/images/auth.jpg';
 import '../public/images/undraw_page_not_found_su7k.svg';
+import '../public/images/home.png';

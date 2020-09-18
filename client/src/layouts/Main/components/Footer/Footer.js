@@ -40,7 +40,7 @@ const Footer = props => {
                 . 2020
             </Typography>
             <Typography variant="caption">
-                These are spring boot and reacts that I personally made.
+                These are spring boot and react that I personally made.
             </Typography>
         </div>
     );

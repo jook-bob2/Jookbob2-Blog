@@ -43,7 +43,9 @@ module.exports = {
                                 // To get relative path you can use
                                 const relativePath = path.relative(context, resourcePath);
                                 
-                                if (relativePath.includes('auth.jpg') || relativePath.includes('undraw_page_not_found_su7k.svg')) {
+                                if (relativePath.includes('auth.jpg') || 
+                                    relativePath.includes('undraw_page_not_found_su7k.svg') || 
+                                    relativePath.includes('home.png')) {
                                   return `images/${url}`;
                                 }
                     

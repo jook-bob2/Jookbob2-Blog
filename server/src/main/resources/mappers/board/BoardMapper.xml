@@ -203,7 +203,9 @@
 	</select>
 	
 	<select id="getBoardKind" resultType="hashmap">
-		SELECT brd_text as brdText
+		SELECT 
+			brd_text as brdText,
+			show_text as showText
 		FROM board_kinds
 		WHERE use_yn = 'Y' 
 		AND del_yn = 'N'

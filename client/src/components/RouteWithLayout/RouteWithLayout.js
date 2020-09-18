@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const RouteWithLayout = props => {
-  const { layout: Layout, component: Component, fallback: Fallback, isAllow, admin, user, ...rest } = props;
+  const { layout: Layout, component: Component, fallback: Fallback, isAllow, admin, user, group, ...rest } = props;
   const classes = useStyles();
   
   const [progress, setProgress] = useState(0);
@@ -56,7 +56,7 @@ const RouteWithLayout = props => {
             return <Fallback />
           } else {
             return <Layout>
-                <Component {...matchProps} />
+                <Component {...matchProps} group={group} />
               </Layout>
           }
         }

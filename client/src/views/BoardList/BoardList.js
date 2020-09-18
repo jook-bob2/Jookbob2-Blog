@@ -300,8 +300,8 @@ const BoardList = props => {
         <div className={classes.pagination}>
           <Pagination 
             classes={{ ul: classes.paginationUl}}
-            color="primary" 
-            shape="rounded" 
+            color="secondary" 
+            shape="round" 
             count={noOfPages}
             page={page}
             onChange={handlePaging}
