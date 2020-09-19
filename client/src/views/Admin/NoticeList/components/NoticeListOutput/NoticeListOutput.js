@@ -10,13 +10,20 @@ import {
     FormControl,
     InputLabel,
     Select,
-    MenuItem
+    MenuItem,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogTitle,
+    DialogContent,
+    Typography
   } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles'
 import Pagination from '@material-ui/lab/Pagination';
 import NoticeListTable from './NoticeListTable/NoticeListTable';
 import { useSelector, useDispatch } from 'react-redux';
-import { getNoticeListing, getNoticePaging } from 'store/actions/admin/noticeList';
+import { getNoticeListing, getNoticeFiltering, getNoticePaging } from 'store/actions/admin/noticeList';
+import { post } from 'axios';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -76,6 +83,10 @@ const NoticeListOutput = props => {
     const [pageOpen, setPageOpen] = useState(false);
     const [progress, setProgress] = useState(0);
     const [noOfPages, setNoOfPages] = useState(0);
+    const [state, setState] = useState({
+        deleteOpen: false,
+        restoreOpen: false
+    });
 
     useEffect(() => {
         if (filterValues === '') {
@@ -144,6 +155,95 @@ const NoticeListOutput = props => {
         setPageOpen(true);
     };
 
+    const handleCheckAll = (event) => {
+        const checkAll = event.target.checked;
+        if (checkAll) {
+            document.querySelectorAll('input[name=childChk]').forEach((item, index) => {
+                item.checked = true;
+            });
+        } else {
+            document.querySelectorAll('input[name=childChk]').forEach((item, index) => {
+                item.checked = false;
+            });
+        }
+    };
+
+    const handleDeleteOpen = () => {
+        setState(state => ({
+            ...state,
+            deleteOpen: true
+        }));
+    };
+
+    const handleDeleteClose = () => {
+        setState(state => ({
+            ...state,
+            deleteOpen: false
+        }));
+    }
+
+    const handleRestoreOpen = () => {
+        setState(state => ({
+            ...state,
+            restoreOpen: true
+        }));
+    };
+
+    const handleRestoreClose = () => {
+        setState(state => ({
+            ...state,
+            restoreOpen: false
+        }));
+    }
+
+    const deleteNoticeChk = () => {
+        const checkArr = [];
+        document.querySelectorAll('input[name=childChk]').forEach((item) => {
+            if (item.checked) {
+                checkArr.push(item.value);
+            }
+        });
+
+        post(`/notice/noticeDeleteChk`, checkArr)
+            .then(res => {
+                setState(state => ({
+                    ...state,
+                    deleteOpen: false
+                }));
+
+                dispatch(getNoticeListing(null, page, itemsPerPage));
+                dispatch(getNoticeFiltering());
+                dispatch(getNoticePaging(page));
+            })
+            .catch(err => {
+                throw(err);
+            });
+    };
+
+    const restoreNoticeChk = () => {
+        const checkArr = [];
+        document.querySelectorAll('input[name=childChk]').forEach((item) => {
+            if (item.checked) {
+                checkArr.push(item.value);
+            }
+        });
+
+        post(`/notice/noticeRestoreChk`, checkArr)
+            .then(res => {
+                setState(state => ({
+                    ...state,
+                    restoreOpen: false
+                }));
+
+                dispatch(getNoticeListing(null, page, itemsPerPage));
+                dispatch(getNoticeFiltering());
+                dispatch(getNoticePaging(page));
+            })
+            .catch(err => {
+                throw(err);
+            });
+    };
+
     return (
         <div className={classes.root}>
             <div className={classes.row}>
@@ -175,6 +275,7 @@ const NoticeListOutput = props => {
                 <Table>
                     <TableHead>
                         <TableRow>
+                            <TableCell align="center" className={classes.tableHead}><input type="checkbox" name="checkAll" onChange={handleCheckAll}></input></TableCell>
                             <TableCell align="center" className={classes.tableHead}>글번호</TableCell>
                             <TableCell align="center" className={classes.tableHead}>글제목</TableCell>
                             <TableCell align="center" className={classes.tableHead}>글작성자</TableCell>
@@ -191,7 +292,7 @@ const NoticeListOutput = props => {
                         :
                         <TableBody>
                             <TableRow>
-                                <TableCell colSpan="9" align="center">
+                                <TableCell colSpan="10" align="center">
                                     <CircularProgress className={classes.progress} variant="determinate" value={progress}></CircularProgress>
                                 </TableCell>
                             </TableRow>
@@ -200,6 +301,10 @@ const NoticeListOutput = props => {
                 </Table>
                 
                 <div className={classes.pagination}>
+                    <div>
+                        <Button color="secondary" variant="contained" onClick={handleDeleteOpen}>선택삭제</Button>&nbsp;&nbsp;
+                        <Button color="primary" variant="contained" onClick={handleRestoreOpen}>선택복구</Button>
+                    </div>
                     <Pagination 
                         classes={{ ul: classes.paginationUl}}
                         color="primary" 
@@ -213,6 +318,66 @@ const NoticeListOutput = props => {
                     />
                 </div>
             </Paper>
+
+            <Dialog
+                open={state.deleteOpen}
+                onClose={handleDeleteClose}
+            >
+                <DialogTitle>
+                    삭제 경고
+                </DialogTitle>
+                <DialogContent>
+                    <Typography gutterBottom>
+                        선택한 게시물을 삭제 하시겠습니까?
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={deleteNoticeChk}
+                    >
+                        삭제
+                    </Button>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleDeleteClose}
+                    >
+                        닫기
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            <Dialog
+                open={state.restoreOpen}
+                onClose={handleRestoreClose}
+            >
+                <DialogTitle>
+                    복구 경고
+                </DialogTitle>
+                <DialogContent>
+                    <Typography gutterBottom>
+                        선택한 유저를 복구 시키겠습니까?
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={restoreNoticeChk}
+                    >
+                        복구
+                    </Button>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleRestoreClose}
+                    >
+                        닫기
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 };

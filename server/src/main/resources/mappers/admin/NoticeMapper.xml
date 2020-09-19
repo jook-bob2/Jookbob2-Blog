@@ -122,7 +122,7 @@
 		</if>
 	</select>
 	
-	<update id="noticeDelete" parameterType="Long">
+	<update id="noticeDelete" parameterType="long">
 		UPDATE notice SET
 			use_yn = 'N',
 			del_yn = 'Y',
@@ -130,7 +130,7 @@
 		WHERE notice_no = #{noticeNo}
 	</update>
 	
-	<update id="noticeRestore" parameterType="Long">
+	<update id="noticeRestore" parameterType="long">
 		UPDATE notice SET
 			use_yn = 'Y',
 			del_yn = 'N',

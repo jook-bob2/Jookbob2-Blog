@@ -10,8 +10,8 @@ import org.apache.ibatis.annotations.Mapper;
 public interface NoticeMapper {
 	public List<Map<String, Object>> noticeList(Map<String, Object> param);
 	public int noticeCnt(Map<String, Object> param);
-	public void noticeDelete(Long noticeNo);
-	public void noticeRestore(Long noticeNo);
+	public void noticeDelete(long noticeNo);
+	public void noticeRestore(long noticeNo);
 	public Map<String, Object> noticeUpdateList(Long noticeNo);
 	public void updateNotice(Map<String, Object> param);
 }

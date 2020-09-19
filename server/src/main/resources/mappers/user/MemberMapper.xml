@@ -19,11 +19,19 @@
 
 	
 	<select id="idCheck" parameterType="hashmap" resultType="Integer">
-		SELECT ifnull(SUM(member_no),0) as memberNo FROM member_info WHERE user_id=#{userId}
+		SELECT ifnull(SUM(member_no),0) as memberNo 
+		FROM member_info 
+		WHERE user_id = #{userId}
+		AND use_yn = 'Y'
+		AND sec_yn = 'N'
 	</select>
 	
 	<select id="emailCheck" parameterType="hashmap" resultType="Integer">
-		SELECT ifnull(SUM(member_no),0) as memberNo FROM member_info WHERE email=#{email}
+		SELECT ifnull(SUM(member_no),0) as memberNo 
+		FROM member_info 
+		WHERE email=#{email}
+		AND use_yn = 'Y'
+		AND sec_yn = 'N'
 	</select>
 	
 	<select id="pwCheck" parameterType="hashmap" resultType="String">
@@ -35,6 +43,8 @@
 		<if test="email != null and !email.equals('')">
 			email=#{email}
 		</if>
+		AND use_yn = 'Y'
+		AND sec_yn = 'N'
 	</select>
 	
 	<select id="loginCheck" parameterType="com.management.domain.model.Member" resultType="Boolean">
@@ -47,6 +57,8 @@
 			email=#{email}
 		</if>
 		AND passwd=#{passwd}
+		AND use_yn = 'Y'
+		AND sec_yn = 'N'
 	</select>
 	
 	<select id="viewMember" parameterType="hashmap" resultMap="selectMap">

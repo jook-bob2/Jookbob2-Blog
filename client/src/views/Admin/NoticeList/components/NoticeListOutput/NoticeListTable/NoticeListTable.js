@@ -34,7 +34,7 @@ const NoticeListTable = props => {
     });
 
 
-    const handleClickOpen = (noticeNo) => {
+    const handleDeleteOpen = (noticeNo) => {
         setState(state => ({
             ...state,
             noticeNo: noticeNo,
@@ -106,6 +106,9 @@ const NoticeListTable = props => {
         <TableBody className={classes.root}>
             <TableRow>
                 <TableCell align='center'>
+                    <input type="checkbox" name="childChk" value={props.noticeNo}></input>
+                </TableCell>
+                <TableCell align='center'>
                     {props.noticeNo}
                 </TableCell>
                 <TableCell align='center'>
@@ -140,7 +143,7 @@ const NoticeListTable = props => {
                     &nbsp;&nbsp;
                     {props.delYn !== 'Y' 
                         ?
-                        <Button color="secondary" variant="contained" onClick={() => handleClickOpen(props.noticeNo)}>
+                        <Button color="secondary" variant="contained" onClick={() => handleDeleteOpen(props.noticeNo)}>
                             삭제
                         </Button>
                         :

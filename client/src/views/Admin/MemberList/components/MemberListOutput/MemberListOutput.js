@@ -10,13 +10,20 @@ import {
     FormControl,
     InputLabel,
     Select,
-    MenuItem
+    MenuItem,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogTitle,
+    DialogContent,
+    Typography
   } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles'
 import Pagination from '@material-ui/lab/Pagination';
 import MemberListTable from './MemberListTable/MemberListTable';
+import { post } from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
-import { getMemberListing, getMemberPaging } from 'store/actions/admin/memberList';
+import { getMemberListing, getMemberPaging, getMemberFiltering } from 'store/actions/admin/memberList';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -76,6 +83,10 @@ const MemberListOutput = props => {
     const [progress, setProgress] = useState(0);
     const [noOfPages, setNoOfPages] = useState(0);
     const [pageOpen, setPageOpen] = useState(false);
+    const [state, setState] = useState({
+        secOpen: false,
+        restoreOpen: false
+    });
 
     useEffect(() => {
         if (filterValues === '') {
@@ -143,6 +154,95 @@ const MemberListOutput = props => {
         setPageOpen(true);
     };
 
+    const handleCheckAll = (event) => {
+        const checkAll = event.target.checked;
+        if (checkAll) {
+            document.querySelectorAll('input[name=childChk]').forEach((item, index) => {
+                item.checked = true;
+            });
+        } else {
+            document.querySelectorAll('input[name=childChk]').forEach((item, index) => {
+                item.checked = false;
+            });
+        }
+    };
+
+    const handleSecOpen = () => {
+        setState(state => ({
+            ...state,
+            secOpen: true
+        }));
+    };
+
+    const handleSecClose = () => {
+        setState(state => ({
+            ...state,
+            secOpen: false
+        }));
+    }
+
+    const handleRestoreOpen = () => {
+        setState(state => ({
+            ...state,
+            restoreOpen: true
+        }));
+    };
+
+    const handleRestoreClose = () => {
+        setState(state => ({
+            ...state,
+            restoreOpen: false
+        }));
+    }
+
+    const secUserChk = () => {
+        const checkArr = [];
+        document.querySelectorAll('input[name=childChk]').forEach((item) => {
+            if (item.checked) {
+                checkArr.push(item.value);
+            }
+        });
+
+        post(`/user/userSecChk`, checkArr)
+            .then(res => {
+                setState(state => ({
+                    ...state,
+                    secOpen: false
+                }));
+
+                dispatch(getMemberListing(null, page, itemsPerPage));
+                dispatch(getMemberFiltering());
+                dispatch(getMemberPaging(page));
+            })
+            .catch(err => {
+                throw(err);
+            });
+    };
+
+    const restoreUserChk = () => {
+        const checkArr = [];
+        document.querySelectorAll('input[name=childChk]').forEach((item) => {
+            if (item.checked) {
+                checkArr.push(item.value);
+            }
+        });
+
+        post(`/user/userRestoreChk`, checkArr)
+            .then(res => {
+                setState(state => ({
+                    ...state,
+                    restoreOpen: false
+                }));
+
+                dispatch(getMemberListing(null, page, itemsPerPage));
+                dispatch(getMemberFiltering());
+                dispatch(getMemberPaging(page));
+            })
+            .catch(err => {
+                throw(err);
+            });
+    };
+
     return (
         <div className={classes.root}>
             <div className={classes.row}>
@@ -174,6 +274,7 @@ const MemberListOutput = props => {
                 <Table>
                     <TableHead>
                         <TableRow>
+                            <TableCell align="center" className={classes.tableHead}><input type="checkbox" name="checkAll" onChange={handleCheckAll}></input></TableCell>
                             <TableCell align="center" className={classes.tableHead}>번호</TableCell>
                             <TableCell align="center" className={classes.tableHead}>아이디</TableCell>
                             <TableCell align="center" className={classes.tableHead}>이메일</TableCell>
@@ -190,7 +291,7 @@ const MemberListOutput = props => {
                         :
                         <TableBody>
                             <TableRow>
-                                <TableCell colSpan="9" align="center">
+                                <TableCell colSpan="10" align="center">
                                     <CircularProgress className={classes.progress} variant="determinate" value={progress}></CircularProgress>
                                 </TableCell>
                             </TableRow>
@@ -199,6 +300,10 @@ const MemberListOutput = props => {
                 </Table>
                 
                 <div className={classes.pagination}>
+                    <div>
+                        <Button color="secondary" variant="contained" onClick={handleSecOpen}>선택탈퇴</Button>&nbsp;&nbsp;
+                        <Button color="primary" variant="contained" onClick={handleRestoreOpen}>선택복구</Button>
+                    </div>
                     <Pagination 
                         classes={{ ul: classes.paginationUl}}
                         color="primary" 
@@ -212,6 +317,66 @@ const MemberListOutput = props => {
                     />
                 </div>
             </Paper>
+
+            <Dialog
+                open={state.secOpen}
+                onClose={handleSecClose}
+            >
+                <DialogTitle>
+                    탈퇴 경고
+                </DialogTitle>
+                <DialogContent>
+                    <Typography gutterBottom>
+                        선택한 유저를 탈퇴 시키겠습니까?
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={secUserChk}
+                    >
+                        탈퇴
+                    </Button>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleSecClose}
+                    >
+                        닫기
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            <Dialog
+                open={state.restoreOpen}
+                onClose={handleRestoreClose}
+            >
+                <DialogTitle>
+                    복구 경고
+                </DialogTitle>
+                <DialogContent>
+                    <Typography gutterBottom>
+                        선택한 게시물을 복구 하시겠습니까?
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={restoreUserChk}
+                    >
+                        복구
+                    </Button>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleRestoreClose}
+                    >
+                        닫기
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 };

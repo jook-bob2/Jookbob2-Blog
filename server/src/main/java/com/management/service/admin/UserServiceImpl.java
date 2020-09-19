@@ -47,4 +47,20 @@ public class UserServiceImpl implements UserService {
 	public void userUpdate(Map<String, Object> param) {
 		userMapper.userUpdate(param);
 	}
+
+	@Override
+	public void userSecChk(List<Long> checkArr) {
+		for (int i = 0; i < checkArr.size(); i++) {
+			long memberNo = checkArr.get(i);
+			userMapper.userSec(memberNo);
+		}
+	}
+
+	@Override
+	public void userRestoreChk(List<Long> checkArr) {
+		for (int i = 0; i < checkArr.size(); i++) {
+			long memberNo = checkArr.get(i);
+			userMapper.userRestore(memberNo);
+		}
+	}
 }

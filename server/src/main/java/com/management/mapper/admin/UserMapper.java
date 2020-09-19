@@ -15,4 +15,6 @@ public interface UserMapper {
 	public int userPhoneCheck(Map<String, Object> param);
 	public Map<String, Object> userUpdateList(String adminId);
 	public void userUpdate(Map<String, Object> param);
+	public void userSec(long memberNo);
+	public void userRestore(long memberNo);
 }

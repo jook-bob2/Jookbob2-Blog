@@ -156,4 +156,18 @@
 		WHERE
 			user_id = #{userId}
 	</update>
+	
+	<update id="userSec" parameterType="long">
+		UPDATE member_info SET
+			use_yn = 'N',
+			sec_yn = 'Y'
+		WHERE member_no = #{memberNo}
+	</update>
+	
+	<update id="userRestore" parameterType="long">
+		UPDATE member_info SET
+			use_yn = 'Y',
+			sec_yn = 'N'
+		WHERE member_no = #{memberNo}
+	</update>
 </mapper>

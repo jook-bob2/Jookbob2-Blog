@@ -35,4 +35,20 @@ public class NoticeServiceImpl implements NoticeService {
 	public List<Map<String, Object>> noticeList(Map<String, Object> param) {
 		return noticeMapper.noticeList(param);
 	}
+
+	@Override
+	public void noticeDeleteChk(List<Long> checkArr) {
+		for (int i = 0; i < checkArr.size(); i++) {
+			long noticeNo = checkArr.get(i);
+			noticeMapper.noticeDelete(noticeNo);
+		}
+	}
+
+	@Override
+	public void noticeRestoreChk(List<Long> checkArr) {
+		for (int i = 0; i < checkArr.size(); i++) {
+			long noticeNo = checkArr.get(i);
+			noticeMapper.noticeRestore(noticeNo);
+		}
+	}
 }

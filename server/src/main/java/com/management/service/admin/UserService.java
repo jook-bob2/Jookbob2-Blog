@@ -10,4 +10,6 @@ public interface UserService {
 	public List<Map<String, Object>> userList(Map<String, Object> param);
 	public void registration(Member entity) throws SQLException;
 	public void userUpdate(Map<String, Object> param);
+	public void userSecChk(List<Long> checkArr);
+	public void userRestoreChk(List<Long> checkArr);
 }
