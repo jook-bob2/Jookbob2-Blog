@@ -9,8 +9,8 @@ import org.apache.ibatis.annotations.Mapper;
 public interface BoardManagementMapper {
 	public List<Map<String, Object>> boardList(Map<String, Object> param);
 	public int boardCnt(Map<String, Object> param);
-	public void boardDelete(Long bno);
-	public void boardRestore(Long bno);
+	public void boardDelete(long bno);
+	public void boardRestore(long bno);
 	public List<Map<String, Object>> getShowText();
 	public Map<String, Object> boardUpdateList(Long bno);
 	public void updateBoard(Map<String, Object> param);

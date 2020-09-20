@@ -14,4 +14,6 @@ public interface AdminService {
 	public void adminUdpate(Map<String, Object> param);
 	public String pwCheck(Map<String, Object> map);
 	public Boolean loginCheck(Admin entity, HttpSession session);
+	public void adminRestoreChk(List<Long> checkArr);
+	public void adminSecChk(List<Long> checkArr);
 }

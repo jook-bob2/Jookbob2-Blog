@@ -10,14 +10,20 @@ import {
     FormControl,
     InputLabel,
     Select,
-    MenuItem
+    MenuItem,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogTitle,
+    DialogContent,
+    Typography
   } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles'
 import Pagination from '@material-ui/lab/Pagination';
 import AdminListTable from './AdminListTable/AdminListTable';
 import { useSelector, useDispatch } from 'react-redux';
-import { getAdminListing, getAdminPaging } from 'store/actions/admin/adminList';
-// import Button from '@material-ui/core/Button';
+import { getAdminListing, getAdminPaging, getAdminFiltering } from 'store/actions/admin/adminList';
+import { post } from 'axios';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -77,6 +83,11 @@ const AdminListOutput = props => {
     const [pageOpen, setPageOpen] = useState(false);
     const [progress, setProgress] = useState(0);
     const [noOfPages, setNoOfPages] = useState(0);
+    const [state, setState] = useState({
+        secOpen: false,
+        restoreOpen: false,
+        chkOpen: false
+    });
 
     useEffect(() => {
         if (filterValues === '') {
@@ -145,6 +156,133 @@ const AdminListOutput = props => {
         setPageOpen(true);
     };
 
+    const handleCheckAll = (event) => {
+        const checkAll = event.target.checked;
+        if (checkAll) {
+            document.querySelectorAll('input[name=childChk]').forEach((item, index) => {
+                item.checked = true;
+            });
+        } else {
+            document.querySelectorAll('input[name=childChk]').forEach((item, index) => {
+                item.checked = false;
+            });
+        }
+    };
+
+    const handleChkOpen = () => {
+        setState(state => ({
+            ...state,
+            chkOpen: true
+        }));
+    };
+
+    const handleChkClose = () => {
+        setState(state => ({
+            ...state,
+            chkOpen: false
+        }));
+    };
+
+    const handleSecOpen = () => {
+        const checked = [];
+        
+        document.querySelectorAll('input[name=childChk]').forEach((item) => {
+            checked.push(item.checked);
+        });
+        
+        const checkValue = checked.some((checkValue) => checkValue);
+
+        if (!checkValue) {
+            handleChkOpen();
+        } else {
+            setState(state => ({
+                ...state,
+                secOpen: true
+            }));
+        }
+    };
+
+    const handleSecClose = () => {
+        setState(state => ({
+            ...state,
+            secOpen: false
+        }));
+    };
+
+    const handleRestoreOpen = () => {
+        const checked = [];
+        
+        document.querySelectorAll('input[name=childChk]').forEach((item) => {
+            checked.push(item.checked);
+        });
+        
+        const checkValue = checked.some((checkValue) => checkValue);
+
+        if (!checkValue) {
+            handleChkOpen();
+        } else {
+            setState(state => ({
+                ...state,
+                restoreOpen: true
+            }));
+        }
+    };
+
+    const handleRestoreClose = () => {
+        setState(state => ({
+            ...state,
+            restoreOpen: false
+        }));
+    }
+
+    const secAdminChk = () => {
+        const checkArr = [];
+        document.querySelectorAll('input[name=childChk]').forEach((item) => {
+            if (item.checked) {
+                checkArr.push(item.value);
+            }
+        });
+
+        post(`/admin/adminSecChk`, checkArr)
+            .then(res => {
+                setState(state => ({
+                    ...state,
+                    secOpen: false
+                }));
+
+                dispatch(getAdminListing(null, page, itemsPerPage));
+                dispatch(getAdminFiltering());
+                dispatch(getAdminPaging(page));
+            })
+            .catch(err => {
+                throw(err);
+            });
+    };
+
+    const restoreAdminChk = () => {
+        const checkArr = [];
+        document.querySelectorAll('input[name=childChk]').forEach((item) => {
+            if (item.checked) {
+                checkArr.push(item.value);
+            }
+        });
+
+        post(`/admin/adminRestoreChk`, checkArr)
+            .then(res => {
+                setState(state => ({
+                    ...state,
+                    restoreOpen: false
+                }));
+
+                dispatch(getAdminListing(null, page, itemsPerPage));
+                dispatch(getAdminFiltering());
+                dispatch(getAdminPaging(page));
+            })
+            .catch(err => {
+                throw(err);
+            });
+    };
+
     return (
         <div className={classes.root}>
             <div className={classes.row}>
@@ -176,6 +314,7 @@ const AdminListOutput = props => {
                 <Table>
                     <TableHead>
                         <TableRow>
+                            <TableCell align="center" className={classes.tableHead}><input type="checkbox" name="checkAll" onChange={handleCheckAll}></input></TableCell>
                             <TableCell align="center" className={classes.tableHead}>번호</TableCell>
                             <TableCell align="center" className={classes.tableHead}>아이디</TableCell>
                             <TableCell align="center" className={classes.tableHead}>이메일</TableCell>
@@ -192,7 +331,7 @@ const AdminListOutput = props => {
                         :
                         <TableBody>
                             <TableRow>
-                                <TableCell colSpan="9" align="center">
+                                <TableCell colSpan="10" align="center">
                                     <CircularProgress className={classes.progress} variant="determinate" value={progress}></CircularProgress>
                                 </TableCell>
                             </TableRow>
@@ -201,6 +340,10 @@ const AdminListOutput = props => {
                 </Table>
                 
                 <div className={classes.pagination}>
+                    <div>
+                        <Button color="secondary" variant="contained" onClick={handleSecOpen}>선택탈퇴</Button>&nbsp;&nbsp;
+                        <Button color="primary" variant="contained" onClick={handleRestoreOpen}>선택복구</Button>
+                    </div>
                     <Pagination 
                         classes={{ ul: classes.paginationUl}}
                         color="primary" 
@@ -214,6 +357,89 @@ const AdminListOutput = props => {
                     />
                 </div>
             </Paper>
+
+            <Dialog
+                open={state.chkOpen}
+                onClose={handleChkClose}
+            >
+                <DialogTitle>
+                    알림
+                </DialogTitle>
+                <DialogContent>
+                    <Typography gutterBottom>
+                        선택된 관리자가 없습니다.
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={handleChkClose}
+                    >
+                        닫기
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            <Dialog
+                open={state.secOpen}
+                onClose={handleSecClose}
+            >
+                <DialogTitle>
+                    탈퇴 경고
+                </DialogTitle>
+                <DialogContent>
+                    <Typography gutterBottom>
+                        선택한 관리자를 탈퇴 시키겠습니까?
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={secAdminChk}
+                    >
+                        탈퇴
+                    </Button>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleSecClose}
+                    >
+                        닫기
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            <Dialog
+                open={state.restoreOpen}
+                onClose={handleRestoreClose}
+            >
+                <DialogTitle>
+                    복구 경고
+                </DialogTitle>
+                <DialogContent>
+                    <Typography gutterBottom>
+                        선택한 관리자를 복구 하시겠습니까?
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={restoreAdminChk}
+                    >
+                        복구
+                    </Button>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleRestoreClose}
+                    >
+                        닫기
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 };

@@ -53,4 +53,20 @@ public class AdminServiceImpl implements AdminService {
 	public Boolean loginCheck(Admin entity, HttpSession session) {
 		return adminMapper.loginCheck(entity);
 	}
+
+	@Override
+	public void adminRestoreChk(List<Long> checkArr) {
+		for (int i = 0; i < checkArr.size(); i++) {
+			long adminNo = checkArr.get(i);
+			adminMapper.adminRestore(adminNo);
+		}
+	}
+
+	@Override
+	public void adminSecChk(List<Long> checkArr) {
+		for (int i = 0; i < checkArr.size(); i++) {
+			long adminNo = checkArr.get(i);
+			adminMapper.adminSec(adminNo);
+		}
+	}
 }

@@ -106,6 +106,9 @@ const BoardListTable = props => {
         <TableBody className={classes.root}>
             <TableRow>
                 <TableCell align='center'>
+                    <input type="checkbox" name="childChk" value={props.bno}></input>
+                </TableCell>
+                <TableCell align='center'>
                     {props.bno}
                 </TableCell>
                 <TableCell align='center'>

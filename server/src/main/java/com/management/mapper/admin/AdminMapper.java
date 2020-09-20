@@ -21,4 +21,6 @@ public interface AdminMapper {
 	public String pwCheck(Map<String, Object> param);
 	public Boolean loginCheck(Admin entity);
 	public Map<String, Object> viewMember(Map<String, Object> map);
+	public void adminSec(long adminNo);
+	public void adminRestore(long adminNo);
 }

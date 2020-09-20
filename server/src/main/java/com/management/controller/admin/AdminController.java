@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -249,4 +250,13 @@ public class AdminController {
 		return map;
 	}
 	
+	@PostMapping(value = "/adminSecChk")
+	public void adminSecChk(@RequestBody List<Long> checkArr) {
+		adminService.adminSecChk(checkArr);
+	}
+	
+	@PostMapping(value = "/adminRestoreChk")
+	public void adminRestoreChk(@RequestBody List<Long> checkArr) {
+		adminService.adminRestoreChk(checkArr);
+	}
 }

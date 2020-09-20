@@ -25,4 +25,20 @@ public class BoardManagementServiceImpl implements BoardManagementService {
 	public List<Map<String, Object>> boardList(Map<String, Object> param) {
 		return boardManagementMapper.boardList(param);
 	}
+
+	@Override
+	public void boardDeleteChk(List<Long> checkArr) {
+		for(int i = 0; i < checkArr.size(); i++) {
+			long bno = checkArr.get(i);
+			boardManagementMapper.boardDelete(bno);
+		}
+	}
+
+	@Override
+	public void boardRestoreChk(List<Long> checkArr) {
+		for(int i = 0; i < checkArr.size(); i++) {
+			long bno = checkArr.get(i);
+			boardManagementMapper.boardRestore(bno);
+		}
+	}
 }

@@ -85,7 +85,8 @@ const NoticeListOutput = props => {
     const [noOfPages, setNoOfPages] = useState(0);
     const [state, setState] = useState({
         deleteOpen: false,
-        restoreOpen: false
+        restoreOpen: false,
+        chkOpen: false
     });
 
     useEffect(() => {
@@ -168,11 +169,37 @@ const NoticeListOutput = props => {
         }
     };
 
-    const handleDeleteOpen = () => {
+    const handleChkOpen = () => {
         setState(state => ({
             ...state,
-            deleteOpen: true
+            chkOpen: true
         }));
+    };
+
+    const handleChkClose = () => {
+        setState(state => ({
+            ...state,
+            chkOpen: false
+        }));
+    };
+
+    const handleDeleteOpen = () => {
+        const checked = [];
+        
+        document.querySelectorAll('input[name=childChk]').forEach((item) => {
+            checked.push(item.checked);
+        });
+        
+        const checkValue = checked.some((checkValue) => checkValue);
+
+        if (!checkValue) {
+            handleChkOpen();
+        } else {
+            setState(state => ({
+                ...state,
+                deleteOpen: true
+            }));
+        }
     };
 
     const handleDeleteClose = () => {
@@ -180,13 +207,25 @@ const NoticeListOutput = props => {
             ...state,
             deleteOpen: false
         }));
-    }
+    };
 
     const handleRestoreOpen = () => {
-        setState(state => ({
-            ...state,
-            restoreOpen: true
-        }));
+        const checked = [];
+        
+        document.querySelectorAll('input[name=childChk]').forEach((item) => {
+            checked.push(item.checked);
+        });
+        
+        const checkValue = checked.some((checkValue) => checkValue);
+
+        if (!checkValue) {
+            handleChkOpen();
+        } else {
+            setState(state => ({
+                ...state,
+                restoreOpen: true
+            }));
+        }
     };
 
     const handleRestoreClose = () => {
@@ -320,6 +359,29 @@ const NoticeListOutput = props => {
             </Paper>
 
             <Dialog
+                open={state.chkOpen}
+                onClose={handleChkClose}
+            >
+                <DialogTitle>
+                    알림
+                </DialogTitle>
+                <DialogContent>
+                    <Typography gutterBottom>
+                        선택된 게시물이 없습니다.
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={handleChkClose}
+                    >
+                        닫기
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            <Dialog
                 open={state.deleteOpen}
                 onClose={handleDeleteClose}
             >
@@ -358,7 +420,7 @@ const NoticeListOutput = props => {
                 </DialogTitle>
                 <DialogContent>
                     <Typography gutterBottom>
-                        선택한 유저를 복구 시키겠습니까?
+                        선택한 게시물을 복구 하시겠습니까?
                     </Typography>
                 </DialogContent>
                 <DialogActions>

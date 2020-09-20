@@ -10,13 +10,20 @@ import {
     FormControl,
     InputLabel,
     Select,
-    MenuItem
+    MenuItem,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogTitle,
+    DialogContent,
+    Typography
   } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles'
 import Pagination from '@material-ui/lab/Pagination';
 import BoardListTable from './BoardListTable/BoardListTable';
 import { useSelector, useDispatch } from 'react-redux';
-import { getBoardListing, getBoardPaging } from 'store/actions/admin/boardList';
+import { getBoardListing, getBoardPaging, getBoardFiltering } from 'store/actions/admin/boardList';
+import { post } from 'axios';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -76,6 +83,11 @@ const BoardListOutput = props => {
     const [noOfPages, setNoOfPages] = useState(0);
     const [itemsPerPage, setItemPerPage] = useState(5);
     const [pageOpen, setPageOpen] = useState(false);
+    const [state, setState] = useState({
+        deleteOpen: false,
+        restoreOpen: false,
+        chkOpen: false
+    });
 
     useEffect(() => {
         if (filterValues === '') {
@@ -144,6 +156,133 @@ const BoardListOutput = props => {
         setPageOpen(true);
     };
 
+    const handleCheckAll = (event) => {
+        const checkAll = event.target.checked;
+        if (checkAll) {
+            document.querySelectorAll('input[name=childChk]').forEach((item, index) => {
+                item.checked = true;
+            });
+        } else {
+            document.querySelectorAll('input[name=childChk]').forEach((item, index) => {
+                item.checked = false;
+            });
+        }
+    };
+
+    const handleChkOpen = () => {
+        setState(state => ({
+            ...state,
+            chkOpen: true
+        }));
+    };
+
+    const handleChkClose = () => {
+        setState(state => ({
+            ...state,
+            chkOpen: false
+        }));
+    };
+
+    const handleDeleteOpen = () => {
+        const checked = [];
+        
+        document.querySelectorAll('input[name=childChk]').forEach((item) => {
+            checked.push(item.checked);
+        });
+        
+        const checkValue = checked.some((checkValue) => checkValue);
+
+        if (!checkValue) {
+            handleChkOpen();
+        } else {
+            setState(state => ({
+                ...state,
+                deleteOpen: true
+            }));
+        }
+    };
+
+    const handleDeleteClose = () => {
+        setState(state => ({
+            ...state,
+            deleteOpen: false
+        }));
+    }
+
+    const handleRestoreOpen = () => {
+        const checked = [];
+        
+        document.querySelectorAll('input[name=childChk]').forEach((item) => {
+            checked.push(item.checked);
+        });
+        
+        const checkValue = checked.some((checkValue) => checkValue);
+
+        if (!checkValue) {
+            handleChkOpen();
+        } else {
+            setState(state => ({
+                ...state,
+                restoreOpen: true
+            }));
+        }
+    };
+
+    const handleRestoreClose = () => {
+        setState(state => ({
+            ...state,
+            restoreOpen: false
+        }));
+    }
+
+    const deleteBoardChk = () => {
+        const checkArr = [];
+        document.querySelectorAll('input[name=childChk]').forEach((item) => {
+            if (item.checked) {
+                checkArr.push(item.value);
+            }
+        });
+
+        post(`/boardManagement/boardDeleteChk`, checkArr)
+            .then(res => {
+                setState(state => ({
+                    ...state,
+                    deleteOpen: false
+                }));
+
+                dispatch(getBoardListing(null, page, itemsPerPage));
+                dispatch(getBoardFiltering());
+                dispatch(getBoardPaging(page));
+            })
+            .catch(err => {
+                throw(err);
+            });
+    };
+
+    const restoreBoardChk = () => {
+        const checkArr = [];
+        document.querySelectorAll('input[name=childChk]').forEach((item) => {
+            if (item.checked) {
+                checkArr.push(item.value);
+            }
+        });
+
+        post(`/boardManagement/boardRestoreChk`, checkArr)
+            .then(res => {
+                setState(state => ({
+                    ...state,
+                    restoreOpen: false
+                }));
+
+                dispatch(getBoardListing(null, page, itemsPerPage));
+                dispatch(getBoardFiltering());
+                dispatch(getBoardPaging(page));
+            })
+            .catch(err => {
+                throw(err);
+            });
+    };
+
     return (
         <div className={classes.root}>
             <div className={classes.row}>
@@ -175,6 +314,7 @@ const BoardListOutput = props => {
                 <Table>
                     <TableHead>
                         <TableRow>
+                        <TableCell align="center" className={classes.tableHead}><input type="checkbox" name="checkAll" onChange={handleCheckAll}></input></TableCell>
                             <TableCell align="center" className={classes.tableHead}>글번호</TableCell>
                             <TableCell align="center" className={classes.tableHead}>글제목</TableCell>
                             <TableCell align="center" className={classes.tableHead}>글작성자</TableCell>
@@ -191,7 +331,7 @@ const BoardListOutput = props => {
                         :
                         <TableBody>
                             <TableRow>
-                                <TableCell colSpan="9" align="center">
+                                <TableCell colSpan="10" align="center">
                                     <CircularProgress className={classes.progress} variant="determinate" value={progress}></CircularProgress>
                                 </TableCell>
                             </TableRow>
@@ -200,6 +340,10 @@ const BoardListOutput = props => {
                 </Table>
                 
                 <div className={classes.pagination}>
+                    <div>
+                        <Button color="secondary" variant="contained" onClick={handleDeleteOpen}>선택삭제</Button>&nbsp;&nbsp;
+                        <Button color="primary" variant="contained" onClick={handleRestoreOpen}>선택복구</Button>
+                    </div>
                     <Pagination 
                         classes={{ ul: classes.paginationUl}}
                         color="primary" 
@@ -213,6 +357,89 @@ const BoardListOutput = props => {
                     />
                 </div>
             </Paper>
+
+            <Dialog
+                open={state.chkOpen}
+                onClose={handleChkClose}
+            >
+                <DialogTitle>
+                    알림
+                </DialogTitle>
+                <DialogContent>
+                    <Typography gutterBottom>
+                        선택된 게시물이 없습니다.
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={handleChkClose}
+                    >
+                        닫기
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            <Dialog
+                open={state.deleteOpen}
+                onClose={handleDeleteClose}
+            >
+                <DialogTitle>
+                    삭제 경고
+                </DialogTitle>
+                <DialogContent>
+                    <Typography gutterBottom>
+                        선택한 게시물을 삭제 하시겠습니까?
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={deleteBoardChk}
+                    >
+                        삭제
+                    </Button>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleDeleteClose}
+                    >
+                        닫기
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            <Dialog
+                open={state.restoreOpen}
+                onClose={handleRestoreClose}
+            >
+                <DialogTitle>
+                    복구 경고
+                </DialogTitle>
+                <DialogContent>
+                    <Typography gutterBottom>
+                        선택한 게시물을 복구 하시겠습니까?
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={restoreBoardChk}
+                    >
+                        복구
+                    </Button>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleRestoreClose}
+                    >
+                        닫기
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 };

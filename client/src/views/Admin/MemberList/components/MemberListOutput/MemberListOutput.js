@@ -85,7 +85,8 @@ const MemberListOutput = props => {
     const [pageOpen, setPageOpen] = useState(false);
     const [state, setState] = useState({
         secOpen: false,
-        restoreOpen: false
+        restoreOpen: false,
+        chkOpen: false
     });
 
     useEffect(() => {
@@ -167,11 +168,37 @@ const MemberListOutput = props => {
         }
     };
 
-    const handleSecOpen = () => {
+    const handleChkOpen = () => {
         setState(state => ({
             ...state,
-            secOpen: true
+            chkOpen: true
         }));
+    };
+
+    const handleChkClose = () => {
+        setState(state => ({
+            ...state,
+            chkOpen: false
+        }));
+    };
+
+    const handleSecOpen = () => {
+        const checked = [];
+        
+        document.querySelectorAll('input[name=childChk]').forEach((item) => {
+            checked.push(item.checked);
+        });
+        
+        const checkValue = checked.some((checkValue) => checkValue);
+
+        if (!checkValue) {
+            handleChkOpen();
+        } else {
+            setState(state => ({
+                ...state,
+                secOpen: true
+            }));
+        }
     };
 
     const handleSecClose = () => {
@@ -182,10 +209,22 @@ const MemberListOutput = props => {
     }
 
     const handleRestoreOpen = () => {
-        setState(state => ({
-            ...state,
-            restoreOpen: true
-        }));
+        const checked = [];
+        
+        document.querySelectorAll('input[name=childChk]').forEach((item) => {
+            checked.push(item.checked);
+        });
+        
+        const checkValue = checked.some((checkValue) => checkValue);
+
+        if (!checkValue) {
+            handleChkOpen();
+        } else {
+            setState(state => ({
+                ...state,
+                restoreOpen: true
+            }));
+        }
     };
 
     const handleRestoreClose = () => {
@@ -317,6 +356,29 @@ const MemberListOutput = props => {
                     />
                 </div>
             </Paper>
+
+            <Dialog
+                open={state.chkOpen}
+                onClose={handleChkClose}
+            >
+                <DialogTitle>
+                    알림
+                </DialogTitle>
+                <DialogContent>
+                    <Typography gutterBottom>
+                        선택된 유저가 없습니다.
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={handleChkClose}
+                    >
+                        닫기
+                    </Button>
+                </DialogActions>
+            </Dialog>
 
             <Dialog
                 open={state.secOpen}

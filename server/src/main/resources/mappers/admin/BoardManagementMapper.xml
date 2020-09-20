@@ -122,7 +122,7 @@
 		</if>
 	</select>
 	
-	<update id="boardDelete" parameterType="Long">
+	<update id="boardDelete" parameterType="long">
 		UPDATE board SET
 			use_yn = 'N',
 			del_yn = 'Y',
@@ -130,7 +130,7 @@
 		WHERE bno = #{bno}
 	</update>
 	
-	<update id="boardRestore" parameterType="Long">
+	<update id="boardRestore" parameterType="long">
 		UPDATE board SET
 			use_yn = 'Y',
 			del_yn = 'N',

@@ -63,7 +63,7 @@ const MemberListTable = props => {
         }));
     };
 
-    const secMember = (event) => {
+    const secUser = (event) => {
         event.preventDefault();
         
         Axios.delete(`/user/userSec/${state.memberNo}`)
@@ -82,7 +82,7 @@ const MemberListTable = props => {
             });
     };
 
-    const restoreMember = (event) => {
+    const restoreUser = (event) => {
         event.preventDefault();
         
         Axios.post(`/user/userRestore/${state.memberNo}`)
@@ -168,7 +168,7 @@ const MemberListTable = props => {
                     <Button
                         variant="contained"
                         color="secondary"
-                        onClick={secMember}
+                        onClick={secUser}
                     >
                         탈퇴
                     </Button>
@@ -198,7 +198,7 @@ const MemberListTable = props => {
                     <Button
                         variant="contained"
                         color="secondary"
-                        onClick={restoreMember}
+                        onClick={restoreUser}
                     >
                         복구
                     </Button>

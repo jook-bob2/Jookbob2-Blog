@@ -6,8 +6,10 @@
             "last 2 versions", ">= 5% in KR"
         ] 
       },
-      "debug": true,
-      "useBuiltIns": "entry"
+      "debug": false,
+      "useBuiltIns": "usage",
+      "corejs": 3,
+      "shippedProposals": true
     }],
     "@babel/preset-react"
   ]

@@ -337,4 +337,18 @@
 			AND email=#{email}
 		</if>
 	</select>
+	
+	<update id="adminSec" parameterType="long">
+		UPDATE admin_info SET
+			use_yn = 'N',
+			sec_yn = 'Y'
+		WHERE admin_no = #{adminNo}
+	</update>
+	
+	<update id="adminRestore" parameterType="long">
+		UPDATE admin_info SET
+			use_yn = 'Y',
+			sec_yn = 'N'
+		WHERE admin_no = #{adminNo}
+	</update>
 </mapper>
