@@ -24,6 +24,7 @@ import boardKindsListPageReducer from './admin/boardKindsListPageReducer';
 import frontBoardListReducer from './front/frontBoardListReducer';
 import frontBoardListPageReducer from './front/frontBoardListPageReducer';
 import frontBoardFilterReducer from './front/frontBoardFilterReducer';
+import frontViewMemberReducer from './front/frontViewMemberReducer';
 
 const rootReducer = combineReducers({
     session: sessionReducer,
@@ -50,7 +51,8 @@ const rootReducer = combineReducers({
     menuListPage: menuListPageReducer,
     boardKindsList: boardKindsListReducer,
     boardKindsFilter: boardKindsFilterReducer,
-    boardKindsListPage: boardKindsListPageReducer
+    boardKindsListPage: boardKindsListPageReducer,
+    frontViewMember: frontViewMemberReducer
 });
 
 export default rootReducer;

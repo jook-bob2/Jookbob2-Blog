@@ -1,6 +1,7 @@
 package com.management.controller.user;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -76,15 +77,13 @@ public class MemberController {
 			pwCheck = memberService.pwCheck(map);
 		}
 		
-		ModelAndView mav = new ModelAndView();
-		
 		if (passwordEncode.matches(password, pwCheck)) {
 			entity.setPasswd(pwCheck);
 			boolean result = memberService.loginCheck(entity, session);
 			if(result) {
 				Map<String, Object> memberList = memberMapper.viewMember(map);
 				String name = (String) memberList.get("name");
-				Long memberNo = (Long) memberList.get("memberNo");
+				long memberNo = (Long) memberList.get("memberNo");
 				
 				session.setAttribute("userId", auth);
 				session.setAttribute("name", name);
@@ -100,9 +99,50 @@ public class MemberController {
 			}
 		} else {
 			map.put("message", "error");
-			mav.addObject("message", map);
 			return map;
 		}
+		return map;
+	}
+	
+	@PostMapping(value = "/apiLogin")
+	public Map<String, Object> googleLogin(@RequestParam Map<String, Object> param, HttpSession session) throws Exception {
+		Member entity = new Member();
+		Map<String, Object> map = new HashMap<>();
+		String userId = param.get("id").toString();
+		String name = param.get("name").toString();
+		
+		map.put("userId", param.get("id").toString());
+		int idCheck = memberService.idCheck(map);
+		
+		if (!userId.equals("") && userId != null) {
+			// 아이디가 존재하면 세션 셋팅
+			if (idCheck > 0) {
+				Map<String, Object> memberList = memberMapper.viewMember(map);
+				long memberNo = (Long) memberList.get("memberNo");
+				session.setAttribute("userId", userId);
+				session.setAttribute("name", name);
+				session.setAttribute("memberNo", memberNo);
+				
+			} else if (idCheck == 0) { // 아이디가 존재하지 않으면 아이디 저장 후 세션 셋팅
+				entity.setEmail(param.get("email").toString());
+				entity.setUserId(userId);
+				entity.setProfileImg(param.get("profileImg").toString());
+				entity.setName(param.get("name").toString());
+				entity.setUseYn("Y");
+				entity.setSecYn("N");
+				
+				long memberNo = memberService.joinMember(entity);
+				
+				session.setAttribute("userId", userId);
+				session.setAttribute("name", name);
+				session.setAttribute("memberNo", memberNo);
+			}
+			
+			map.put("message", "succeed");
+			return map;
+		}
+		
+		map.put("message", "error");
 		return map;
 	}
 	
@@ -243,7 +283,7 @@ public class MemberController {
 		return map;
 	}
 	
-	@PostMapping(value = "saveProfile")
+	@PostMapping(value = "/saveProfile")
 	public void saveProfile(@RequestParam Map<String, Object> param, HttpSession session) {
 		Long memberNo = null;
 		Member entity = new Member();
@@ -255,6 +295,7 @@ public class MemberController {
 			entity.setAddress2(param.get("address2").toString());
 			entity.setEmail(param.get("email").toString());
 			entity.setPhoneNo(param.get("phoneNo").toString());
+			entity.setPostNo(param.get("postNo").toString());
 			memberMapper.saveProfile(entity);
 			
 			Board entity2 = new Board();
@@ -267,7 +308,7 @@ public class MemberController {
 		
 	}
 	
-	@PostMapping(value = "updatePw")
+	@PostMapping(value = "/updatePw")
 	public Boolean updatePw(@RequestParam Map<String, Object> param, HttpSession session) {
 		Long memberNo = null;
 		String passwd = "";

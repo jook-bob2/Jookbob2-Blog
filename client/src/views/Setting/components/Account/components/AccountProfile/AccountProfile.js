@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import moment from 'moment';
@@ -12,6 +12,8 @@ import {
   Button
 } from '@material-ui/core';
 import {post} from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
+import { getViewMember } from 'store/actions/front/viewMember';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -46,47 +48,20 @@ const AccountProfile = props => {
   const { className } = props;
 
   const classes = useStyles();
-  
-  const [state, setState] = useState({
-    email: '',
-    userId: '',
-    file: null,
-    userName: '',
-    fileName: '',
-    avatar: '',
-    createDt: 0,
-  });
 
-  const callBackMember = useCallback(() => {
-    const url = 'member/viewMember';
-    const formData = new FormData();
-    post(url, formData).then(res => {
-      const list = res.data.list;
-      setState(state => ({
-        ...state,
-        userId:list.userId,
-        userName:list.name,
-        email:list.email,
-        createDt:list.createDt,
-        updateDt:list.updateDt,
-        avatar:list.profileImg
-      }))
-    })
-    .catch(err => console.log(err));
-  }, []);
+  const dispatch = useDispatch();
+
+  const user = useSelector(state => state.frontViewMember, '') || '';
 
   useEffect(() => {
-    callBackMember();
-  }, [callBackMember]);
+    dispatch(getViewMember());
+  }, [dispatch]);
 
   const handleFileChange = (e) => {
     e.preventDefault();
     addPicture(e)
       .then(res => {
-        setState({
-          ...state,
-          avatar: res.data.profileImg
-        });
+        dispatch(getViewMember());
       })
       .catch(err => console.log(err));
   };
@@ -104,22 +79,15 @@ const AccountProfile = props => {
   }
 
   const handleFileRemove = () => {
-    removePicture()
-    .then(res => {
-      setState({
-        ...state,
-        avatar: res.data ? '' : state.avatar,
-        fileName: ''
+    post(`/member/removePicture`)
+      .then(res => {
+        dispatch(getViewMember());
+        res.data ? alert("이미지가 삭제되었습니다.") : alert("삭제 할 이미지가 존재하지 않습니다.");
       })
-      res.data ? alert("이미지가 삭제되었습니다.") : alert("삭제 할 이미지가 존재하지 않습니다.")
-    })   
+      .catch(err => {
+        throw(err);
+      });
   };
-
-
-  const removePicture = () => {
-    const url = '/member/removePicture';
-    return post(url);
-  }
 
   return (
     <Card
@@ -128,23 +96,23 @@ const AccountProfile = props => {
       <CardContent>
         <div className={classes.details}>
           <div>
-            <h2 className={classes.userName}>{state.userName}({state.userId})</h2>
+            <h2 className={classes.userName}>{user.userName}({user.userId})</h2>
             <div>
-              가입일 : {moment(state.createDt).format('YYYY-MM-DD hh:mm:ss')}
+              가입일 : {moment(user.createDt).format('YYYY-MM-DD hh:mm:ss')}
             </div>
             <div>
-              수정일 : {moment(state.updateDt).format('YYYY-MM-DD hh:mm:ss')}
+              수정일 : {moment(user.updateDt).format('YYYY-MM-DD hh:mm:ss')}
             </div>
           </div>
           <Avatar
             className={classes.avatar}
-            src={state.avatar}
+            src={user.avatar}
           />
         </div>
       </CardContent>
       <Divider />
       <CardActions>
-        <input className={classes.hidden} type="file" accept="image/*" id="raised-button-file" file={state.file} value={state.fileName} onChange={handleFileChange}></input>
+        <input className={classes.hidden} type="file" accept="image/*" id="raised-button-file" file={user.file} value={user.fileName} onChange={handleFileChange}></input>
         <label htmlFor="raised-button-file">
           <Button
             className={classes.uploadButton}
@@ -153,10 +121,10 @@ const AccountProfile = props => {
             component="span" 
             name="file"
           >
-            {state.avatar === "" ? "Upload picture" : "Update picture"}
+            {user.avatar === "" ? "사진 등록" : "사진 수정"}
           </Button>
         </label>
-        {state.avatar === "" ? null : <Button variant="outlined" color="secondary" onClick={handleFileRemove}>Remove picture</Button>}
+        {user.avatar === "" ? null : <Button variant="outlined" color="secondary" onClick={handleFileRemove}>사진 삭제</Button>}
         
       </CardActions>
     </Card>

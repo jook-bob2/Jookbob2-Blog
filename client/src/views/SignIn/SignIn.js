@@ -13,8 +13,9 @@ import {
   Typography
 } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-
-//import { Facebook as FacebookIcon, Google as GoogleIcon } from 'icons';
+import { Facebook as FacebookIcon, Google as GoogleIcon } from '../../icons';
+import GoogleLogin from 'react-google-login';
+import FacebookLogin from 'react-facebook-login';
 
 const schema = {
   email: {
@@ -123,6 +124,12 @@ const useStyles = makeStyles(theme => ({
   },
   signInButton: {
     margin: theme.spacing(2, 0)
+  },
+  facebooxBtn: {
+    height: 45,
+    width: 200,
+    backgroundColor: '#3f51b5',
+    color: 'beige'
   }
 }));
 
@@ -194,15 +201,66 @@ const SignIn = (props) => {
     formState.touched[field] && formState.errors[field] ? true : false;
 
   const handleLogin = () => {
-    const url = "member/login";
+    const url = "/member/login";
     const formData = new FormData();
     formData.append('email', formState.values.email);
     formData.append('password', formState.values.password);
     return post(url, formData);
   };
+  
+  const googleOnSuccess = (response) => {
+    const id = response.profileObj.googleId;
+    const email = response.profileObj.email;
+    const name = response.profileObj.name;
+    const profileImg = response.profileObj.imageUrl;
 
-  const handleDevelope = () => {
-    alert('개발중입니다.');
+    const formData = new FormData();
+    formData.append('id', id);
+    formData.append('email', email);
+    formData.append('name', name);
+    formData.append('profileImg', profileImg);
+
+    post(`/member/apiLogin`, formData)
+      .then(res => {
+        if (res.data.message !== 'error') {
+          history.push('/');
+        }
+      })
+      .catch(err => {
+        throw(err);
+      });
+  }
+
+  const googleOnFail = (response) => {
+    console.log('fail', response);
+  }
+
+  const facebookOnClick = (event) => {
+    console.log('onclick', event);
+  };
+
+  const facebookCallback = (response) => {
+    console.log('callback', response);
+    const id = response.id;
+    const email = response.email;
+    const name = response.name;
+    const profileImg = response.picture.data.url;
+
+    const formData = new FormData();
+    formData.append('id', id);
+    formData.append('email', email);
+    formData.append('name', name);
+    formData.append('profileImg', profileImg);
+
+    post(`/member/apiLogin`, formData)
+      .then(res => {
+        if (res.data.message !== 'error') {
+          history.push('/');
+        }
+      })
+      .catch(err => {
+        throw(err);
+      });
   };
 
   return (
@@ -274,28 +332,27 @@ const SignIn = (props) => {
                 <Grid
                   className={classes.socialButtons}
                   container
-                  spacing={2}
+                  spacing={3}
                 >
                   <Grid item>
-                    <Button
-                      color="primary"
-                      onClick={handleDevelope}
-                      size="large"
-                      variant="contained"
-                    >
-                      {/* <FacebookIcon className={classes.socialIcon} /> */}
-                      Login with Facebook
-                    </Button>
+                    <FacebookLogin
+                      appId="700530764152041"
+                      //autoLoad={true}
+                      fields="name,email,picture"
+                      onClick={facebookOnClick}
+                      callback={facebookCallback} 
+                      icon={<FacebookIcon/>}
+                      cssClass={classes.facebooxBtn}
+                    />
                   </Grid>
                   <Grid item>
-                    <Button
-                      onClick={handleDevelope}
-                      size="large"
-                      variant="contained"
-                    >
-                      {/* <GoogleIcon className={classes.socialIcon} /> */}
-                      Login with Google
-                    </Button>
+                    <GoogleLogin
+                      clientId="235232838707-352015emcjs2s2111hlgpc4b30iurfl8.apps.googleusercontent.com"
+                      buttonText="LOGIN WITH GOOGLE"
+                      onSuccess={googleOnSuccess}
+                      onFailure={googleOnFail}
+                      cookiePolicy={'single_host_origin'}
+                    />
                   </Grid>
                 </Grid>
                 <Typography

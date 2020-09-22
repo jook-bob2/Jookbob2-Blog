@@ -118,8 +118,8 @@ const Password = props => {
         onSubmit={handleSubmit}
       >
         <CardHeader
-          subheader="Update password"
-          title="Password"
+          subheader="[Password]와 [Confirm password]를 입력하세요."
+          title="비밀번호 변경"
         />
         <Divider />
         <CardContent>
@@ -158,7 +158,7 @@ const Password = props => {
             variant="contained"
             type="submit"
           >
-            Update
+            저장
           </Button>
         </CardActions>
       </form>

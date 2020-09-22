@@ -124,6 +124,9 @@
 			<if test="passwd != null and !passwd.equals('')">
 				passwd = #{passwd},
 			</if>
+			<if test="postNo != null and !postNo.equals('')">
+				post_no = #{postNo},
+			</if>
 			update_dt = SYSDATE()
 		WHERE 1=1
 		AND 

@@ -38,7 +38,7 @@ public class Member {
     private String userId;
     
     // 패스워드
-    @Column(length = 150, nullable = false)
+    @Column(length = 150, nullable = true)
     private String passwd;
     
     // 이름

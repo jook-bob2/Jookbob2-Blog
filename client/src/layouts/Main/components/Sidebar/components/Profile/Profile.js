@@ -10,6 +10,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import LockOpenIcon from '@material-ui/icons/LockOpen'; 
 import { useSelector, useDispatch } from 'react-redux';
 import { getSessioning } from 'store/actions';
+import { getViewMember } from 'store/actions/front/viewMember';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -37,38 +38,18 @@ const Profile = props => {
     const classes = useStyles();
 
     const dispatch = useDispatch();
+
+    const session = useSelector(state => state.session, []) || [];
+    const user = useSelector(state => state.frontViewMember, '') || '';
+    const authenticated = session.authenticated;
+
     useEffect(() => {
         dispatch(getSessioning());
     }, [dispatch]);
 
-    const session = useSelector(state => state.session, []) || [];
-    const authenticated = session.authenticated;
-
-    const [user, setUser] = useState({
-        name: '',
-        avatar: ''
-    });
-
-    const callBackUser = useCallback(() => {
-        const url = "/member/viewMember";
-        const formData = new FormData();
-
-        post(url, formData).then(res => {
-            const message = res.data.message;
-            if (message === "succeed") {
-                const list = res.data.list;
-                setUser(user => ({
-                    ...user,
-                    name: list.name,
-                    avatar: list.profileImg
-                }))
-            }
-        });
-    }, []);
-
     useEffect(() => {
-        callBackUser();
-    }, [callBackUser]);
+        dispatch(getViewMember());
+    }, [dispatch]);
 
     const logout = () => {
         post("/member/logout");

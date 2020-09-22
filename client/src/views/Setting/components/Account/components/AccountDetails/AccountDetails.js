@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
@@ -10,14 +10,25 @@ import {
   Divider,
   Grid,
   Button,
-  TextField
+  TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent
 } from '@material-ui/core';
 import {post} from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
+import { getViewMember } from 'store/actions/front/viewMember';
+import DaumPostcode from 'react-daum-postcode';
 
 const useStyles = makeStyles(() => ({
-  root: {},
+  root: {
+    //width: '100%'
+  },
   btn: {
     padding: "16px"
+  },
+  mapBtn: {
+    paddingTop: 8
   }
 }));
 
@@ -26,15 +37,21 @@ const AccountDetails = props => {
 
   const classes = useStyles();
 
+  const dispatch = useDispatch();
+
+  const user = useSelector(state => state.frontViewMember, '') || '';
+
   const [values, setValues] = useState({
     memberNo: props.memberNo,
     name: '',
     email: '',
     phoneNo: '',
-    state: 'Alabama',
     address1: '',
-    address2: ''
+    address2: '',
+    postNo: ''
   });
+
+  const [open, setOpen] = useState(false);
 
   const handleChange = event => {
     setValues({
@@ -43,55 +60,34 @@ const AccountDetails = props => {
     });
   };
 
-  const callBackMember = useCallback(() => {
-    const url = 'member/viewMember';
-    const formData = new FormData();
-    formData.append('memberNo', props.memberNo);
-    post(url, formData).then(res => {
-        const list = res.data.list;
-        setValues({
-          memberNo: list.memberNo,
-          name: list.name,
-          email: list.email,
-          phoneNo: list.phoneNo,
-          address1: list.address1,
-          address2: list.address2
-        })
-      })
-      .catch(err => console.log(err));
-  }, [props.memberNo]);
+  useEffect(() => {
+    dispatch(getViewMember());
+  },[dispatch]);
 
   useEffect(() => {
-    callBackMember();
-  },[callBackMember]);
-
-  // const states = [
-  //   {
-  //     value: 'alabama',
-  //     label: 'Alabama'
-  //   },
-  //   {
-  //     value: 'new-york',
-  //     label: 'New York'
-  //   },
-  //   {
-  //     value: 'san-francisco',
-  //     label: 'San Francisco'
-  //   }
-  // ];
+    setValues(state => ({
+      ...state,
+      name: user.name,
+      email: user.email,
+      phoneNo: user.phoneNo,
+      address1: user.address1,
+      address2: user.address2,
+      postNo: user.postNo
+    }));
+  }, [user]);
 
   const handleSubmit = event => {
     event.preventDefault();
     
     saveProfile(event)
-     .then(res => {
-       alert("저장완료!");
-       window.location.reload();
-     })
+      .then(res => {
+        alert("저장되었습니다.");
+        dispatch(getViewMember());
+      });
   }
 
-  const saveProfile = (event) => {
-    const url = "member/saveProfile";
+  const saveProfile = () => {
+    const url = "/member/saveProfile";
     const formData = new FormData();
     formData.append("name",values.name);
     formData.append("email",values.email);
@@ -99,8 +95,37 @@ const AccountDetails = props => {
     formData.append("address1",values.address1);
     formData.append("address2",values.address2);
     formData.append("memberNo",values.memberNo);
+    formData.append("postNo",values.postNo);
     return post(url, formData);
   }
+
+  const handleComplete = (data) => {
+    let address = '';
+    let postNo = data.zonecode;
+    
+    if (data.userSelectedType === 'J') { // 지번 주소
+        address = data.jibunAddress;
+        
+    } else if (data.userSelectedType === 'R') { // 도로명 주소
+        address = data.address;
+    }
+
+    setValues(values => ({
+        ...values,
+        address1: address,
+        postNo: postNo
+    }));
+
+    setOpen(false);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpenMap = () => {
+    setOpen(true);
+  };
 
   return (
     <Card
@@ -112,8 +137,8 @@ const AccountDetails = props => {
         onSubmit={handleSubmit}
       >
         <CardHeader
-          subheader="The information can be edited"
-          title="Profile"
+          subheader="원하는 정보를 수정하세요."
+          title="회원 상세 정보"
         />
         <Divider />
         <CardContent>
@@ -128,8 +153,8 @@ const AccountDetails = props => {
             >
               <TextField
                 fullWidth
-                helperText="Please specify the first name"
-                label="User Name"
+                //helperText="Please specify the first name"
+                label="이름"
                 margin="dense"
                 name="name"
                 onChange={handleChange}
@@ -138,15 +163,20 @@ const AccountDetails = props => {
                 variant="outlined"
               />
             </Grid>
-            
-            <Grid
+          </Grid>
+
+          <Grid
+            container
+            spacing={3}
+          >
+          <Grid
               item
               md={4}
               xs={8}
             >
               <TextField
                 fullWidth
-                label="Email Address"
+                label="Email 주소"
                 margin="dense"
                 name="email"
                 onChange={handleChange}
@@ -162,7 +192,7 @@ const AccountDetails = props => {
             >
               <TextField
                 fullWidth
-                label="Phone Number"
+                label="연락처"
                 margin="dense"
                 name="phoneNo"
                 onChange={handleChange}
@@ -171,34 +201,12 @@ const AccountDetails = props => {
                 variant="outlined"
               />
             </Grid>
-            {/* <Grid
-              item
-              md={4}
-              xs={8}
-            >
-              <TextField
-                fullWidth
-                label="Select State"
-                margin="dense"
-                name="state"
-                onChange={handleChange}
-                required
-                select
-                // eslint-disable-next-line react/jsx-sort-props
-                SelectProps={{ native: true }}
-                value={values.state}
-                variant="outlined"
-              >
-                {states.map(option => (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                  >
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
-            </Grid>
+          </Grid>
+
+          <Grid
+            container
+            spacing={3}
+          >
             <Grid
               item
               md={4}
@@ -206,7 +214,47 @@ const AccountDetails = props => {
             >
               <TextField
                 fullWidth
-                label="Country"
+                label="우편번호"
+                margin="dense"
+                name="postNo"
+                onChange={handleChange}
+                //required
+                //select
+                //SelectProps={{ native: true }}
+                value={values.postNo || ''}
+                variant="outlined"
+              >
+              </TextField>
+            </Grid>
+            <Grid
+              item
+              md={4}
+              xs={8}
+            >
+              <div className={classes.mapBtn}>
+                <Button 
+                  color="primary"
+                  variant="contained"
+                  onClick={handleOpenMap}
+                >
+                  주소찾기
+                </Button>
+              </div>
+            </Grid>
+          </Grid>
+          
+          <Grid
+            container
+            spacing={3}
+          >
+          <Grid
+              item
+              md={4}
+              xs={8}
+            >
+              <TextField
+                fullWidth
+                label="주소"
                 margin="dense"
                 name="address1"
                 onChange={handleChange}
@@ -222,7 +270,7 @@ const AccountDetails = props => {
             >
               <TextField
                 fullWidth
-                label="Country"
+                label="나머지 주소"
                 margin="dense"
                 name="address2"
                 onChange={handleChange}
@@ -230,7 +278,7 @@ const AccountDetails = props => {
                 value={values.address2 || ''}
                 variant="outlined"
               />
-            </Grid> */}
+            </Grid>
           </Grid>
         </CardContent>
         <Divider />
@@ -240,10 +288,21 @@ const AccountDetails = props => {
             variant="contained"
             type="submit"
           >
-            Save details
+            저장
           </Button>
         </CardActions>
       </form>
+
+      <Dialog
+          open={open}
+          onClose={handleClose}
+      >
+          <DialogTitle>주소찾기</DialogTitle>
+          <Divider />
+          <DialogContent>
+              <DaumPostcode onComplete={handleComplete}/>
+          </DialogContent>
+      </Dialog>
     </Card>
   );
 };

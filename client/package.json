@@ -22,6 +22,8 @@
     "react": "^16.13.1",
     "react-daum-postcode": "^1.9.0",
     "react-dom": "^16.13.1",
+    "react-facebook-login": "^4.1.1",
+    "react-google-login": "^5.1.21",
     "react-html-parser": "^2.0.2",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
@@ -31,7 +33,7 @@
     "validate.js": "^0.13.1"
   },
   "scripts": {
-    "dev": "webpack-dev-server --progress",
+    "dev": "webpack-dev-server --https --progress",
     "start": "webpack",
     "build": "webpack -p"
   },
