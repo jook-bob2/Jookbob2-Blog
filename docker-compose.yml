@@ -39,6 +39,7 @@ services:
     restart: always
     depends_on:
       - web
+    command: npm run watch
 
 #volumes:
   #test_volume:

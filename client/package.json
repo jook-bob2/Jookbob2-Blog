@@ -35,7 +35,8 @@
   "scripts": {
     "dev": "webpack",
     "start": "webpack-dev-server",
-    "build": "webpack -p"
+    "build": "webpack -p",
+    "watch": "webpack-dev-server --color --watch"
   },
   "eslintConfig": {
     "extends": "react-app"
