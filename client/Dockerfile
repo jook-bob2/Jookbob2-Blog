@@ -13,6 +13,8 @@ ENV PATH /react/node_modules/.bin:$PATH
 # install and cache app dependencies 
 COPY ./package*.json ./
 
+EXPOSE 8080
+
 # RUN npm cache clean --force
 RUN npm install
 
