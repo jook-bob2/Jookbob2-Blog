@@ -91,7 +91,8 @@ module.exports = {
                         console.log('Skipping proxy for browser request.');
                         return '/index.html';
                     }
-                }
+                },
+                secure: false
             }
         }
     },
