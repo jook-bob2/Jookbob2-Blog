@@ -5,7 +5,7 @@ module.exports = {
     mode: 'development',
     entry: ['@babel/polyfill', './src/index.js'],
     output: {
-        publicPath: '/',
+        publicPath: 'http://13.124.146.235',
         path: path.resolve(__dirname, 'dist'),
         filename: 'bundle.[hash].js'
     },
@@ -72,13 +72,13 @@ module.exports = {
         stats: "errors-only",
         //historyApiFallback: true,
         contentBase: path.join(__dirname, 'dist'),
-        public: 'localhost:8080',
+        //public: 'localhost:8080',
         //compress: true,
         inline: true,
         //host: 'http://13.124.146.235',
         port: 8080,
         //open: true,
-        disableHostCheck: true,
+        //disableHostCheck: true,
         proxy: {
             '**': {
                 target: 'http://web:8081',
@@ -97,9 +97,9 @@ module.exports = {
             "node_modules"
         ]
     },
-    watchOptions: {
-        aggregateTimeout: 300,
-        poll: 1000,
-        ignored: /node_modules/,
-    },
+    // watchOptions: {
+    //     aggregateTimeout: 300,
+    //     poll: 1000,
+    //     ignored: /node_modules/,
+    // },
 };
