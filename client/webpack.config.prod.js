@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require("path");
+const fs = require('fs');
 
 module.exports = {
     mode: 'development',
@@ -67,13 +68,19 @@ module.exports = {
     ],
     devServer: {
         //https: true,
+        http2: true,
+        https: {
+            key: fs.readFileSync('/etc/gogetssl/www_jookbob2_com.key'),
+            cert: fs.readFileSync('/etc/gogetssl/www_jookbob2_com.crt'),
+            ca: fs.readFileSync('/etc/gogetssl/www_jookbob2_com.ca.pem'),
+        },
         hot: true,
         stats: "errors-only",
         historyApiFallback: true,
         contentBase: path.join(__dirname, 'dist'),
         public: '13.124.146.235',
         inline: true,
-        host: '0.0.0.0',
+        host: 'www.jookbob2.com',
         port: 80,
         disableHostCheck: true,
         proxy: {
