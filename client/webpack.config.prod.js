@@ -76,7 +76,7 @@ module.exports = {
         //hot: true,
         stats: "errors-only",
         //historyApiFallback: true,
-        //contentBase: path.join(__dirname, 'dist'),
+        contentBase: path.join(__dirname, 'dist'),
         public: 'www.jookbob2.com',
         //inline: true,
         host: '0.0.0.0', // 모든 host에서의 접근을 허용
