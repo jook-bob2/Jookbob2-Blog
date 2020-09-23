@@ -77,7 +77,7 @@ module.exports = {
         contentBase: path.join(__dirname, 'dist'),
         public: 'www.jookbob2.com',
         host: '0.0.0.0', // 모든 host에서의 접근을 허용
-        port: 80,
+        port: 8080,
         allowedHosts: [
             'www.jookbob2.com',
             '.jookbob2.com',

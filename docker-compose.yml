@@ -35,7 +35,7 @@ services:
     #volumes:
     #  - ./react:/usr/src/app
     ports:
-      - "80:80" # Map the exposed port 80 on the container to port 9090 on the host machine
+      - "80:8080" # Map the exposed port 80 on the container to port 9090 on the host machine
     restart: always
     depends_on:
       - web
