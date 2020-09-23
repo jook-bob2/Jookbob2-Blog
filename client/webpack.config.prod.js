@@ -67,7 +67,7 @@ module.exports = {
         })
     ],
     devServer: {
-        http2: true,
+        //http2: true,
         https: {
             key: fs.readFileSync('etc/gogetssl/www_jookbob2_com.key'),
             cert: fs.readFileSync('etc/gogetssl/www_jookbob2_com.crt'),
