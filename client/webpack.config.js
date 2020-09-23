@@ -5,7 +5,7 @@ module.exports = {
     mode: 'development',
     entry: ['@babel/polyfill', './src/index.js'],
     output: {
-        publicPath: 'http://13.124.146.235:80/',
+        publicPath: 'http://13.124.146.235/',
         path: path.resolve(__dirname, 'dist'),
         filename: 'bundle.[hash].js'
     },
@@ -72,10 +72,10 @@ module.exports = {
         stats: "errors-only",
         //historyApiFallback: true,
         contentBase: path.join(__dirname, 'dist'),
-        //public: 'localhost:8080',
+        public: '13.124.146.235',
         //compress: true,
         inline: true,
-        //host: 'http://13.124.146.235',
+        host: '0.0.0.0',
         port: 80,
         //open: true,
         //disableHostCheck: true,
