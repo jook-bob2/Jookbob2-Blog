@@ -6,7 +6,7 @@ module.exports = {
     mode: 'development',
     entry: ['@babel/polyfill', './src/index.js'],
     output: {
-        publicPath: 'http://www.jookbob2.com/',
+        publicPath: 'https://www.jookbob2.com/',
         path: path.resolve(__dirname, 'dist'),
         filename: 'bundle.[hash].js'
     },
