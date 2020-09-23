@@ -67,15 +67,16 @@ module.exports = {
     ],
     devServer: {
         //https: true,
-        //hot: true,
+        hot: true,
         //overlay: true,
         stats: "errors-only",
         //historyApiFallback: true,
         contentBase: path.join(__dirname, 'dist'),
+        public: 'localhost:8080',
         //compress: true,
-        //inline: true,
+        inline: true,
         //host: 'http://13.124.146.235',
-        //port: 3000,
+        port: 8080,
         //open: true,
         proxy: {
             '**': {
@@ -96,6 +97,9 @@ module.exports = {
         ]
     },
     watchOptions: {
-        poll: true
-    }
+        aggregateTimeout: 300,
+        poll: 1000,
+        ignored: /node_modules/,
+    },
+    disableHostCheck: true,
 };
