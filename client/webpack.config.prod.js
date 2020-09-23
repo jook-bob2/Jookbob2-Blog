@@ -2,10 +2,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require("path");
 
 module.exports = {
-    mode: 'production',
+    mode: 'development',
     entry: ['@babel/polyfill', './src/index.js'],
     output: {
-        publicPath: 'http://13.124.146.235/',
+        publicPath: 'https://13.124.146.235/',
         path: path.resolve(__dirname, 'dist'),
         filename: 'bundle.[hash].js'
     },
@@ -66,7 +66,7 @@ module.exports = {
         })
     ],
     devServer: {
-        //https: true,
+        https: true,
         hot: true,
         overlay: true,
         stats: "errors-only",
@@ -78,7 +78,7 @@ module.exports = {
         host: '0.0.0.0',
         port: 80,
         open: true,
-        //disableHostCheck: true,
+        disableHostCheck: true,
         proxy: {
             '**': {
                 target: 'http://web:8081',
