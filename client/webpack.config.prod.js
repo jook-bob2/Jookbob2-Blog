@@ -2,10 +2,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require("path");
 
 module.exports = {
-    mode: 'development',
+    mode: 'production',
     entry: ['@babel/polyfill', './src/index.js'],
     output: {
-        publicPath: '/',
+        publicPath: 'https://13.124.146.235/',
         path: path.resolve(__dirname, 'dist'),
         filename: 'bundle.[hash].js'
     },
@@ -72,13 +72,16 @@ module.exports = {
         stats: "errors-only",
         historyApiFallback: true,
         contentBase: path.join(__dirname, 'dist'),
+        public: '13.124.146.235',
         compress: true,
         inline: true,
+        host: '0.0.0.0',
         port: 80,
         open: true,
+        disableHostCheck: true,
         proxy: {
             '**': {
-                target: 'http://localhost:8081',
+                target: 'http://web:8081',
                 bypass: function (req, res, proxyOptions) {
                     if (req.headers.accept.indexOf('html') !== -1) {
                         console.log('Skipping proxy for browser request.');

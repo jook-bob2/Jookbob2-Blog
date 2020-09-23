@@ -33,8 +33,8 @@
     "validate.js": "^0.13.1"
   },
   "scripts": {
-    "dev": "webpack",
-    "start": "webpack-dev-server",
+    "dev": "webpack-dev-server",
+    "start": "webpack-dev-server --config webpack.config.prod.js",
     "build": "webpack -p",
     "watch": "webpack-dev-server --color --watch"
   },
