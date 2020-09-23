@@ -77,7 +77,7 @@ module.exports = {
         stats: "errors-only",
         historyApiFallback: true,
         contentBase: path.join(__dirname, 'dist'),
-        public: 'www.jookbob2.com',
+        public: '13.124.146.235',
         inline: true,
         host: '0.0.0.0',
         port: 80,
