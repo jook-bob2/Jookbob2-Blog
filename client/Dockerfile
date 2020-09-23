@@ -19,4 +19,4 @@ RUN npm install
 COPY . .
 
 # start app 
-CMD ["react-scripts", "start"]
+CMD ["webpack-dev-server --https --progress", "dev"]
