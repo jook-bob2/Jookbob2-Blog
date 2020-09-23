@@ -78,6 +78,7 @@ module.exports = {
         //host: 'http://13.124.146.235',
         port: 8080,
         //open: true,
+        disableHostCheck: true,
         proxy: {
             '**': {
                 target: 'http://web:8081',
@@ -101,5 +102,4 @@ module.exports = {
         poll: 1000,
         ignored: /node_modules/,
     },
-    disableHostCheck: true,
 };
