@@ -33,8 +33,8 @@
     "validate.js": "^0.13.1"
   },
   "scripts": {
-    "dev": "webpack-dev-server --https --progress",
-    "start": "webpack",
+    "dev": "webpack-dev-server --progress",
+    "start": "webpack-dev-server --progress",
     "build": "webpack -p"
   },
   "eslintConfig": {

@@ -19,4 +19,4 @@ RUN npm install
 COPY . .
 
 # start app 
-CMD ["webpack-dev-server --https --progress", "dev"]
+CMD ["webpack-dev-server", "start"]

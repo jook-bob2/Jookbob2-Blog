@@ -66,7 +66,7 @@ module.exports = {
         })
     ],
     devServer: {
-        https: true,
+        //https: true,
         hot: true,
         overlay: true,
         stats: "errors-only",
