@@ -78,7 +78,7 @@ module.exports = {
         open: true,
         proxy: {
             '**': {
-                target: 'https://localhost:8081',
+                target: 'https://localhost:9090',
                 bypass: function (req, res, proxyOptions) {
                     if (req.headers.accept.indexOf('html') !== -1) {
                         console.log('Skipping proxy for browser request.');
