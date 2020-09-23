@@ -67,18 +67,15 @@ module.exports = {
         })
     ],
     devServer: {
-        // http2: true,
-        // https: {
-        //     key: fs.readFileSync('etc/gogetssl/www_jookbob2_com.key'),
-        //     cert: fs.readFileSync('etc/gogetssl/www_jookbob2_com.crt'),
-        //     ca: fs.readFileSync('etc/gogetssl/www_jookbob2_com.ca-bundle'),
-        // },
-        //hot: true,
+        http2: true,
+        https: {
+            key: fs.readFileSync('etc/gogetssl/www_jookbob2_com.key'),
+            cert: fs.readFileSync('etc/gogetssl/www_jookbob2_com.crt'),
+            ca: fs.readFileSync('etc/gogetssl/www_jookbob2_com.ca-bundle'),
+        },
         stats: "errors-only",
-        //historyApiFallback: true,
         contentBase: path.join(__dirname, 'dist'),
         public: 'www.jookbob2.com',
-        //inline: true,
         host: '0.0.0.0', // 모든 host에서의 접근을 허용
         port: 80,
         allowedHosts: [
@@ -86,10 +83,9 @@ module.exports = {
             '.jookbob2.com',
             'jookbob2.com'
         ],
-        //disableHostCheck: true, // Host Check를 끕니다
         proxy: {
             '**': {
-                target: 'http://web:8081',
+                target: 'https://web:8081',
                 bypass: function (req, res, proxyOptions) {
                     if (req.headers.accept.indexOf('html') !== -1) {
                         console.log('Skipping proxy for browser request.');
