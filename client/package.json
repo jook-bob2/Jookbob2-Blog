@@ -34,7 +34,7 @@
   },
   "scripts": {
     "dev": "webpack",
-    "start": "webpack-dev-server --progress",
+    "start": "webpack-dev-server",
     "build": "webpack -p"
   },
   "eslintConfig": {
