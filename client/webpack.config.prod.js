@@ -6,7 +6,7 @@ module.exports = {
     mode: 'development',
     entry: ['@babel/polyfill', './src/index.js'],
     output: {
-        publicPath: 'https://www.jookbob2.com/',
+        publicPath: '/',
         path: path.resolve(__dirname, 'dist'),
         filename: 'bundle.[hash].js'
     },
@@ -68,10 +68,10 @@ module.exports = {
     ],
     devServer: {
         //http2: true,
-        https: true,
-        key: fs.readFileSync('etc/gogetssl/www_jookbob2_com.key'),
-        cert: fs.readFileSync('etc/gogetssl/www_jookbob2_com.crt'),
-        ca: fs.readFileSync('etc/gogetssl/www_jookbob2_com.ca-bundle'),
+        // https: true,
+        // key: fs.readFileSync('etc/gogetssl/www_jookbob2_com.key'),
+        // cert: fs.readFileSync('etc/gogetssl/www_jookbob2_com.crt'),
+        // ca: fs.readFileSync('etc/gogetssl/www_jookbob2_com.ca-bundle'),
         //hot: true,
         stats: "errors-only",
         //historyApiFallback: true,
