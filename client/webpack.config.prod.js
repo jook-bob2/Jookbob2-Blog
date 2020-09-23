@@ -76,9 +76,9 @@ module.exports = {
         stats: "errors-only",
         //historyApiFallback: true,
         //contentBase: path.join(__dirname, 'dist'),
-        public: 'www.jookbob2.com',
+        //public: 'www.jookbob2.com',
         //inline: true,
-        host: '0.0.0.0', // 모든 host에서의 접근을 허용
+        host: 'www.jookbob2.com', // 모든 host에서의 접근을 허용
         port: 80,
         //disableHostCheck: true, // Host Check를 끕니다
         proxy: {
