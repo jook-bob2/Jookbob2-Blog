@@ -67,12 +67,12 @@ module.exports = {
         })
     ],
     devServer: {
-        http2: true,
-        https: {
-            key: fs.readFileSync('etc/gogetssl/www_jookbob2_com.key'),
-            cert: fs.readFileSync('etc/gogetssl/www_jookbob2_com.crt'),
-            ca: fs.readFileSync('etc/gogetssl/www_jookbob2_com.ca-bundle'),
-        },
+        // http2: true,
+        // https: {
+        //     key: fs.readFileSync('etc/gogetssl/www_jookbob2_com.key'),
+        //     cert: fs.readFileSync('etc/gogetssl/www_jookbob2_com.crt'),
+        //     ca: fs.readFileSync('etc/gogetssl/www_jookbob2_com.ca-bundle'),
+        // },
         //hot: true,
         stats: "errors-only",
         //historyApiFallback: true,
