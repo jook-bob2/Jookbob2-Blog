@@ -81,6 +81,11 @@ module.exports = {
         //inline: true,
         host: '0.0.0.0', // 모든 host에서의 접근을 허용
         port: 80,
+        allowedHosts: [
+            'www.jookbob2.com',
+            '.jookbob2.com',
+            'jookbob2.com'
+        ],
         //disableHostCheck: true, // Host Check를 끕니다
         proxy: {
             '**': {
