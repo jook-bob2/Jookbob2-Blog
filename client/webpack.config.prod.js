@@ -77,11 +77,11 @@ module.exports = {
         stats: "errors-only",
         historyApiFallback: true,
         contentBase: path.join(__dirname, 'dist'),
-        public: '13.124.146.235',
+        //public: '13.124.146.235',
         inline: true,
-        host: '0.0.0.0',
+        host: 'www.jookbob2.com',
         port: 80,
-        disableHostCheck: true,
+        //disableHostCheck: true,
         proxy: {
             '**': {
                 target: 'http://web:8081',
