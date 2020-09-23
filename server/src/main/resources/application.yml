@@ -24,12 +24,12 @@ server:
   port: 9090  servlet:    session:      timeout: 1800
   ssl:
     enabled: true
-    key-alias: ayokeystore
-    key-store: ayokeystore.pkcs12
-    key-store-password: 'wlstjr129'
-    key-password: 'wlstjr129'
-    trust-store: ayotrust.pkcs12
-    trust-store-password: 'wlstjr129'
+    key-alias: "ayokeystore"
+    key-store: "ayokeystore.pkcs12"
+    key-store-password: "wlstjr129"
+    key-password: "wlstjr129"
+    trust-store: "ayotrust.pkcs12"
+    trust-store-password: "wlstjr129"
 logging:
   level:
     org.springframework.web: debug
@@ -42,4 +42,3 @@ cloud:
       static: ap-northeast-2
     stack:
       auto: false
-debug: true
