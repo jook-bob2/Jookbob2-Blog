@@ -9,7 +9,7 @@ group = 'com.management'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
-ext['tomcat.version'] = '9.0.26'
+ext['tomcat.version'] = '9.0.27'
 
 configurations {
 	developmentOnly
