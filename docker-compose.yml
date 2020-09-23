@@ -6,7 +6,7 @@ version: '3.0'
 services:
   # App backend service
   web:
-    container_name: web
+    container_name: server
     # Configuration for building the docker image for the backend service
     build:
       context: ./server # Use an image built from the specified dockerfile in the `polling-app-server` directory.
@@ -38,7 +38,7 @@ services:
       - "80:3000" # Map the exposed port 80 on the container to port 9090 on the host machine
     restart: always
     depends_on:
-      - web
+      - server
 
 #volumes:
   #test_volume:

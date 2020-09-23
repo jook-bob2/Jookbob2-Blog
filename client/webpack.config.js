@@ -74,12 +74,12 @@ module.exports = {
         contentBase: path.join(__dirname, 'dist'),
         compress: true,
         inline: true,
-        host: 'localhost',
+        //host: 'localhost',
         port: 3000,
         open: true,
         proxy: {
             '**': {
-                target: 'http://web:8081',
+                target: 'http://server:8081',
                 bypass: function (req, res, proxyOptions) {
                     if (req.headers.accept.indexOf('html') !== -1) {
                         console.log('Skipping proxy for browser request.');
