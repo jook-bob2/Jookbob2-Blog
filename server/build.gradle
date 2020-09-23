@@ -9,6 +9,7 @@ group = 'com.management'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
+ext['tomcat.version'] = '9.0.26'
 
 configurations {
 	developmentOnly
@@ -54,7 +55,7 @@ dependencies {
 	compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
 	compile group: 'org.bgee.log4jdbc-log4j2', name: 'log4jdbc-log4j2-jdbc4.1', version: '1.16' /* Log4JDBC */
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-tomcat
-	compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: '2.2.6.RELEASE'
+	// compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: '2.2.6.RELEASE'
 }
 
 test {
