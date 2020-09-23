@@ -6,7 +6,7 @@ module.exports = {
     mode: 'development',
     entry: ['@babel/polyfill', './src/index.js'],
     output: {
-        publicPath: 'http://www.jookbob2.com/',
+        publicPath: 'https://www.jookbob2.com/',
         path: path.resolve(__dirname, 'dist'),
         filename: 'bundle.[hash].js'
     },
@@ -68,17 +68,17 @@ module.exports = {
     ],
     devServer: {
         //http2: true,
-        //https: true,
-        // key: fs.readFileSync('etc/gogetssl/www_jookbob2_com.key'),
-        // cert: fs.readFileSync('etc/gogetssl/www_jookbob2_com.crt'),
-        // ca: fs.readFileSync('etc/gogetssl/www_jookbob2_com.ca-bundle'),
+        https: true,
+        key: fs.readFileSync('etc/gogetssl/www_jookbob2_com.key'),
+        cert: fs.readFileSync('etc/gogetssl/www_jookbob2_com.crt'),
+        ca: fs.readFileSync('etc/gogetssl/www_jookbob2_com.ca-bundle'),
         //hot: true,
         stats: "errors-only",
         //historyApiFallback: true,
         //contentBase: path.join(__dirname, 'dist'),
-        //public: 'www.jookbob2.com',
+        public: 'www.jookbob2.com',
         //inline: true,
-        host: 'www.jookbob2.com', // 모든 host에서의 접근을 허용
+        host: '0.0.0.0', // 모든 host에서의 접근을 허용
         port: 80,
         //disableHostCheck: true, // Host Check를 끕니다
         proxy: {
