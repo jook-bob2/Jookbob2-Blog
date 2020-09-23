@@ -33,7 +33,7 @@
     "validate.js": "^0.13.1"
   },
   "scripts": {
-    "dev": "webpack-dev-server --progress",
+    "dev": "webpack",
     "start": "webpack-dev-server --progress",
     "build": "webpack -p"
   },
