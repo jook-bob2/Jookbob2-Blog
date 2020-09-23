@@ -6,7 +6,7 @@ version: '3.0'
 services:
   # App backend service
   web:
-    container_name: server
+    container_name: web
     # Configuration for building the docker image for the backend service
     build:
       context: ./server # Use an image built from the specified dockerfile in the `polling-app-server` directory.
