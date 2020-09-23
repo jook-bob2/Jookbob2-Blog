@@ -18,8 +18,6 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 8080
-
 # start app 
 CMD ["npm", "run", "start"]
 
