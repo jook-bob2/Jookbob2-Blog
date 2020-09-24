@@ -232,15 +232,13 @@ const SignIn = (props) => {
   }
 
   const googleOnFail = (response) => {
-    console.log('fail', response);
-  }
+    alert('서버 에러 발생');
+  };
 
   const facebookOnClick = (event) => {
-    console.log('onclick', event);
   };
 
   const facebookCallback = (response) => {
-    console.log('callback', response);
     const id = response.id;
     const email = response.email;
     const name = response.name;
