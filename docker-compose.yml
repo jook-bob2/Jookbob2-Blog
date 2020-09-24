@@ -12,7 +12,7 @@ services:
       context: ./server # Use an image built from the specified dockerfile in the `polling-app-server` directory.
       dockerfile: Dockerfile
     ports:
-      - "443:8443" # Forward the exposed port 8080 on the container to port 8080 on the host machine
+      - "8443:8443" # Forward the exposed port 8080 on the container to port 8080 on the host machine
     restart: always
     #depends_on:
     #  - db # This service depends on mysql. Start that first.
