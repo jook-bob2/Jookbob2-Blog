@@ -21,7 +21,7 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
 server:
-  port: 8086  servlet:    session:      timeout: 1800
+  port: 443
   ssl:
     enabled: true
     key-alias: ayokeystore
@@ -29,7 +29,7 @@ server:
     key-store-password: wlstjr129
     key-password: wlstjr129
     trust-store: ayotrust.pkcs12
-    trust-store-password: wlstjr129
+    trust-store-password: wlstjr129  servlet:    session:      timeout: 1800
 logging:
   level:
     org.springframework.web: debug

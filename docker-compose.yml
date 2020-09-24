@@ -12,7 +12,7 @@ services:
       context: ./server # Use an image built from the specified dockerfile in the `polling-app-server` directory.
       dockerfile: Dockerfile
     ports:
-      - "8086:8086" # Forward the exposed port 8080 on the container to port 8080 on the host machine
+      - "8080:443" # Forward the exposed port 8080 on the container to port 8080 on the host machine
     restart: always
     #depends_on:
     #  - db # This service depends on mysql. Start that first.
@@ -35,7 +35,7 @@ services:
     #volumes:
     #  - ./react:/usr/src/app
     ports:
-      - "80:8080" # Map the exposed port 80 on the container to port 9090 on the host machine
+      - "443:443" # Map the exposed port 80 on the container to port 9090 on the host machine
     restart: always
     depends_on:
       - web

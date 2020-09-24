@@ -77,7 +77,7 @@ module.exports = {
         contentBase: path.join(__dirname, 'dist'),
         public: 'www.jookbob2.com',
         host: '0.0.0.0', // 모든 host에서의 접근을 허용
-        port: 8080,
+        port: 443,
         allowedHosts: [
             'www.jookbob2.com',
             '.jookbob2.com',
@@ -85,7 +85,7 @@ module.exports = {
         ],
         proxy: {
             '**': {
-                target: 'https://web:8086',
+                target: 'https://web:8080',
                 bypass: function (req, res, proxyOptions) {
                     if (req.headers.accept.indexOf('html') !== -1) {
                         console.log('Skipping proxy for browser request.');
