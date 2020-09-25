@@ -52,8 +52,14 @@ const Profile = props => {
     }, [dispatch]);
 
     const logout = () => {
-        post("/member/logout");
-        window.location.href="/";
+        post("/member/logout")
+            .then(res => {
+                dispatch(getViewMember());
+                dispatch(getSessioning());
+            })
+            .catch(err => {
+                throw(err);
+            });
     };
 
     return (
@@ -61,19 +67,19 @@ const Profile = props => {
             className={clsx(classes.root, className)}
         >
             {authenticated ?
-            <Avatar
-                alt="Person"
-                className={classes.avatar}
-                component={RouterLink}
-                src={user.avatar}
-                to="/setting"
-            /> 
-            : 
-            <Avatar
-                alt="Person"
-                className={classes.avatar}
-                
-            /> }
+                <Avatar
+                    alt="Person"
+                    className={classes.avatar}
+                    component={RouterLink}
+                    src={user.avatar}
+                    to="/setting"
+                /> 
+                : 
+                <Avatar
+                    alt="Person"
+                    className={classes.avatar}
+                /> 
+            }
             {authenticated ?
                 <Typography
                     className={classes.name}
@@ -97,9 +103,7 @@ const Profile = props => {
 
             {authenticated ?
                 <div className={classes.iconBtn}>
-                    <RouterLink onClick={logout} to="/#">
-                        <Button><InputIcon /></Button>
-                    </RouterLink>
+                    <Button onClick={logout}><InputIcon /></Button>
                     <RouterLink to="/setting">
                         <Button><SettingsIcon /></Button>
                     </RouterLink>

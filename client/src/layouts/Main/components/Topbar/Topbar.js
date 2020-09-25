@@ -12,6 +12,7 @@ import LockOpenIcon from '@material-ui/icons/LockOpen';
 import {post} from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { getSessioning } from 'store/actions';
+import { getViewMember } from 'store/actions/front/viewMember';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -30,22 +31,33 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Topbar = props => {
-    const { className, onSidebarOpen } = props;
+    const { className, onSidebarOpen, onSidebarClose, open } = props;
     const classes = useStyles();
 
     const [notifications] = useState([]);
 
     const dispatch = useDispatch();
+
     useEffect(() => {
         dispatch(getSessioning());
+    }, [dispatch]);
+    
+    useEffect(() => {
+        dispatch(getViewMember());
     }, [dispatch]);
 
     const session = useSelector(state => state.session, []) || [];
     const authenticated = session.authenticated;
 
     const logout = () => {
-        post("/member/logout");
-        window.location.reload(true);
+        post("/member/logout")
+            .then(res => {
+                dispatch(getViewMember());
+                dispatch(getSessioning());
+            })
+            .catch(err => {
+                throw(err);
+            });
     };
 
 
@@ -55,9 +67,23 @@ const Topbar = props => {
             color="secondary"
         >
             <Toolbar>
-                <RouterLink to="/">
+                {/* <Hidden lgUp>
+                    <IconButton
+                        color="inherit"
+                        onClick={onSidebarOpen}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                </Hidden> */}
+                <IconButton
+                    color="inherit"
+                    onClick={open ? onSidebarClose : onSidebarOpen}
+                >
+                    <MenuIcon />
+                </IconButton>
+                {/* <RouterLink to="/">
                     <img src="/images/home.png" width="40"></img>
-                </RouterLink>
+                </RouterLink> */}
                 <div className={classes.flexGrow}/>
                 <Hidden mdDown>
                     <IconButton color="inherit">
@@ -70,13 +96,12 @@ const Topbar = props => {
                         </Badge>
                     </IconButton>
                     {authenticated ? 
-                        <RouterLink onClick={logout} to="/#">
-                            <IconButton
-                                className={classes.signOutButton}
-                            >
-                                <InputIcon />
-                            </IconButton>
-                        </RouterLink>
+                        <IconButton
+                            className={classes.signOutButton}
+                            onClick={logout}
+                        >
+                            <InputIcon />
+                        </IconButton>
                         :
                         <RouterLink to="/sign-in">
                             <IconButton
@@ -85,14 +110,6 @@ const Topbar = props => {
                                 <LockOpenIcon />
                             </IconButton>
                         </RouterLink>}
-                </Hidden>
-                <Hidden lgUp>
-                    <IconButton
-                        color="inherit"
-                        onClick={onSidebarOpen}
-                    >
-                        <MenuIcon />
-                    </IconButton>
                 </Hidden>
             </Toolbar>
         </AppBar>

@@ -51,6 +51,29 @@ const styles = makeStyles(theme => ({
     }
 }));
 
+function transform(node, index) {
+    if (node.type === "tag" && node.name === "oembed") {
+        console.log(node);
+        const vCode = node.attribs.url.split("v=")[1];
+        const url = `https://www.youtube.com/embed/${vCode}`
+        return (
+            // eslint-disable-next-line jsx-a11y/iframe-has-title
+            <iframe
+                key={index}
+                src={url} width="720" height="380" frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+            >
+            </iframe>
+        );
+    }
+}
+
+const options = {
+    decodeEntities: true,
+    transform
+};
+
 const BoardView = props => {
     const classes = styles();
     const { className, location, match, history } = props;
@@ -134,7 +157,7 @@ const BoardView = props => {
                                     <TableCell colSpan="2"><h2>{state.title}</h2></TableCell>
                                 </TableRow>
                                 <TableRow>
-                                    <td colSpan='2' className={classes.content2} id="content">{ReactHtmlParser(state.content)}</td>
+                                    <td colSpan="2" className={classes.content2} id="content">{ReactHtmlParser(state.content, options)}</td>
                                 </TableRow>
                             </TableBody> 
                             

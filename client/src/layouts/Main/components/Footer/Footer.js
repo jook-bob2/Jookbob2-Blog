@@ -6,7 +6,8 @@ import { Typography, Link } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
     root: {
-        padding: theme.spacing(4)
+        padding: theme.spacing(4),
+        float: 'left'
     }
 }));
 
@@ -24,7 +25,7 @@ const Footer = props => {
                 &copy;{' '}
                 <Link
                     component="a"
-                    href="https://github.com/ehrmaks/SpringBoot-React.git"
+                    href="https://github.com/ehrmaks/"
                     target="_blank"
                 >
                     Github

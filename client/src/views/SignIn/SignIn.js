@@ -10,7 +10,11 @@ import {
   IconButton,
   TextField,
   Link,
-  Typography
+  Typography,
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  DialogContent
 } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { Facebook as FacebookIcon, Google as GoogleIcon } from '../../icons';
@@ -127,9 +131,10 @@ const useStyles = makeStyles(theme => ({
   },
   facebooxBtn: {
     height: 45,
-    width: 200,
+    width: 190,
     backgroundColor: '#3f51b5',
-    color: 'beige'
+    color: 'beige',
+    borderRadius: 5
   }
 }));
 
@@ -144,6 +149,8 @@ const SignIn = (props) => {
     touched: {},
     errors: {}
   });
+
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const errors = validate(formState.values, schema);
@@ -185,9 +192,9 @@ const SignIn = (props) => {
         .then((response) => {
             let param = response.data;
             if (param.userId !== null && param.userId !== "" && param.message !== "error") {
-              window.location.href = "/";
+              history.goBack();
             } else {
-              alert("아이디/비밀번호를 확인 해주세요.");
+              setOpen(true);
               document.getElementsByName("email")[0].focus();
             }
         })
@@ -261,6 +268,10 @@ const SignIn = (props) => {
       });
   };
 
+  const handleOpenClose = () => {
+    setOpen(false);
+  };
+
   return (
     <div className={classes.root}>
       <Grid
@@ -273,7 +284,7 @@ const SignIn = (props) => {
           lg={5}
         >
           <div className={classes.quote}>
-            <div className={classes.quoteInner}>
+            {/* <div className={classes.quoteInner}>
               <Typography
                 className={classes.quoteText}
                 variant="h6"
@@ -295,7 +306,7 @@ const SignIn = (props) => {
                   Manager at inVision
                 </Typography>
               </div>
-            </div>
+            </div> */}
           </div>
         </Grid>
         <Grid
@@ -346,7 +357,7 @@ const SignIn = (props) => {
                   <Grid item>
                     <GoogleLogin
                       clientId="235232838707-352015emcjs2s2111hlgpc4b30iurfl8.apps.googleusercontent.com"
-                      buttonText="LOGIN WITH GOOGLE"
+                      buttonText="Login with Google"
                       onSuccess={googleOnSuccess}
                       onFailure={googleOnFail}
                       cookiePolicy={'single_host_origin'}
@@ -404,7 +415,7 @@ const SignIn = (props) => {
                   color="textSecondary"
                   variant="body1"
                 >
-                  Don't have an account?{' '}
+                  회원이 아니신가요?{' '}
                   <Link
                     component={RouterLink}
                     to="/sign-up"
@@ -418,6 +429,29 @@ const SignIn = (props) => {
           </div>
         </Grid>
       </Grid>
+
+      <Dialog
+          open={open}
+          onClose={handleOpenClose}
+      >
+          <DialogTitle>
+            알림
+          </DialogTitle>
+          <DialogContent>
+              <Typography gutterBottom>
+                아이디/비밀번호를 확인 해주세요.
+              </Typography>
+          </DialogContent>
+          <DialogActions>
+              <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleOpenClose}
+              >
+                  닫기
+              </Button>
+          </DialogActions>
+      </Dialog>
     </div>
   );
 };

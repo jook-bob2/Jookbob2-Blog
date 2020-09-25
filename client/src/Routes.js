@@ -174,6 +174,8 @@ const Routes = () => {
                 exact
                 layout={MainLayout}
                 path="/setting"
+                group="회원 정보 수정"
+                boardUse={false}
                 user={true}
                 isAllow={userAuth}
                 fallback={GoToUserSignPage}

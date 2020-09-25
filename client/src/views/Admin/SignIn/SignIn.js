@@ -77,22 +77,27 @@ const useStyles = makeStyles(theme => ({
   contentHeader: {
     display: 'flex',
     alignItems: 'center',
-    paddingTop: '8%',
+    //paddingTop: '8%',
+    // paddingBototm: theme.spacing(2),
+    // paddingLeft: theme.spacing(2),
+    // paddingRight: 410,
+    // alignSelf: 'center'
+    paddingTop: theme.spacing(5),
     paddingBototm: theme.spacing(2),
     paddingLeft: theme.spacing(2),
-    paddingRight: 410,
-    alignSelf: 'center'
+    paddingRight: theme.spacing(2)
   },
   logoImage: {
     marginLeft: theme.spacing(4)
   },
   contentBody: {
     flexGrow: 1,
+    display: 'flex',
     alignItems: 'center',
     [theme.breakpoints.down('md')]: {
       justifyContent: 'center'
     },
-    alignSelf: 'center'
+    //alignSelf: 'center'
   },
   form: {
     paddingLeft: 100,
@@ -206,9 +211,16 @@ const SignIn = (props) => {
         container
       >
         <Grid
+          className={classes.quoteContainer}
+          item
+          lg={5}
+        >
+          <div className={classes.quote}></div>
+        </Grid>
+        <Grid
           className={classes.content}
           item
-          lg={12}
+          lg={7}
           xs={12}
         >
           <div className={classes.content}>

@@ -37,7 +37,7 @@ const Main = props => {
         defaultMatches: true
     });
 
-    const [openSidebar, setOpenSidebar] = useState(false);
+    const [openSidebar, setOpenSidebar] = useState(true);
 
     const boardState = useSelector(state => state.frontBoardList, '') || '';
 
@@ -49,25 +49,37 @@ const Main = props => {
         setOpenSidebar(false);
     };
 
-    const shouldOpenSidebar = isDesktop ? true : openSidebar;
+    //const shouldOpenSidebar = isDesktop ? true : openSidebar;
+
+    const handleBoardWhether = () => {
+        if (!children.props.boardUse) {
+            return children.props.group;
+        } else {
+            return children.props.group + `(${boardState.count})`;
+        }
+    }
 
     return (
         <div
             className={clsx({
                 [classes.root]: true,
-                [classes.shiftContent]: isDesktop
+                [classes.shiftContent]: openSidebar
             })}
         >
-            <Topbar onSidebarOpen={handleSidebarOpen} />
+            <Topbar open={openSidebar} onSidebarOpen={handleSidebarOpen} onSidebarClose={handleSidebarClose} />
+            <div></div>
             <Sidebar 
                 onClose={handleSidebarClose}
-                open={shouldOpenSidebar}
+                open={openSidebar}
                 variant={isDesktop ? 'persistent' : 'temporary'}
             />
             <main className={classes.content}>
-                <div className={classes.group}>
-                    {children.props.group !== undefined ? children.props.group + `(${boardState.count})` : ''}
-                </div>
+                {children.props.group ?
+                    <div className={classes.group}>
+                        {children.props.group !== undefined ? handleBoardWhether() : ''}
+                    </div>
+                    : null
+                }
                 {children}
                 <Footer />
             </main>
