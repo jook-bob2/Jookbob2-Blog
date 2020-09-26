@@ -53,7 +53,6 @@ const styles = makeStyles(theme => ({
 
 function transform(node, index) {
     if (node.type === "tag" && node.name === "oembed") {
-        console.log(node);
         const vCode = node.attribs.url.split("v=")[1];
         const url = `https://www.youtube.com/embed/${vCode}`
         return (
@@ -127,43 +126,41 @@ const BoardView = props => {
             >
                 
                 <CardContent className={classes.content}>
-                    
-                        <Table>
-                            <colgroup>
-                                <col width="2%"/>
-                                <col width="60%"/>
-                                <col width="38%"/>
-                            </colgroup>
-                            <TableBody>
-                                <TableRow>
-                                    <td colSpan="1" className={classes.avatarTd}>
-                                        <Avatar
-                                            alt="Person"
-                                            className={classes.avatar}
-                                            src={state.avatar}
-                                            //component={RouterLink}
-                                            //src=""
-                                            //to="/setting"
-                                        />
-                                    </td>
-                                    <td colSpan="1"><span>{state.writer}</span><br/>
-                                        {state.createDt !== '' ?  <span><h6>{moment(state.createDt).format('YYYY.MM.DD hh:mm:ss')}</h6></span> : '' }
-                                    </td>
-                                </TableRow>
-                                <TableRow>
-                                    <td className={classes.bno} colSpan="2"><h5>#{state.bno} {state.showText}</h5></td>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell colSpan="2"><h2>{state.title}</h2></TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <td colSpan="2" className={classes.content2} id="content">{ReactHtmlParser(state.content, options)}</td>
-                                </TableRow>
-                            </TableBody> 
-                            
-                        </Table>
-                        <BoardDelete history={history} state={state} bno={state.bno} writerNo={state.writerNo} memberNo={state.memberNo} brdText={state.brdText} bKinds={state.bKinds}></BoardDelete>
-                    
+                    <Table>
+                        <colgroup>
+                            <col width="2%"/>
+                            <col width="60%"/>
+                            <col width="38%"/>
+                        </colgroup>
+                        <TableBody>
+                            <TableRow>
+                                <td colSpan="1" className={classes.avatarTd}>
+                                    <Avatar
+                                        alt="Person"
+                                        className={classes.avatar}
+                                        src={state.avatar}
+                                        //component={RouterLink}
+                                        //src=""
+                                        //to="/setting"
+                                    />
+                                </td>
+                                <td colSpan="1"><span>{state.writer}</span><br/>
+                                    {state.createDt !== '' ?  <span><h6>{moment(state.createDt).format('YYYY.MM.DD hh:mm:ss')}</h6></span> : '' }
+                                </td>
+                            </TableRow>
+                            <TableRow>
+                                <td className={classes.bno} colSpan="2"><h5>#{state.bno} {state.showText}</h5></td>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell colSpan="2"><h2>{state.title}</h2></TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <td colSpan="2" className={classes.content2} id="content">{ReactHtmlParser(state.content, options)}</td>
+                            </TableRow>
+                        </TableBody> 
+                        
+                    </Table>
+                    <BoardDelete history={history} state={state} bno={state.bno} writerNo={state.writerNo} memberNo={state.memberNo} brdText={state.brdText} bKinds={state.bKinds}></BoardDelete>
                 </CardContent>
             </Card>
             <Reply bno={state.bno} />

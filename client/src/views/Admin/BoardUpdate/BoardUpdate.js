@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -87,6 +87,18 @@ const BoardUpdate = props => {
     const [typeOpen, setTypeOpen] = useState(false);
 
     useEffect(() => {
+        post(`/boardManagement/getShowText`)
+            .then(res => {
+                setShowText(res.data.list);
+                updateListCallback();
+            })
+            .catch(err => {
+                throw(err);
+            });
+    // eslint-disable-next-line no-use-before-define
+    }, [updateListCallback]);
+
+    const updateListCallback = useCallback(() => {
         post(`/boardManagement/boardUpdateList/${state.bno}`)
             .then(res => {
                 setState(state => ({
@@ -104,16 +116,24 @@ const BoardUpdate = props => {
             });
     }, [state.bno]);
 
-    useEffect(() => {
-        post(`/boardManagement/getShowText`)
-            .then(res => {
-                setShowText(res.data.list);
-            })
-            .catch(err => {
-                throw(err);
-            });
-    }, []);
-    
+    // useEffect(() => {
+    //     post(`/boardManagement/boardUpdateList/${state.bno}`)
+    //         .then(res => {
+    //             setState(state => ({
+    //                 ...state,
+    //                 title: res.data.title,
+    //                 content: res.data.content,
+    //                 brdCode: res.data.brdCode,
+    //                 userName: res.data.name,
+    //                 avatar: res.data.profileImg,
+    //                 memberNo: res.data.memberNo
+    //             }));
+    //         })
+    //         .catch(err => {
+    //             throw(err);
+    //         });
+    // }, [state.bno]);
+
     const handleChange = (event) => {
         event.persist();
         if (event.target !== undefined) {

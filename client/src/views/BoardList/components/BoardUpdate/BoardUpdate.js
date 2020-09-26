@@ -74,7 +74,7 @@ const BoardUpdate = props => {
         list: location.query !== undefined ? location.query.state : {},
         title: location.query !== undefined ? location.query.state.title : '',
         content: location.query !== undefined ? location.query.state.content : '',
-        brdCode: location.query !== undefined ? location.query.state.bKinds : '',
+        brdCode: '',
         brdText: location.query !== undefined ? location.query.state.brdText : ''
     });
 
@@ -101,11 +101,15 @@ const BoardUpdate = props => {
         post(`/boardManagement/getShowText`)
             .then(res => {
                 setShowText(res.data.list);
+                setState(state => ({
+                    ...state,
+                    brdCode: location.query !== undefined ? location.query.state.bKinds : ''
+                }))
             })
             .catch(err => {
                 throw(err);
             });
-    }, []);
+    }, [location.query]);
 
     const callMember = async() => {
         const url = '/member/viewMember';

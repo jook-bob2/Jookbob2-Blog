@@ -3,10 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/styles';
-import { AppBar, Toolbar, Badge, Hidden, IconButton } from '@material-ui/core';
+import { makeStyles, withStyles } from '@material-ui/styles';
+import { AppBar, Toolbar, Badge, IconButton, Tooltip } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
+import AlarmOnIcon from '@material-ui/icons/AlarmOn';
 import InputIcon from '@material-ui/icons/Input';
 import LockOpenIcon from '@material-ui/icons/LockOpen'; 
 import {post} from 'axios';
@@ -25,13 +26,22 @@ const useStyles = makeStyles(theme => ({
         flexGrow: 1
     },
     signOutButton: {
-        marginLeft: theme.spacing(1),
         color: '#FFFFFF'
     }
 }));
 
+const LightTooltip = withStyles((theme) => ({
+    tooltip: {
+      backgroundColor: 'white',
+      color: 'rgba(0, 0, 0, 0.87)',
+      boxShadow: theme.shadows[1],
+      fontSize: 15,
+      border: '1px solid rgb(176, 176, 176)'
+    },
+}))(Tooltip);
+
 const Topbar = props => {
-    const { className, onSidebarOpen, onSidebarClose, open } = props;
+    const { className, onSidebarOpen, onSidebarClose, sidebarOpen, timelineOpen, onTimeLineOpen, onTimelineClose } = props;
     const classes = useStyles();
 
     const [notifications] = useState([]);
@@ -67,25 +77,18 @@ const Topbar = props => {
             color="secondary"
         >
             <Toolbar>
-                {/* <Hidden lgUp>
+                <LightTooltip title="메뉴 On/Off">
                     <IconButton
                         color="inherit"
-                        onClick={onSidebarOpen}
+                        onClick={sidebarOpen ? onSidebarClose : onSidebarOpen}
                     >
                         <MenuIcon />
                     </IconButton>
-                </Hidden> */}
-                <IconButton
-                    color="inherit"
-                    onClick={open ? onSidebarClose : onSidebarOpen}
-                >
-                    <MenuIcon />
-                </IconButton>
-                {/* <RouterLink to="/">
-                    <img src="/images/home.png" width="40"></img>
-                </RouterLink> */}
+                </LightTooltip>
+
                 <div className={classes.flexGrow}/>
-                <Hidden mdDown>
+ 
+                <LightTooltip title="알림">
                     <IconButton color="inherit">
                         <Badge
                             badgeContent={notifications.length}
@@ -95,22 +98,36 @@ const Topbar = props => {
                             <NotificationsIcon />
                         </Badge>
                     </IconButton>
-                    {authenticated ? 
+                </LightTooltip>
+                {authenticated ? 
+                    <LightTooltip title="로그아웃">
                         <IconButton
                             className={classes.signOutButton}
                             onClick={logout}
                         >
                             <InputIcon />
                         </IconButton>
-                        :
+                    </LightTooltip>
+                    :
+                    <LightTooltip title="로그인">
                         <RouterLink to="/sign-in">
                             <IconButton
                                 className={classes.signOutButton}
                             >
                                 <LockOpenIcon />
                             </IconButton>
-                        </RouterLink>}
-                </Hidden>
+                        </RouterLink>
+                    </LightTooltip>
+                }
+
+                <LightTooltip title="타임라인 On/Off">
+                    <IconButton
+                        color="inherit"
+                        onClick={timelineOpen ? onTimelineClose : onTimeLineOpen}
+                    >
+                        <AlarmOnIcon />
+                    </IconButton>
+                </LightTooltip>
             </Toolbar>
         </AppBar>
     );

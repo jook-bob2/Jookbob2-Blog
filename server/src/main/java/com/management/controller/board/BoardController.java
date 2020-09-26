@@ -1,5 +1,7 @@
 package com.management.controller.board;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -210,6 +212,41 @@ public class BoardController {
 		List<Map<String, Object>> pathList = boardMapper.getBoardKind();
 		
 		map.put("pathList", pathList);
+		
+		return map;
+	}
+	
+	@PostMapping(value = "/dashboardList")
+	public Map<String, Object> popularBrd() {
+		Map<String, Object> map = new HashMap<>();
+		
+		List<Map<String, Object>> popularList = boardMapper.popularBrd();
+		List<Map<String, Object>> noticeList = boardMapper.noticeList(map);
+		List<Map<String, Object>> freeList = boardMapper.freeList();
+		List<Map<String, Object>> journalList = boardMapper.journalList();
+		
+		
+		map.put("popularList", popularList);
+		map.put("noticeList", noticeList);
+		map.put("freeList", freeList);
+		map.put("journalList", journalList);
+		
+		return map;
+	}
+	
+	@PostMapping(value = "/timelineList")
+	public Map<String, Object> timelineList() {
+		Map<String, Object> map = new HashMap<>();
+		
+		List<Map<String, Object>> list = new ArrayList<>();
+		
+		List<Map<String, Object>> noticeList = boardMapper.timelineNoticeList();
+		List<Map<String, Object>> boardList = boardMapper.timelineBoardList();
+		
+		list.addAll(noticeList);
+		list.addAll(boardList);
+		
+		map.put("list", list);
 		
 		return map;
 	}

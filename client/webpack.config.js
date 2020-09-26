@@ -56,14 +56,15 @@ module.exports = {
                         }
                     }
                 ]
-            }
+            },
         ]
     },
+    devtool: 'source-map',
     plugins: [
         new HtmlWebpackPlugin({
             template: 'public/index.html',
             favicon: 'public/favicon.ico'
-        })
+        }),
     ],
     devServer: {
         //https: true,

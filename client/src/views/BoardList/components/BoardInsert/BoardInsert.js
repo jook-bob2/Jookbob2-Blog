@@ -77,7 +77,7 @@ const BoardInsert = props => {
         brdText: location.query !== undefined ? location.query.brdText : '',
         title: '',
         content: '',
-        brdCode: match.params.brdCode
+        brdCode: ''
     });
 
     const [showText, setShowText] = useState([]);
@@ -103,11 +103,15 @@ const BoardInsert = props => {
         post(`/boardManagement/getShowText`)
             .then(res => {
                 setShowText(res.data.list);
+                setState(state => ({
+                    ...state,
+                    brdCode: match.params.brdCode
+                }));
             })
             .catch(err => {
                 throw(err);
             });
-    }, []);
+    }, [match.params.brdCode]);
 
     const handleChange = (event) => {
         event.persist();
@@ -235,6 +239,32 @@ const BoardInsert = props => {
                                         ckfinder: {
                                             uploadUrl: '/board/uploadImg'
                                         },
+                                        // codeBlock: {
+                                        //     languages: [
+                                        //         // Do not render the CSS class for the plain text code blocks.
+                                        //         { language: 'plaintext', label: 'Plain text', class: '' },
+                                
+                                        //         // Use the "php-code" class for PHP code blocks.
+                                        //         { language: 'php', label: 'PHP', class: 'php-code' },
+                                
+                                        //         // Use the "js" class for JavaScript code blocks.
+                                        //         // Note that only the first ("js") class will determine the language of the block when loading data.
+                                        //         { language: 'javascript', label: 'JavaScript', class: 'js javascript js-code' },
+                                
+                                        //         // Python code blocks will have the default "language-python" CSS class.
+                                        //         { language: 'python', label: 'Python' }
+                                        //     ]
+                                        // },
+                                        // toolbar: {
+                                        //     items:
+                                        //     [
+                                        //       'heading', '|', 
+                                        //       'alignment', 'bold', 'italic', 'highlight', '|',
+                                        //       'link', 'bulletedList', 'numberedList', 'imageUpload', '|',
+                                        //       'blockQuote', 'insertTable', 'mediaEmbed', '|',
+                                        //       'undo', 'redo', 'codeBlock'
+                                        //     ],
+                                        // },
                                     }
                                 }
                             />

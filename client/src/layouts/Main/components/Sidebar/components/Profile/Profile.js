@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/styles';
-import { Avatar, Typography,  Button } from '@material-ui/core';
+import { makeStyles, withStyles } from '@material-ui/styles';
+import { Avatar, Typography,  Button, Tooltip } from '@material-ui/core';
 import InputIcon from '@material-ui/icons/Input';
 import {post} from 'axios';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -31,6 +31,16 @@ const useStyles = makeStyles(theme => ({
         marginTop: 8
     }
 }));
+
+const LightTooltip = withStyles((theme) => ({
+    tooltip: {
+      backgroundColor: 'white',
+      color: 'rgba(0, 0, 0, 0.87)',
+      boxShadow: theme.shadows[1],
+      fontSize: 15,
+      border: '1px solid rgb(176, 176, 176)'
+    },
+}))(Tooltip);
 
 const Profile = props => {
     const { className } = props;
@@ -103,16 +113,22 @@ const Profile = props => {
 
             {authenticated ?
                 <div className={classes.iconBtn}>
-                    <Button onClick={logout}><InputIcon /></Button>
-                    <RouterLink to="/setting">
-                        <Button><SettingsIcon /></Button>
-                    </RouterLink>
+                    <LightTooltip title="로그아웃">
+                        <Button onClick={logout}><InputIcon /></Button>
+                    </LightTooltip>
+                    <LightTooltip title="회원정보수정">
+                        <RouterLink to="/setting">
+                            <Button><SettingsIcon /></Button>
+                        </RouterLink>
+                    </LightTooltip>
                 </div>
                 :
                 <div className={classes.iconBtn}>
-                    <RouterLink to="/sign-in">
-                        <Button><LockOpenIcon /></Button>
-                    </RouterLink>
+                    <LightTooltip title="로그인">
+                        <RouterLink to="/sign-in">
+                            <Button><LockOpenIcon /></Button>
+                        </RouterLink>
+                    </LightTooltip>
                 </div>}
         </div>
     );

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/styles';
 import { useMediaQuery } from '@material-ui/core';
-import { Sidebar, Topbar, Footer } from './components';
+import { Sidebar, Topbar, Footer, TimeLine } from './components';
 import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles(theme => ({
@@ -26,7 +26,17 @@ const useStyles = makeStyles(theme => ({
         fontWeight: 'bold',
         fontSize: 'xx-large',
         marginRight: '10%'
-    }
+    },
+    left: {
+        width: '80%',
+        float: 'left',
+        boxSizing: 'border-box'
+    }, 
+    right : {
+        width: '20%',
+        float: 'right',
+        boxSizing: "border-box"
+    },
 }));
 
 const Main = props => {
@@ -37,9 +47,20 @@ const Main = props => {
         defaultMatches: true
     });
 
-    const [openSidebar, setOpenSidebar] = useState(true);
+    const [openSidebar, setOpenSidebar] = useState(false);
+    const [openTimeLine, setOpenTimeLine] = useState(false);
 
     const boardState = useSelector(state => state.frontBoardList, '') || '';
+
+    useEffect(() => {
+        if (isDesktop) {
+            setOpenSidebar(true);
+            setOpenTimeLine(true);
+        } else {
+            setOpenSidebar(false);
+            setOpenTimeLine(false);
+        }
+    }, [isDesktop]);
 
     const handleSidebarOpen = () => {
         setOpenSidebar(true);
@@ -49,13 +70,22 @@ const Main = props => {
         setOpenSidebar(false);
     };
 
-    //const shouldOpenSidebar = isDesktop ? true : openSidebar;
+    const handleTimeLineOpen = () => {
+        setOpenTimeLine(true);
+    };
+
+    const handleTimeLineClose = () => {
+        setOpenTimeLine(false);
+    };
 
     const handleBoardWhether = () => {
-        if (!children.props.boardUse) {
+        // if (!children.props.boardUse) {
+        //     return children.props.group;
+        // } else {
+        //     return children.props.group + `(${boardState.count})`;
+        // }
+        if (boardState.count === 0) {
             return children.props.group;
-        } else {
-            return children.props.group + `(${boardState.count})`;
         }
     }
 
@@ -63,24 +93,32 @@ const Main = props => {
         <div
             className={clsx({
                 [classes.root]: true,
-                [classes.shiftContent]: openSidebar
+                [classes.shiftContent]: openSidebar && isDesktop
             })}
         >
-            <Topbar open={openSidebar} onSidebarOpen={handleSidebarOpen} onSidebarClose={handleSidebarClose} />
-            <div></div>
+            <Topbar 
+                sidebarOpen={openSidebar} onSidebarOpen={handleSidebarOpen} onSidebarClose={handleSidebarClose} 
+                timelineOpen={openTimeLine} onTimeLineOpen={handleTimeLineOpen} onTimelineClose={handleTimeLineClose}
+            />
             <Sidebar 
                 onClose={handleSidebarClose}
                 open={openSidebar}
                 variant={isDesktop ? 'persistent' : 'temporary'}
             />
             <main className={classes.content}>
-                {children.props.group ?
+                <div className={classes.left}>
                     <div className={classes.group}>
                         {children.props.group !== undefined ? handleBoardWhether() : ''}
                     </div>
-                    : null
-                }
-                {children}
+                    {children}
+                </div>
+                <div className={classes.right}>
+                    <TimeLine 
+                        open={openTimeLine} 
+                        onClose={handleTimeLineClose}
+                        variant={isDesktop ? 'persistent' : 'temporary'}
+                    />
+                </div>
                 <Footer />
             </main>
         </div>
