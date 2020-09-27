@@ -1,15 +1,23 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React from 'react';
+import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/styles';
-//import { Link as RouterLink } from 'react-router-dom';
 import { 
     CardContent,
     Table,
     TableBody,
     TableRow,
     Avatar,
+    IconButton,
+    Dialog,
+    DialogActions,
+    DialogTitle,
+    DialogContent,
+    Typography,
+    Button
 } from '@material-ui/core';
 import ReactHtmlParser from 'react-html-parser';
+import {ThumbUpAlt, ThumbUpOutlined, ThumbDownAlt, ThumbDownOutlined} from '@material-ui/icons';
+import ModeCommentOutlinedIcon from '@material-ui/icons/ModeCommentOutlined';
 
 const useStyles = makeStyles(theme => ({
     contentTr: {
@@ -32,6 +40,9 @@ const useStyles = makeStyles(theme => ({
         fontSize: 12,
         lineHeight: '24px'
     },
+    repArea: {
+        paddingTop: 12
+    }
 }));
 
 function transform(node, index) {
@@ -58,6 +69,15 @@ const options = {
 
 const TimeLineTable = (props) => {
     const classes = useStyles();
+    const [open, setOpen] = useState(false);
+
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     return (
         <div className={classes.contentColor}>
@@ -90,8 +110,51 @@ const TimeLineTable = (props) => {
                             </TableRow>
                         </TableBody>
                     </Table>
+                    <div className={classes.repArea}>
+                        <Table>
+                            <TableBody>
+                                <TableRow align='center'>
+                                    <td>
+                                        <IconButton>
+                                            <ThumbUpOutlined />
+                                        </IconButton>
+                                    </td>
+                                    <td>
+                                        <IconButton>
+                                            <ThumbDownOutlined />
+                                        </IconButton>
+                                    </td>
+                                    <td>
+                                        <IconButton onClick={handleOpen}>
+                                            <ModeCommentOutlinedIcon />
+                                        </IconButton>
+                                    </td>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
+                    </div>
                 </CardContent>
             </span>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+            >
+                <DialogTitle>
+                    댓글 보기
+                </DialogTitle>
+                <DialogContent>
+                    
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        onClick={handleClose}
+                    >
+                        닫기
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 };

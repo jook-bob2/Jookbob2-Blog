@@ -26,9 +26,8 @@ public interface BoardMapper {
 	public Map<String, Object> selectLowerBoardKind();
 	public boolean dupPathCheck(String pathSrc);
 	public String getBkinds(String brdText);
-	public List<Map<String, Object>> popularBrd();
-	public List<Map<String, Object>> journalList();
-	public List<Map<String, Object>> freeList();
-	public List<Map<String, Object>> timelineNoticeList();
-	public List<Map<String, Object>> timelineBoardList();
+	public List<Map<String, Object>> popularBrd(Map<String, Object> map);
+	public List<Map<String, Object>> journalList(Map<String, Object> map);
+	public List<Map<String, Object>> freeList(Map<String, Object> map);
+	public List<Map<String, Object>> timelineList(Map<String, Object> map);
 }

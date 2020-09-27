@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import { 
@@ -16,7 +16,7 @@ import { post } from 'axios';
 
 const useStyles = makeStyles(theme => ({
     drawer: {
-        width: '15%',
+        width: '16%',
         minWidth: 200,
         [theme.breakpoints.up('lg')]: {
             marginTop: 64,
@@ -34,7 +34,6 @@ const useStyles = makeStyles(theme => ({
         position: 'absolute',
         top: 0,
         width: '100%',
-        zIndex: -1
     },
     blogName: {
         color: '#fff',
@@ -44,13 +43,13 @@ const useStyles = makeStyles(theme => ({
     position: {
         bottom: 40,
         left: 0,
-        position: 'absolute',
         right: 0,
         top: 0,
-        zIndex: 1
+        zIndex: 1,
+        overflow: 'hidden'
     },
     timeLineList: {
-        paddingTop: 150,
+        paddingTop: 120,
     },
     title: {
         borderBottom: '4px solid #4267b2',
@@ -72,7 +71,7 @@ const useStyles = makeStyles(theme => ({
         overflowY: 'auto',
         position: 'relative',
         width: '100%',
-        maxHeight: 706
+        maxHeight: 675
     },
     contentPadding: {
         padding: 20,
@@ -90,6 +89,8 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+const rowsPerPage = 5;
+
 const TimeLine = (props) => {
     const { open, onClose, variant } = props;
     const classes = useStyles();
@@ -98,6 +99,7 @@ const TimeLine = (props) => {
         values: []
     });
     const [progress, setProgress] = useState(0);
+    let page = 1;
 
     useEffect(() => {
         const timer = setInterval(progressCount, 10);
@@ -108,7 +110,17 @@ const TimeLine = (props) => {
     }, []);
 
     useEffect(() => {
-        post(`/board/timelineList`)
+        timelineCallback();
+    // eslint-disable-next-line no-use-before-define
+    }, [timelineCallback]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const timelineCallback = useCallback(() => {
+        const formData = new FormData();
+        formData.append('page', page);
+        formData.append('rowsPerPage', rowsPerPage);
+
+        post(`/board/timelineList`, formData)
             .then(res => {
                 const dateSortAfterList = res.data.list.sort((a, b) => {
                     return new Date(b.createDt) - new Date(a.createDt);
@@ -116,13 +128,31 @@ const TimeLine = (props) => {
 
                 setTimelineState(state => ({
                     ...state,
-                    values: dateSortAfterList
+                    values: state.values.concat(dateSortAfterList)
                 }));
             })
             .catch(err => {
                 throw(err);
             });
-    }, []);
+    }, [page]);
+
+    useEffect(() => {
+        window.addEventListener('scroll', infiniteScroll, true);
+    // eslint-disable-next-line no-use-before-define
+    }, [infiniteScroll]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const infiniteScroll = () => {
+        let element = document.getElementById('contentOver');
+        let scrollHeight = Math.max(element.scrollHeight, document.body.scrollHeight);
+        let scrollTop = Math.max(element.scrollTop, document.body.scrollTop);
+        let clientHeight = element.clientHeight;
+
+        if (scrollTop + clientHeight === scrollHeight) {
+            page++;
+            timelineCallback();
+        }
+    };
 
     const progressCount = () => {
         setProgress(oldProgress => oldProgress + 1);
@@ -130,6 +160,24 @@ const TimeLine = (props) => {
 
     const timeLineTable = (data) => {
         return data.map((c, index) => {
+            if (c.content.length >= 20) {
+                if (c.noticeNo) {
+                    const noticeMore = `<a href='/noticeView/${c.noticeNo}'>...더보기</a>`;
+                    c.content = c.content.substring(0, 20) + noticeMore;
+                } else if (c.bno) {
+                    const boardMore = `<a href='/boardView/${c.bno}'>...더보기</a>`;
+                    c.content = c.content.substring(0, 20) + boardMore;
+                }
+            } else {
+                if (c.noticeNo) {
+                    const noticeMore = `<a href='/noticeView/${c.noticeNo}'>...더보기</a>`;
+                    c.content += noticeMore;
+                } else if (c.bno) {
+                    const boardMore = `<a href='/boardView/${c.bno}'>...더보기</a>`;
+                    c.content += boardMore;
+                }
+            }
+
             return <TimeLineTable 
                 key={index} agoTime={c.agoTime} showText={c.showText}
                 name={c.name} avatar={c.profileImg} content={c.content}
@@ -168,7 +216,7 @@ const TimeLine = (props) => {
                             </TableBody>
                         </Table>
                         <div className={classes.contentArea}>
-                            <div className={classes.contentOver}>
+                            <div className={classes.contentOver} id='contentOver'>
                                 <div className={classes.contentPadding}>
                                     {timelineState.values.length > 0 ? timeLineTable(timelineState.values)
                                         : <div className={classes.contentColor}>

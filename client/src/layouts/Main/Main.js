@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
         marginRight: '10%'
     },
     left: {
-        width: '80%',
+        width: 'calc(80% + 100px)',
         float: 'left',
         boxSizing: 'border-box'
     }, 
@@ -51,6 +51,7 @@ const Main = props => {
     const [openTimeLine, setOpenTimeLine] = useState(false);
 
     const boardState = useSelector(state => state.frontBoardList, '') || '';
+    const boardUse = children.props.boardUse === false ? false : true;
 
     useEffect(() => {
         if (isDesktop) {
@@ -78,17 +79,6 @@ const Main = props => {
         setOpenTimeLine(false);
     };
 
-    const handleBoardWhether = () => {
-        // if (!children.props.boardUse) {
-        //     return children.props.group;
-        // } else {
-        //     return children.props.group + `(${boardState.count})`;
-        // }
-        if (boardState.count === 0) {
-            return children.props.group;
-        }
-    }
-
     return (
         <div
             className={clsx({
@@ -107,9 +97,13 @@ const Main = props => {
             />
             <main className={classes.content}>
                 <div className={classes.left}>
-                    <div className={classes.group}>
-                        {children.props.group !== undefined ? handleBoardWhether() : ''}
-                    </div>
+                    {children.props.group !== undefined ?
+                        <div className={classes.group}>
+                            {boardUse === false ? children.props.group : children.props.group + `(${boardState.count})`}
+                        </div>
+                        :
+                        null
+                    }
                     {children}
                 </div>
                 <div className={classes.right}>

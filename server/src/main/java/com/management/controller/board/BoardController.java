@@ -219,11 +219,13 @@ public class BoardController {
 	@PostMapping(value = "/dashboardList")
 	public Map<String, Object> popularBrd() {
 		Map<String, Object> map = new HashMap<>();
+		map.put("pageBegin", 0);
+		map.put("pageEnd", 8);
 		
-		List<Map<String, Object>> popularList = boardMapper.popularBrd();
+		List<Map<String, Object>> popularList = boardMapper.popularBrd(map);
 		List<Map<String, Object>> noticeList = boardMapper.noticeList(map);
-		List<Map<String, Object>> freeList = boardMapper.freeList();
-		List<Map<String, Object>> journalList = boardMapper.journalList();
+		List<Map<String, Object>> freeList = boardMapper.freeList(map);
+		List<Map<String, Object>> journalList = boardMapper.journalList(map);
 		
 		
 		map.put("popularList", popularList);
@@ -235,16 +237,19 @@ public class BoardController {
 	}
 	
 	@PostMapping(value = "/timelineList")
-	public Map<String, Object> timelineList() {
+	public Map<String, Object> timelineList(@RequestParam Map<String, Object> param) {
 		Map<String, Object> map = new HashMap<>();
 		
-		List<Map<String, Object>> list = new ArrayList<>();
+		int page = Integer.parseInt(param.get("page").toString());
+		int rowsPerPage = Integer.parseInt(param.get("rowsPerPage").toString());
 		
-		List<Map<String, Object>> noticeList = boardMapper.timelineNoticeList();
-		List<Map<String, Object>> boardList = boardMapper.timelineBoardList();
+		// 페이지 수 계산
+		int pageBegin = (page - 1) * rowsPerPage; // 0, 5, 10 이런식으로 페이징
 		
-		list.addAll(noticeList);
-		list.addAll(boardList);
+		map.put("pageBegin", pageBegin);
+		map.put("pageEnd", rowsPerPage);
+		
+		List<Map<String, Object>> list = boardMapper.timelineList(map);
 		
 		map.put("list", list);
 		

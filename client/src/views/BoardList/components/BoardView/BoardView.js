@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { useMediaQuery } from '@material-ui/core';
 import {
     Card,
     CardContent,
@@ -22,7 +23,8 @@ const styles = makeStyles(theme => ({
         marginRight: '10%'
     },
     content: {
-        padding: 0
+        padding: 0,
+        overflow: 'auto'
     },
     inner: {
         minWidth: 1050
@@ -51,30 +53,12 @@ const styles = makeStyles(theme => ({
     }
 }));
 
-function transform(node, index) {
-    if (node.type === "tag" && node.name === "oembed") {
-        const vCode = node.attribs.url.split("v=")[1];
-        const url = `https://www.youtube.com/embed/${vCode}`
-        return (
-            // eslint-disable-next-line jsx-a11y/iframe-has-title
-            <iframe
-                key={index}
-                src={url} width="720" height="380" frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-            >
-            </iframe>
-        );
-    }
-}
-
-const options = {
-    decodeEntities: true,
-    transform
-};
-
 const BoardView = props => {
     const classes = styles();
+    const theme = useTheme();
+    const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
+        defaultMatches: true
+    });
     const { className, location, match, history } = props;
 
     const [state, setState] = useState({
@@ -91,6 +75,42 @@ const BoardView = props => {
         avatar: '',
         showText: ''
     });
+
+    const options = {
+        decodeEntities: true,
+        transform
+    };
+
+    function transform(node, index) {
+        if (node.type === "tag" && node.name === "oembed") {
+            const vCode = node.attribs.url.split("v=")[1];
+            const url = `https://www.youtube.com/embed/${vCode}`;
+    
+            if (isDesktop) {
+                return (
+                    // eslint-disable-next-line jsx-a11y/iframe-has-title
+                    <iframe
+                        key={index}
+                        src={url} width="720" height="380" frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                    >
+                    </iframe>
+                );
+            } else {
+                return (
+                    // eslint-disable-next-line jsx-a11y/iframe-has-title
+                    <iframe
+                        key={index}
+                        src={url} width="360" height="180" frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                    >
+                    </iframe>
+                );
+            }
+        }
+    }
 
     const callBackView = useCallback(() => {
         post('/board/boardDetail/' + match.params.bno).then(res => {
