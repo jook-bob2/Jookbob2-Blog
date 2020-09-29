@@ -38,7 +38,8 @@ const useStyles = makeStyles(theme => ({
     blogName: {
         color: '#fff',
         textShadow: '0 2px 4px rgba(0, 0, 0, .9)',
-        float: 'right'
+        float: 'right',
+        marginRight: 80
     },
     position: {
         bottom: 40,
@@ -167,9 +168,11 @@ const TimeLine = (props) => {
 
     const infiniteScroll = useCallback(() => {
         let element = document.getElementById('contentOver');
-        let scrollHeight = Math.max(element.scrollHeight, document.body.scrollHeight);
-        let scrollTop = Math.max(element.scrollTop, document.body.scrollTop);
+        let scrollHeight = Math.max(element.scrollHeight, element.scrollHeight);
+        let scrollTop = Math.max(element.scrollTop, element.scrollTop);
         let clientHeight = element.clientHeight;
+        const { innerHeight } = window;
+        console.log(scrollHeight, scrollTop, clientHeight, innerHeight);
 
         if (scrollTop + clientHeight === scrollHeight) {
             page++;
