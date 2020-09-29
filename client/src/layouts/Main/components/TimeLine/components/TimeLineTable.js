@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, {useState} from 'react';
-import { makeStyles } from '@material-ui/styles';
+import React, {useState, useEffect} from 'react';
+import { makeStyles, withStyles } from '@material-ui/styles';
 import { 
     CardContent,
     Table,
@@ -9,17 +9,28 @@ import {
     Avatar,
     IconButton,
     Dialog,
-    DialogActions,
     DialogTitle,
     DialogContent,
     Typography,
-    Button
 } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 import ReactHtmlParser from 'react-html-parser';
+import { Link as RouterLink } from 'react-router-dom';
 import {ThumbUpAlt, ThumbUpOutlined, ThumbDownAlt, ThumbDownOutlined} from '@material-ui/icons';
 import ModeCommentOutlinedIcon from '@material-ui/icons/ModeCommentOutlined';
+import Reply from 'views/BoardList/components/Reply';
 
 const useStyles = makeStyles(theme => ({
+    root: {
+        margin: 0,
+        padding: theme.spacing(2),
+    },
+    closeButton: {
+        position: 'absolute',
+        right: theme.spacing(1),
+        top: theme.spacing(1),
+        color: 'white',
+    },
     contentTr: {
         padding: '15px 5px 0px 5px'
     },
@@ -41,7 +52,12 @@ const useStyles = makeStyles(theme => ({
         lineHeight: '24px'
     },
     repArea: {
-        paddingTop: 12
+        paddingTop: 6
+    },
+    dlgTitle: {
+        backgroundColor: '#f50057',
+        color: 'white',
+        textShadow: '0 2px 4px rgba(0, 0, 0, .9)'
     }
 }));
 
@@ -70,6 +86,15 @@ const options = {
 const TimeLineTable = (props) => {
     const classes = useStyles();
     const [open, setOpen] = useState(false);
+
+    const [content, setContent] = useState('');
+
+    useEffect(() => {
+        if (props.content.length >= 100) {
+            const contentValue = props.content.substring(0, 100) + '...';
+            setContent(contentValue);
+        }
+    }, [props.content]);
 
     const handleOpen = () => {
         setOpen(true);
@@ -106,7 +131,23 @@ const TimeLineTable = (props) => {
                                 </td>
                             </TableRow>
                             <TableRow>
-                                <td colSpan="2" className={classes.contentTr}>{ReactHtmlParser(props.content, options)}</td>
+                                <td colSpan="2" className={classes.contentTr}>
+                                    {ReactHtmlParser(content, options)}
+                                </td>
+                            </TableRow>
+                            <TableRow>
+                                <td colSpan="2" className={classes.contentTr}>
+                                    {
+                                        props.noticeNo !== undefined ?
+                                            <RouterLink to={`/noticeView/${props.noticeNo}`}>
+                                                자세히보기
+                                            </RouterLink>
+                                        :
+                                            <RouterLink to={`/boardView/${props.bno}`}>
+                                                자세히보기
+                                            </RouterLink>
+                                    }
+                                </td>
                             </TableRow>
                         </TableBody>
                     </Table>
@@ -114,19 +155,14 @@ const TimeLineTable = (props) => {
                         <Table>
                             <TableBody>
                                 <TableRow align='center'>
-                                    <td>
-                                        <IconButton>
-                                            <ThumbUpOutlined />
+                                    {/* <td>
+                                        <IconButton style={{ fontSize: 12 }}>
+                                            <ThumbUpOutlined style={{ fontSize: 12 }}/> 좋아요
                                         </IconButton>
-                                    </td>
+                                    </td> */}
                                     <td>
-                                        <IconButton>
-                                            <ThumbDownOutlined />
-                                        </IconButton>
-                                    </td>
-                                    <td>
-                                        <IconButton onClick={handleOpen}>
-                                            <ModeCommentOutlinedIcon />
+                                        <IconButton style={{ fontSize: 15 }} onClick={handleOpen}>
+                                            <ModeCommentOutlinedIcon style={{ fontSize: 15 }} /> 댓글 달기
                                         </IconButton>
                                     </td>
                                 </TableRow>
@@ -138,14 +174,26 @@ const TimeLineTable = (props) => {
             <Dialog
                 open={open}
                 onClose={handleClose}
+                fullWidth
             >
-                <DialogTitle>
+                {/* <IconButton onClick={handleClose}>
+                    <CloseIcon />
+                </IconButton> */}
+                <DialogTitle className={classes.dlgTitle}>
                     댓글 보기
+                    <IconButton onClick={handleClose} className={classes.closeButton}>
+                        <CloseIcon />
+                    </IconButton>
                 </DialogTitle>
                 <DialogContent>
-                    
+                    {
+                        props.bno !== undefined ?
+                            <Reply bno={props.bno} />
+                        :
+                            <Reply noticeNo={props.noticeNo} />
+                    }
                 </DialogContent>
-                <DialogActions>
+                {/* <DialogActions>
                     <Button
                         variant="contained"
                         color="secondary"
@@ -153,7 +201,7 @@ const TimeLineTable = (props) => {
                     >
                         닫기
                     </Button>
-                </DialogActions>
+                </DialogActions> */}
             </Dialog>
         </div>
     );

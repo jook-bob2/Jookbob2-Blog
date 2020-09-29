@@ -29,7 +29,6 @@ const useStyles = makeStyles(theme => ({
     },
     contentArea: {
         padding: 'calc(1rem)',
-        //lineHeight: 24
     },
     content: {
         display: 'flex',
@@ -54,50 +53,6 @@ const useStyles = makeStyles(theme => ({
         height: '100%',
         whiteSpace: 'nowrap'
     },
-    // left: {
-    //     width: '80%',
-    //     float: 'left',
-    //     boxSizing: 'border-box'
-    // }, 
-    // right : {
-    //     width: '20%',
-    //     float: 'right',
-    //     boxSizing: "border-box"
-    // },
-    // drawer: {
-    //     width: '15%',
-    //     minWidth: 200,
-    //     [theme.breakpoints.up('lg')]: {
-    //         marginTop: 64,
-    //         height: 'calc(100% - 64px)'
-    //     }
-    // },
-    // rightBar: {
-    //     maxHeight: 130
-    // },
-    // icon: {
-    //     padding: 10,
-    //     background: 'linear-gradient(to bottom, rgba(0, 0, 0, .7) 0%, rgba(0, 0, 0, 0) 100%)',
-    //     height: 130,
-    //     left: 0,
-    //     position: 'absolute',
-    //     top: 0,
-    //     width: '100%',
-    //     zIndex: -1
-    // },
-    // blogName: {
-    //     color: '#fff',
-    //     textShadow: '0 2px 4px rgba(0, 0, 0, .9)',
-    //     float: 'right'
-    // },
-    // position: {
-    //     bottom: 40,
-    //     left: 0,
-    //     position: 'absolute',
-    //     right: 0,
-    //     top: 0,
-    //     zIndex: 1
-    // }
 }));
 
 const Dashboard = () => {
@@ -198,7 +153,7 @@ const Dashboard = () => {
                     xs={12}
                 >  
                     <div className={classes.titleArea}>
-                        <h3 className={classes.title}>인기쟁이 글</h3>
+                        <h3 className={classes.title}>인기 있는 글</h3>
                         <div className={classes.contentArea}>
                             {popular.values.map((value, index) => {
                                 return <div className={classes.content} key={index}

@@ -115,7 +115,7 @@ const Reply = props => {
     useEffect(() => {
         callBackApi();
 
-        const timer = setInterval(progressCount, 20);
+        const timer = setInterval(progressCount, 100);
     
         return () => {
         clearInterval(timer);

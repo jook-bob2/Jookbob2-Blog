@@ -17,7 +17,7 @@ import { post } from 'axios';
 const useStyles = makeStyles(theme => ({
     drawer: {
         width: '16%',
-        minWidth: 200,
+        minWidth: 350,
         [theme.breakpoints.up('lg')]: {
             marginTop: 64,
             height: 'calc(100% - 64px)'
@@ -87,6 +87,13 @@ const useStyles = makeStyles(theme => ({
         fontSize: 12,
         lineHeight: '24px'
     },
+    searchArea: {
+        lineHeight: 1.358,
+        marginBottom: 2,
+        borderBottom: '2px solid #4b4f56',
+        backgroundColor: 'white',
+        textAlign: 'center'
+    }
 }));
 
 const rowsPerPage = 5;
@@ -99,10 +106,21 @@ const TimeLine = (props) => {
         values: []
     });
     const [progress, setProgress] = useState(0);
+    const [scrollProgress, setScrollProgress] = useState(0);
+    const [noData, setNoData] = useState(false);
+    let searchData = false;
     let page = 1;
 
     useEffect(() => {
-        const timer = setInterval(progressCount, 10);
+        const timer = setInterval(progressCount, 100);
+        
+        return () => {
+          clearInterval(timer);
+        };
+    }, []);
+
+    useEffect(() => {
+        const timer = setInterval(scrollProgressCount, 100);
         
         return () => {
           clearInterval(timer);
@@ -111,38 +129,43 @@ const TimeLine = (props) => {
 
     useEffect(() => {
         timelineCallback();
+        window.addEventListener('scroll', infiniteScroll, true);
+        return () => window.removeEventListener('scroll', infiniteScroll, true);
     // eslint-disable-next-line no-use-before-define
-    }, [timelineCallback]);
+    }, [infiniteScroll, timelineCallback]);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const timelineCallback = useCallback(() => {
         const formData = new FormData();
         formData.append('page', page);
         formData.append('rowsPerPage', rowsPerPage);
 
-        post(`/board/timelineList`, formData)
-            .then(res => {
-                const dateSortAfterList = res.data.list.sort((a, b) => {
-                    return new Date(b.createDt) - new Date(a.createDt);
+        if (searchData === false) {
+            post(`/board/timelineList`, formData)
+                .then(res => {
+                    if (res.data.list.length === 0) {
+                        page--;
+                        setNoData(true);
+                        // eslint-disable-next-line react-hooks/exhaustive-deps
+                        searchData = true;
+                        setScrollProgress(0);
+                    } else {
+                        const dateSortAfterList = res.data.list.sort((a, b) => {
+                            return new Date(b.createDt) - new Date(a.createDt);
+                        });
+        
+                        setTimelineState(state => ({
+                            ...state,
+                            values: state.values.concat(dateSortAfterList)
+                        }));
+                    }
+                })
+                .catch(err => {
+                    throw(err);
                 });
+        }
+    }, [noData, page]);
 
-                setTimelineState(state => ({
-                    ...state,
-                    values: state.values.concat(dateSortAfterList)
-                }));
-            })
-            .catch(err => {
-                throw(err);
-            });
-    }, [page]);
-
-    useEffect(() => {
-        window.addEventListener('scroll', infiniteScroll, true);
-    // eslint-disable-next-line no-use-before-define
-    }, [infiniteScroll]);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const infiniteScroll = () => {
+    const infiniteScroll = useCallback(() => {
         let element = document.getElementById('contentOver');
         let scrollHeight = Math.max(element.scrollHeight, document.body.scrollHeight);
         let scrollTop = Math.max(element.scrollTop, document.body.scrollTop);
@@ -152,34 +175,21 @@ const TimeLine = (props) => {
             page++;
             timelineCallback();
         }
-    };
+    }, [page, timelineCallback]);
 
     const progressCount = () => {
         setProgress(oldProgress => oldProgress + 1);
     };
 
+    const scrollProgressCount = () => {
+        setScrollProgress(oldProgress => oldProgress + 1);
+    };
+
     const timeLineTable = (data) => {
         return data.map((c, index) => {
-            if (c.content.length >= 20) {
-                if (c.noticeNo) {
-                    const noticeMore = `<a href='/noticeView/${c.noticeNo}'>...더보기</a>`;
-                    c.content = c.content.substring(0, 20) + noticeMore;
-                } else if (c.bno) {
-                    const boardMore = `<a href='/boardView/${c.bno}'>...더보기</a>`;
-                    c.content = c.content.substring(0, 20) + boardMore;
-                }
-            } else {
-                if (c.noticeNo) {
-                    const noticeMore = `<a href='/noticeView/${c.noticeNo}'>...더보기</a>`;
-                    c.content += noticeMore;
-                } else if (c.bno) {
-                    const boardMore = `<a href='/boardView/${c.bno}'>...더보기</a>`;
-                    c.content += boardMore;
-                }
-            }
-
             return <TimeLineTable 
-                key={index} agoTime={c.agoTime} showText={c.showText}
+                key={index} noticeNo={c.noticeNo} bno={c.bno}
+                agoTime={c.agoTime} showText={c.showText}
                 name={c.name} avatar={c.profileImg} content={c.content}
             />
         });
@@ -200,7 +210,7 @@ const TimeLine = (props) => {
                             <img src="/images/home.png" width="70px" height="70px"></img>
                         </RouterLink>
                         <RouterLink to="/" className={classes.blogName}>
-                            <h2>Jookbob2 Blog</h2>
+                            <h2>죽밥이 블로그</h2>
                         </RouterLink>
                     </div>
                     <div className={classes.timeLineList}>
@@ -232,7 +242,7 @@ const TimeLine = (props) => {
                                                             <TableRow>
                                                                 <TableCell colSpan="6" align="center">
                                                                     {progress < 100
-                                                                        ? <CircularProgress variant="determinate" value={progress}></CircularProgress> 
+                                                                        ? <CircularProgress color="secondary" size="1rem" variant="determinate" value={progress}></CircularProgress> 
                                                                         : '데이터가 없습니다.'
                                                                     }
                                                                 </TableCell>
@@ -243,6 +253,14 @@ const TimeLine = (props) => {
                                             </span>
                                         </div>
                                     }
+                                    <div className={classes.searchArea}>
+                                        <span className={classes.contentFont}>
+                                            {noData === true
+                                                ? '더이상 데이터가 없습니다.'
+                                                : <CircularProgress color="secondary" size="1rem" variant="determinate" value={scrollProgress}></CircularProgress> 
+                                            }
+                                        </span>
+                                    </div>
                                 </div>
                             </div>    
                         </div>   

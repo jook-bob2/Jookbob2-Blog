@@ -280,6 +280,55 @@
 		</if>
 	</select>
 	
+	<select id="timelineNoticeList" parameterType="hashmap" resultType="hashmap">
+		SELECT
+			n.notice_no as noticeNo,
+			a.name as name,
+			a.profile_img AS profileImg,
+			n.content as content,
+			n.title,
+			k.show_text as showText,
+			DATE_FORMAT(n.create_dt, '%Y-%m-%d %T') as createDt,
+			CASE
+			    WHEN TIMESTAMPDIFF(MINUTE, n.create_dt, NOW()) <![CDATA[<=]]>  0 THEN '방금 전'
+			    WHEN TIMESTAMPDIFF(MINUTE, n.create_dt, NOW()) <![CDATA[<]]> 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, n.create_dt, NOW()), '분 전')
+			    WHEN TIMESTAMPDIFF(HOUR, n.create_dt, NOW()) <![CDATA[<]]> 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, n.create_dt, NOW()), '시간 전')
+			    WHEN TIMESTAMPDIFF(DAY, n.create_dt, NOW()) <![CDATA[<]]> 30 THEN CONCAT(TIMESTAMPDIFF(DAY, n.create_dt, NOW()), '일 전')
+			    WHEN TIMESTAMPDIFF(MONTH, n.create_dt, NOW()) <![CDATA[<]]> 12 THEN CONCAT(TIMESTAMPDIFF(MONTH, n.create_dt, NOW()), '달 전')
+			    ELSE CONCAT(TIMESTAMPDIFF(YEAR, n.create_dt, NOW()), '년 전') end AS agoTime
+		FROM notice n
+			LEFT OUTER join admin_info a ON a.admin_no = n.writer_no
+			LEFT OUTER JOIN board_kinds k ON k.brd_code = n.brd_code
+		WHERE n.use_yn = 'Y'
+			AND n.del_yn = 'N'
+			ORDER BY n.create_dt DESC
+			LIMIT #{pageBegin}, #{pageEnd}
+	</select>
+	<select id="timelineBoardList" parameterType="hashmap" resultType="hashmap">
+		SELECT
+			b.bno,
+			m.name as name,
+			m.profile_img AS profileImg,
+			b.content as content,
+			b.title,
+			k.show_text as showText,
+			DATE_FORMAT(b.create_dt, '%Y-%m-%d %T') as createDt,
+			CASE
+			    WHEN TIMESTAMPDIFF(MINUTE, b.create_dt, NOW()) <![CDATA[<=]]> 0 THEN '방금 전'
+			    WHEN TIMESTAMPDIFF(MINUTE, b.create_dt, NOW()) <![CDATA[<]]> 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, b.create_dt, NOW()), '분 전')
+			    WHEN TIMESTAMPDIFF(HOUR, b.create_dt, NOW()) <![CDATA[<]]> 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, b.create_dt, NOW()), '시간 전')
+			    WHEN TIMESTAMPDIFF(DAY, b.create_dt, NOW()) <![CDATA[<]]> 30 THEN CONCAT(TIMESTAMPDIFF(DAY, b.create_dt, NOW()), '일 전')
+			    WHEN TIMESTAMPDIFF(MONTH, b.create_dt, NOW()) <![CDATA[<]]> 12 THEN CONCAT(TIMESTAMPDIFF(MONTH, b.create_dt, NOW()), '달 전')
+			    ELSE CONCAT(TIMESTAMPDIFF(YEAR, b.create_dt, NOW()), '년 전') end AS agoTime
+		FROM board b
+			LEFT OUTER join member_info m ON m.member_no = b.writer_no
+			LEFT OUTER JOIN board_kinds k ON k.brd_code = b.brd_code
+		WHERE b.use_yn = 'Y'
+			AND b.del_yn = 'N'
+			ORDER BY b.create_dt DESC
+			LIMIT #{pageBegin}, #{pageEnd}
+	</select>
+	
 	<select id="timelineList" parameterType="hashmap" resultType="hashmap">
 		SELECT t1.* from (SELECT
 					n.notice_no as noticeNo,

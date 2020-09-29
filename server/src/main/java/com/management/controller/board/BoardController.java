@@ -239,6 +239,7 @@ public class BoardController {
 	@PostMapping(value = "/timelineList")
 	public Map<String, Object> timelineList(@RequestParam Map<String, Object> param) {
 		Map<String, Object> map = new HashMap<>();
+		List<Map<String, Object>> list = new ArrayList<>();
 		
 		int page = Integer.parseInt(param.get("page").toString());
 		int rowsPerPage = Integer.parseInt(param.get("rowsPerPage").toString());
@@ -249,7 +250,11 @@ public class BoardController {
 		map.put("pageBegin", pageBegin);
 		map.put("pageEnd", rowsPerPage);
 		
-		List<Map<String, Object>> list = boardMapper.timelineList(map);
+		List<Map<String, Object>> boardList = boardMapper.timelineBoardList(map);
+		List<Map<String, Object>> noticeList = boardMapper.timelineNoticeList(map);
+		
+		list.addAll(boardList);
+		list.addAll(noticeList);
 		
 		map.put("list", list);
 		

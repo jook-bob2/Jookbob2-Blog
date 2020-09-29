@@ -29,5 +29,6 @@ public interface BoardMapper {
 	public List<Map<String, Object>> popularBrd(Map<String, Object> map);
 	public List<Map<String, Object>> journalList(Map<String, Object> map);
 	public List<Map<String, Object>> freeList(Map<String, Object> map);
-	public List<Map<String, Object>> timelineList(Map<String, Object> map);
+	public List<Map<String, Object>> timelineNoticeList(Map<String, Object> map);
+	public List<Map<String, Object>> timelineBoardList(Map<String, Object> map);
 }

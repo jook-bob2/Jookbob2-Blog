@@ -68,6 +68,11 @@ module.exports = {
         })
     ],
     devServer: {
+        hot: true,
+        overlay: true,
+        historyApiFallback: true,
+        compress: true,
+        inline: true,
         http2: true,
         https: {
             key: fs.readFileSync('etc/gogetssl/www_jookbob2_com.key'),

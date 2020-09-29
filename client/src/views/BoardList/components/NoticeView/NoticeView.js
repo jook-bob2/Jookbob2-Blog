@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { useMediaQuery } from '@material-ui/core';
@@ -119,8 +119,8 @@ const NoticeView = props => {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
 
-    useEffect(() => {
-        post('/board/noticeDetail/' + state.noticeNo).then(res => {
+    const callBackView = useCallback(() => {
+        post('/board/noticeDetail/' + match.params.noticeNo).then(res => {
             const list = res.data.list[0];
             setState(state => ({
                 ...state,
@@ -140,7 +140,11 @@ const NoticeView = props => {
         .catch(err => {
             throw(err);
         });
-    }, [state.noticeNo]);
+    }, [match.params.noticeNo])
+
+    useEffect(() => {
+        if (state.noticeNo !== '') callBackView();
+    }, [callBackView, state.noticeNo]);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
