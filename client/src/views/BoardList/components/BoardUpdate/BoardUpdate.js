@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -17,7 +17,8 @@ import {
 import {post} from 'axios';
 import { Link as RouterLink } from 'react-router-dom';
 import CKEditor from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
+import { editorConfiguration } from 'common/Editor/Editor';
 
 const styles = makeStyles(theme => ({
     root: {},
@@ -68,68 +69,67 @@ const styles = makeStyles(theme => ({
 
 const BoardUpdate = props => {
     const classes = styles();
-    const { className, location, history } = props;
+    const { className, history, match } = props;
 
     const [state, setState] = useState({
-        list: location.query !== undefined ? location.query.state : {},
-        title: location.query !== undefined ? location.query.state.title : '',
-        content: location.query !== undefined ? location.query.state.content : '',
+        bno: match.params.bno,
+        title: '',
+        content: '',
         brdCode: '',
-        brdText: location.query !== undefined ? location.query.state.brdText : ''
-    });
-
-    const [member, setMember] = useState({
         userName: '',
-        avatar: ''
+        avatar: '',
+        memberNo: ''
     });
 
     const [showText, setShowText] = useState([]);
     const [typeOpen, setTypeOpen] = useState(false);
 
     useEffect(() => {
-        callMember()
-            .then(res => {
-                const list = res.data.list;
-                setMember({
-                    userName: list.name,
-                    avatar: list.profileImg
-                })
-            });
-    },[]);
-
-    useEffect(() => {
         post(`/boardManagement/getShowText`)
             .then(res => {
                 setShowText(res.data.list);
-                setState(state => ({
-                    ...state,
-                    brdCode: location.query !== undefined ? location.query.state.bKinds : ''
-                }))
+                updateListCallback();
             })
             .catch(err => {
                 throw(err);
             });
-    }, [location.query]);
+    // eslint-disable-next-line no-use-before-define
+    }, [updateListCallback]);
 
-    const callMember = async() => {
-        const url = '/member/viewMember';
-        return post(url);
-    }
+    const updateListCallback = useCallback(() => {
+        post(`/boardManagement/boardUpdateList/${state.bno}`)
+            .then(res => {
+                setState(state => ({
+                    ...state,
+                    title: res.data.title,
+                    content: res.data.content,
+                    brdCode: res.data.brdCode,
+                    userName: res.data.name,
+                    avatar: res.data.profileImg,
+                    memberNo: res.data.memberNo
+                }));
+            })
+            .catch(err => {
+                throw(err);
+            });
+    }, [state.bno]);
 
-    const handleChange = (event, editor) => {
+    const handleChange = (event) => {
+        event.persist();
         if (event.target !== undefined) {
-            setState({
+            setState(state => ({
                 ...state,
                 [event.target.name]: event.target.value
-            });
-        }
-        if (editor !== undefined) {
-            setState({
-                ...state,
-                content: editor.getData()
-            });
+            }));
         }
     };
+    
+    const handleEditor = (event, editor) => {
+        setState(state => ({
+            ...state,
+            content: editor.getData()
+        }));
+    }
 
     const handleSubmit = event => {
         event.preventDefault();
@@ -173,6 +173,10 @@ const BoardUpdate = props => {
         
         setTypeOpen(true);
     };
+
+    const handleCancel = () => {
+        history.goBack();
+    }; 
     
     return (
         <div className={classes.main}>
@@ -190,10 +194,10 @@ const BoardUpdate = props => {
                             <Avatar
                                 alt="Person"
                                 className={classes.avatar}
-                                src={member.avatar}
+                                src={state.avatar}
                             />
                         </td>
-                        <td>{member.userName}</td>
+                        <td>{state.userName}</td>
                         </TableRow>
                     </TableBody>
                 
@@ -227,17 +231,11 @@ const BoardUpdate = props => {
                             <input className={classes.inputWt} placeholder="제목을 입력해 주세요." onChange={handleChange} name="title" value={state.title}></input>
                         </div>
                         <div className={classes.textArea}>
-                            <CKEditor 
-                                editor={ClassicEditor} 
-                                onChange={handleChange} 
-                                name="content" 
-                                config={
-                                    {
-                                        ckfinder: {
-                                            uploadUrl: '/board/uploadImg'
-                                        },
-                                    }
-                                }
+                            <CKEditor
+                                editor={ ClassicEditor }
+                                config={ editorConfiguration }
+                                name="content"
+                                onChange={ handleEditor }
                                 data={state.content}
                             />
                         </div>
@@ -251,16 +249,15 @@ const BoardUpdate = props => {
                         >
                             수정
                         </Button>
-                        <RouterLink to={state.brdText}>
-                            <Button 
-                                color="secondary"
-                                variant="contained"
-                                className={classes.cancel}
-                            >
-                                취소
-                            </Button>
-                        </RouterLink>
                         
+                        <Button 
+                            color="secondary"
+                            variant="contained"
+                            className={classes.cancel}
+                            onClick={handleCancel}
+                        >
+                            취소
+                        </Button>
                     </div>
                     
                 </form>

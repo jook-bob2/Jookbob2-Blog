@@ -50,6 +50,48 @@ const styles = makeStyles(theme => ({
         letterSpacing: "-0.05px",
         verticalAlign: "inherit",
         color: "#1886C4"
+    },
+    deskTopCode: {
+        fontSize: '0.8rem',
+        background: '#eee',
+        border: '0 solid #3d7e9a',
+        color: '#333',
+        marginTop: 0,
+        marginBottom: 20,
+        padding: 15,
+        position: 'relative',
+        fontFamily: 'consolas,monaco,"Andale Mono",monospace',
+        fontStyle: 'normal',
+        fontWeight: 400,
+        lineHeight: 1.5,
+        overflow: 'auto',
+        direction: 'ltr!important',
+        textAlign: 'left!important',
+        borderLeftWidth: '5px!important',
+        borderRightWidth: '0!important',
+        tabSize: 4,
+        hyphens: 'none',
+    },
+    mobileCode: {
+        fontSize: '0.2rem',
+        background: '#eee',
+        border: '0 solid #3d7e9a',
+        color: '#333',
+        marginTop: 0,
+        marginBottom: 20,
+        padding: 15,
+        position: 'relative',
+        fontFamily: 'consolas,monaco,"Andale Mono",monospace',
+        fontStyle: 'normal',
+        fontWeight: 400,
+        lineHeight: 1.5,
+        overflow: 'auto',
+        direction: 'ltr!important',
+        textAlign: 'left!important',
+        borderLeftWidth: '5px!important',
+        borderRightWidth: '0!important',
+        tabSize: 4,
+        hyphens: 'none',
     }
 }));
 
@@ -82,6 +124,24 @@ const BoardView = props => {
     };
 
     function transform(node, index) {
+        if (node.type === "tag" && node.name === "code") {
+            const data = node.children[0].data;
+
+            if (isDesktop) {
+                return (
+                    <div className={classes.deskTopCode} key={index}>
+                        {data}
+                    </div>
+                );
+            } else {
+                return (
+                    <div className={classes.mobileCode} key={index}>
+                        {data}
+                    </div>
+                );
+            }
+        }
+
         if (node.type === "tag" && node.name === "oembed") {
             const vCode = node.attribs.url.split("v=")[1];
             const url = `https://www.youtube.com/embed/${vCode}`;

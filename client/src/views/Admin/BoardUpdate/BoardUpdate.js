@@ -16,7 +16,8 @@ import {
   } from '@material-ui/core';
 import {post} from 'axios';
 import CKEditor from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
+import { editorConfiguration } from 'common/Editor/Editor';
 
 const styles = makeStyles(theme => ({
     root: {},
@@ -115,24 +116,6 @@ const BoardUpdate = props => {
                 throw(err);
             });
     }, [state.bno]);
-
-    // useEffect(() => {
-    //     post(`/boardManagement/boardUpdateList/${state.bno}`)
-    //         .then(res => {
-    //             setState(state => ({
-    //                 ...state,
-    //                 title: res.data.title,
-    //                 content: res.data.content,
-    //                 brdCode: res.data.brdCode,
-    //                 userName: res.data.name,
-    //                 avatar: res.data.profileImg,
-    //                 memberNo: res.data.memberNo
-    //             }));
-    //         })
-    //         .catch(err => {
-    //             throw(err);
-    //         });
-    // }, [state.bno]);
 
     const handleChange = (event) => {
         event.persist();
@@ -252,17 +235,11 @@ const BoardUpdate = props => {
                             <input className={classes.inputWt} placeholder="제목을 입력해 주세요." onChange={handleChange} name="title" value={state.title}></input>
                         </div>
                         <div className={classes.textArea}>
-                            <CKEditor 
-                                editor={ClassicEditor} 
-                                onChange={handleEditor} 
-                                name="content" 
-                                config={
-                                    {
-                                        ckfinder: {
-                                            uploadUrl: `/boardManagement/uploadImg`
-                                        },
-                                    }
-                                }
+                            <CKEditor
+                                editor={ ClassicEditor }
+                                config={ editorConfiguration }
+                                name="content"
+                                onChange={ handleEditor }
                                 data={state.content}
                             />
                         </div>

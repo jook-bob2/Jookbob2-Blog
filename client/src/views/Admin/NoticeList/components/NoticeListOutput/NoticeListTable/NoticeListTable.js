@@ -134,7 +134,7 @@ const NoticeListTable = props => {
                 </TableCell>
                 <TableCell align='center'>
                     <RouterLink
-                        to={{ pathname: "/notice-update/" + props.noticeNo, query: { query: props } }}
+                        to={{ pathname: `/notice-update/${props.noticeNo}` }}
                     >
                         <Button color="primary" variant="contained">
                             수정

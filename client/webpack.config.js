@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require("path");
+const { styles } = require( '@ckeditor/ckeditor5-dev-utils' );
 
 module.exports = {
     mode: 'development',
@@ -12,11 +13,32 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.scss$/,
+				test: /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/,
+				use: [ 'raw-loader' ]
+			},
+            {
+                test: /\.(css|scss)$/,
                 use: [
-                    'style-loader',
-                    'css-loader',
-                    'sass-loader'
+                    {
+						loader: 'style-loader',
+						options: {
+							injectType: 'singletonStyleTag',
+							attributes: {
+								'data-cke': true
+							}
+						}
+					},
+                    //'css-loader',
+                    //'sass-loader',
+                    {
+						loader: 'postcss-loader',
+						options: styles.getPostCssConfig( {
+							themeImporter: {
+								themePath: require.resolve( '@ckeditor/ckeditor5-theme-lark' )
+							},
+							minify: true
+						} )
+					},
                 ]
             },
             {
@@ -32,6 +54,13 @@ module.exports = {
             },
             {
                 test: /\.(png|jpg|gif|svg|ico)$/i,
+                exclude: [
+                    /\.(js|jsx|mjs)$/,
+                    /\.html$/,
+                    /\.json$/,
+                    /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/,
+                    /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css/
+                ],
                 use: [
                     {
                         loader: 'file-loader',
@@ -54,7 +83,7 @@ module.exports = {
                             emitFile: true,
                             esModule: false
                         }
-                    }
+                    },
                 ]
             },
         ]

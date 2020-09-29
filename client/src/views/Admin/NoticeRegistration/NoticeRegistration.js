@@ -16,7 +16,8 @@ import {
   } from '@material-ui/core';
 import {post} from 'axios';
 import CKEditor from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
+import { editorConfiguration } from 'common/Editor/Editor';
 
 const styles = makeStyles(theme => ({
     root: {},
@@ -229,18 +230,11 @@ const NoticeRegistration = props => {
                             <input className={classes.inputWt} placeholder="제목을 입력해 주세요." onChange={handleChange} name="title"></input>
                         </div>
                         <div className={classes.textArea}>
-                            {/* <textarea className={classes.contentWt} onChange={handleChange} name="content"></textarea> */}
-                            <CKEditor 
-                                editor={ClassicEditor} 
-                                onChange={handleEditorChange} 
-                                name="content" 
-                                config={
-                                    {
-                                        ckfinder: {
-                                            uploadUrl: `/notice/uploadImg`
-                                        },
-                                    }
-                                }
+                            <CKEditor
+                                editor={ ClassicEditor }
+                                config={ editorConfiguration }
+                                name="content"
+                                onChange={ handleEditorChange }
                             />
                         </div>
                     </div>

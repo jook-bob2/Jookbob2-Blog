@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require("path");
 const fs = require('fs');
+const { styles } = require( '@ckeditor/ckeditor5-dev-utils' );
 
 module.exports = {
     mode: 'development',
@@ -12,12 +13,79 @@ module.exports = {
     },
     module: {
         rules: [
+            // {
+            //     test: /\.scss$/,
+            //     use: [
+            //         'style-loader',
+            //         'css-loader',
+            //         'sass-loader'
+            //     ]
+            // },
+            // {
+            //     test: /\.(js|jsx)$/,
+            //     exclude: /node_modules/,
+            //     use: {
+            //         loader: 'babel-loader',
+            //     }
+            // },
+            // {
+            //     test: /\.html$/,
+            //     use: ["html-loader"]
+            // },
+            // {
+            //     test: /\.(png|jpg|gif|svg|ico)$/i,
+            //     use: [
+            //         {
+            //             loader: 'file-loader',
+            //             options: {
+            //                 name: '[name].[ext]?[hash]',
+            //                 outputPath: (url, resourcePath, context) => {
+            //                     // `resourcePath` is original absolute path to asset
+            //                     // `context` is directory where stored asset (`rootContext`) or `context` option
+            //                     // To get relative path you can use
+            //                     const relativePath = path.relative(context, resourcePath);
+                                
+            //                     if (relativePath.includes('auth.jpg') || 
+            //                         relativePath.includes('undraw_page_not_found_su7k.svg') || 
+            //                         relativePath.includes('home.png')) {
+            //                       return `images/${url}`;
+            //                     }
+                    
+            //                     return `images/icons/${url}`;
+            //                 },
+            //                 emitFile: true,
+            //                 esModule: false
+            //             }
+            //         }
+            //     ]
+            // }
             {
-                test: /\.scss$/,
+				test: /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/,
+				use: [ 'raw-loader' ]
+			},
+            {
+                test: /\.(css|scss)$/,
                 use: [
-                    'style-loader',
-                    'css-loader',
-                    'sass-loader'
+                    {
+						loader: 'style-loader',
+						options: {
+							injectType: 'singletonStyleTag',
+							attributes: {
+								'data-cke': true
+							}
+						}
+					},
+                    //'css-loader',
+                    //'sass-loader',
+                    {
+						loader: 'postcss-loader',
+						options: styles.getPostCssConfig( {
+							themeImporter: {
+								themePath: require.resolve( '@ckeditor/ckeditor5-theme-lark' )
+							},
+							minify: true
+						} )
+					},
                 ]
             },
             {
@@ -33,6 +101,13 @@ module.exports = {
             },
             {
                 test: /\.(png|jpg|gif|svg|ico)$/i,
+                exclude: [
+                    /\.(js|jsx|mjs)$/,
+                    /\.html$/,
+                    /\.json$/,
+                    /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/,
+                    /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css/
+                ],
                 use: [
                     {
                         loader: 'file-loader',
@@ -55,9 +130,9 @@ module.exports = {
                             emitFile: true,
                             esModule: false
                         }
-                    }
+                    },
                 ]
-            }
+            },
         ]
     },
     devtool: 'source-map',

@@ -58,36 +58,87 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: '#f50057',
         color: 'white',
         textShadow: '0 2px 4px rgba(0, 0, 0, .9)'
+    },
+    deskTopCode: {
+        fontSize: '0.6rem',
+        background: '#eee',
+        border: '0 solid #3d7e9a',
+        color: '#333',
+        marginTop: 0,
+        marginBottom: 20,
+        padding: 15,
+        position: 'relative',
+        fontFamily: 'consolas,monaco,"Andale Mono",monospace',
+        fontStyle: 'normal',
+        fontWeight: 400,
+        lineHeight: 1.5,
+        overflow: 'auto',
+        direction: 'ltr!important',
+        textAlign: 'left!important',
+        borderLeftWidth: '5px!important',
+        borderRightWidth: '0!important',
+        tabSize: 4,
+        hyphens: 'none',
+    },
+    mobileCode: {
+        fontSize: '0.2rem',
+        background: '#eee',
+        border: '0 solid #3d7e9a',
+        color: '#333',
+        marginTop: 0,
+        marginBottom: 20,
+        padding: 15,
+        position: 'relative',
+        fontFamily: 'consolas,monaco,"Andale Mono",monospace',
+        fontStyle: 'normal',
+        fontWeight: 400,
+        lineHeight: 1.5,
+        overflow: 'auto',
+        direction: 'ltr!important',
+        textAlign: 'left!important',
+        borderLeftWidth: '5px!important',
+        borderRightWidth: '0!important',
+        tabSize: 4,
+        hyphens: 'none',
     }
 }));
-
-function transform(node, index) {
-    if (node.type === "tag" && node.name === "oembed") {
-        const vCode = node.attribs.url.split("v=")[1];
-        const url = `https://www.youtube.com/embed/${vCode}`
-        return (
-            // eslint-disable-next-line jsx-a11y/iframe-has-title
-            <iframe
-                key={index}
-                src={url} width="120" height="60" frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-            >
-            </iframe>
-        );
-    }
-}
-
-const options = {
-    decodeEntities: true,
-    transform
-};
 
 const TimeLineTable = (props) => {
     const classes = useStyles();
     const [open, setOpen] = useState(false);
 
     const [content, setContent] = useState('');
+
+    function transform(node, index) {
+        if (node.type === "tag" && node.name === "code") {
+            const data = node.children[0].data;
+            return (
+                <div className={classes.mobileCode} key={index}>
+                    {data}
+                </div>
+            );
+        }
+    
+        if (node.type === "tag" && node.name === "oembed") {
+            const vCode = node.attribs.url.split("v=")[1];
+            const url = `https://www.youtube.com/embed/${vCode}`
+            return (
+                // eslint-disable-next-line jsx-a11y/iframe-has-title
+                <iframe
+                    key={index}
+                    src={url} width="120" height="60" frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                >
+                </iframe>
+            );
+        }
+    }
+    
+    const options = {
+        decodeEntities: true,
+        transform
+    };
 
     useEffect(() => {
         if (props.content.length >= 100) {

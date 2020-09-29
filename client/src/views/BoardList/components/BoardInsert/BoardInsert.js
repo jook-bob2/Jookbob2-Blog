@@ -17,7 +17,9 @@ import {
 import {post} from 'axios';
 import { Link as RouterLink } from 'react-router-dom';
 import CKEditor from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
+import { editorConfiguration } from 'common/Editor/Editor';
+
 
 const styles = makeStyles(theme => ({
     root: {},
@@ -173,6 +175,7 @@ const BoardInsert = props => {
         
         setTypeOpen(true);
     };
+    const input = ' # 이것은 헤더입니다 \ n \ n 그리고 이것은 단락입니다 '
     
     return (
         <div className={classes.main}>
@@ -230,43 +233,11 @@ const BoardInsert = props => {
                             <input className={classes.inputWt} placeholder="제목을 입력해 주세요." onChange={handleChange} name="title"></input>
                         </div>
                         <div className={classes.textArea}>
-                            <CKEditor 
-                                editor={ClassicEditor} 
-                                onChange={handleEditor} 
-                                name="content" 
-                                config={
-                                    {
-                                        ckfinder: {
-                                            uploadUrl: '/board/uploadImg'
-                                        },
-                                        // codeBlock: {
-                                        //     languages: [
-                                        //         // Do not render the CSS class for the plain text code blocks.
-                                        //         { language: 'plaintext', label: 'Plain text', class: '' },
-                                
-                                        //         // Use the "php-code" class for PHP code blocks.
-                                        //         { language: 'php', label: 'PHP', class: 'php-code' },
-                                
-                                        //         // Use the "js" class for JavaScript code blocks.
-                                        //         // Note that only the first ("js") class will determine the language of the block when loading data.
-                                        //         { language: 'javascript', label: 'JavaScript', class: 'js javascript js-code' },
-                                
-                                        //         // Python code blocks will have the default "language-python" CSS class.
-                                        //         { language: 'python', label: 'Python' }
-                                        //     ]
-                                        // },
-                                        // toolbar: {
-                                        //     items:
-                                        //     [
-                                        //       'heading', '|', 
-                                        //       'alignment', 'bold', 'italic', 'highlight', '|',
-                                        //       'link', 'bulletedList', 'numberedList', 'imageUpload', '|',
-                                        //       'blockQuote', 'insertTable', 'mediaEmbed', '|',
-                                        //       'undo', 'redo', 'codeBlock'
-                                        //     ],
-                                        // },
-                                    }
-                                }
+                            <CKEditor
+                                editor={ ClassicEditor }
+                                config={ editorConfiguration }
+                                name="content"
+                                onChange={ handleEditor }
                             />
                         </div>
                     </div>

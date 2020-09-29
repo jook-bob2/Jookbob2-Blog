@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -16,7 +16,8 @@ import {
   } from '@material-ui/core';
 import {post} from 'axios';
 import CKEditor from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
+import { editorConfiguration } from 'common/Editor/Editor';
 
 const styles = makeStyles(theme => ({
     root: {},
@@ -90,13 +91,19 @@ const NoticeUpdate = props => {
         post(`/boardManagement/getShowText`)
             .then(res => {
                 setShowText(res.data.list);
+                updateListCallback();
             })
             .catch(err => {
                 throw(err);
             });
-    }, []);
+    // eslint-disable-next-line no-use-before-define
+    }, [updateListCallback]);
 
     useEffect(() => {
+        
+    }, [state.noticeNo]);
+
+    const updateListCallback = useCallback(() => {
         post(`/notice/noticeUpdateList/${state.noticeNo}`)
             .then(res => {
                 setState(state => ({
@@ -232,17 +239,11 @@ const NoticeUpdate = props => {
                             <input className={classes.inputWt} placeholder="제목을 입력해 주세요." onChange={handleChange} name="title" value={state.title}></input>
                         </div>
                         <div className={classes.textArea}>
-                            <CKEditor 
-                                editor={ClassicEditor} 
-                                onChange={handleEditor} 
-                                name="content" 
-                                config={
-                                    {
-                                        ckfinder: {
-                                            uploadUrl: `/notice/uploadImg`
-                                        },
-                                    }
-                                }
+                            <CKEditor
+                                editor={ ClassicEditor }
+                                config={ editorConfiguration }
+                                name="content"
+                                onChange={ handleEditor }
                                 data={state.content}
                             />
                         </div>
