@@ -168,13 +168,13 @@ const TimeLine = (props) => {
 
     const infiniteScroll = useCallback(() => {
         let element = document.getElementById('contentOver');
-        let scrollHeight = Math.max(element.scrollHeight, element.scrollHeight);
-        let scrollTop = Math.max(element.scrollTop, element.scrollTop);
+        //let scrollHeight = Math.max(element.scrollHeight, document.body.scrollHeight);
+        let scrollHeight = element.scrollHeight;
+        //let scrollTop = Math.max(element.scrollTop, document.body.scrollTop);
+        let scrollTop = element.scrollTop;
         let clientHeight = element.clientHeight;
-        const { innerHeight } = window;
-        console.log(scrollHeight, scrollTop, clientHeight, innerHeight);
 
-        if (scrollTop + clientHeight === scrollHeight) {
+        if (scrollHeight - (scrollTop + clientHeight) <= 100) {
             page++;
             timelineCallback();
         }
