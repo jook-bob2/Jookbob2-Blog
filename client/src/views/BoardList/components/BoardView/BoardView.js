@@ -73,7 +73,7 @@ const styles = makeStyles(theme => ({
         hyphens: 'none',
     },
     mobileCode: {
-        fontSize: '0.2rem',
+        fontSize: '0.4rem',
         background: '#eee',
         border: '0 solid #3d7e9a',
         color: '#333',
