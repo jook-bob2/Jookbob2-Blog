@@ -1,4 +1,3 @@
-# Docker-Compose 빌드하기 입니다.
 ### Installation
 <pre>
 cd /home
@@ -8,6 +7,9 @@ cd ./Jookbob2-Blog
 
 ### Run
 <pre>
+cd /home/Jookbob2-Blog
+docker-compose down
+git pull
 docker-compose up -d --build
 </pre>
 # Jookbob2-Blog에 대한 설명
