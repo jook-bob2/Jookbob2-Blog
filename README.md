@@ -13,4 +13,8 @@ docker-compose up -d --build
 # Jookbob2-Blog에 대한 설명
 <pre>
 웹개발관련 학습에 대한 기록을 담은 개인블로그입니다.
+* Skills
+클라이언트 : React
+백엔드서버 : Spring Boot
+UI : Matrial UI 및 자체 css
 </pre>
