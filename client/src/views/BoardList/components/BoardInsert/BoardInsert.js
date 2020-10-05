@@ -160,6 +160,7 @@ const BoardInsert = props => {
         const url = "/board/saveBoard";
         const formData = new FormData();
         formData.append("writerNo", state.memberNo);
+        formData.append("writer", member.userName);
         formData.append("title", state.title);
         formData.append("content", state.content);
         formData.append("brdCode", state.brdCode);

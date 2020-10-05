@@ -35,7 +35,8 @@ const useStyles = makeStyles(theme => ({
         WebkitBoxAlign: 'center',
         alignItems: 'center',
         height: 'calc(2.5rem)',
-        padding: '0px 0.5rem'
+        padding: '0px 0.5rem',
+        overflow: 'hidden'
     },
     listComment: {
         color: 'crimson',
