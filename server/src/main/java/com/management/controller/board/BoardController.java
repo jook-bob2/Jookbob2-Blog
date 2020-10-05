@@ -118,14 +118,14 @@ public class BoardController {
 	@PostMapping(value = "/saveBoard")
 	public void saveBoard(Board entity, HttpSession session) {
 		// String name = "";
-		//Long memberNo = null;
+		Long memberNo = null;
 		Long num = (long) 0;
 		if (session.getAttribute("memberNo") != null) {
 			// name = session.getAttribute("name").toString();
 			
-			//memberNo = (Long) session.getAttribute("memberNo");
+			memberNo = (Long) session.getAttribute("memberNo");
 			// entity.setWriter(name);
-			//entity.setWriterNo(memberNo);
+			entity.setWriterNo(memberNo);
 			entity.setWriteYn("Y");
 			entity.setViewcnt(num);
 			entity.setUpdateYn("N");
