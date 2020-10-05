@@ -58,10 +58,6 @@ const styles = makeStyles(theme => ({
         marginLeft: 10,
         backgroundColor: '#e83553'
     },
-    avatar: {
-        // width: 50,
-        // height: 50
-    },
     avatarTd: {
         padding: 10
     },
