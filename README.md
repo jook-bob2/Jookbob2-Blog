@@ -15,7 +15,7 @@ docker-compose up -d --build
 # Jookbob2-Blog에 대한 설명
 > Jookbob2 블로그란?
 <pre>
-웹개발관련 학습에 대한 기록을 담은 개인블로그입니다.
+웹 개발관련 학습에 대해 기록중인 개인블로그입니다.
 </pre>
 > Skills
 <pre>
