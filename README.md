@@ -2,13 +2,12 @@
 ### Installation
 <pre>
 cd /home
-git clone https://github.com/ehrmaks/SpringBoot-React.git
-cd ./Docker-Compose
+git clone https://github.com/ehrmaks/Jookbob2-Blog.git
+cd ./Jookbob2-Blog
 </pre>
 
 ### Run
 <pre>
-cd Spring-React
 docker-compose up -d --build
 </pre>
 # SpringBoot-React
