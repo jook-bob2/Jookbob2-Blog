@@ -92,6 +92,12 @@ const styles = makeStyles(theme => ({
         borderRightWidth: '0!important',
         tabSize: 4,
         hyphens: 'none',
+    },
+    deskTopImgTag: {
+        maxWidth: 800
+    },
+    mobileTopImgTag: {
+        maxWidth: 350
     }
 }));
 
@@ -132,7 +138,7 @@ const BoardView = props => {
                     <img
                         key={index}
                         src={img}
-                        width="850px"
+                        className={classes.deskTopImgTag}
                     >
                     </img>
                 )
@@ -142,7 +148,7 @@ const BoardView = props => {
                     <img
                         key={index}
                         src={img}
-                        width="380px"
+                        className={classes.mobileTopImgTag}
                     >
                     </img>
                 )
