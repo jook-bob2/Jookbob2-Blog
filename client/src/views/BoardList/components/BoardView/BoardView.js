@@ -256,7 +256,7 @@ const BoardView = props => {
                                     />
                                 </td>
                                 <td colSpan="1"><span>{state.writer}</span><br/>
-                                    {state.createDt !== '' ?  <span><h6>{moment(state.createDt).format('YYYY.MM.DD hh:mm:ss')}</h6></span> : '' }
+                                    {state.createDt !== '' ?  <span><h6>{moment(state.createDt).format('YYYY.MM.DD HH:mm:ss')}</h6></span> : '' }
                                 </td>
                             </TableRow>
                             <TableRow>

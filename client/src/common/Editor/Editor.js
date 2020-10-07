@@ -30,7 +30,7 @@ export const editorConfiguration = {
         'heading', '|', 
         'alignment', 'bold', 'italic', 'highlight', '|', 
         'link', 'imageUpload', 'mediaEmbed', '|',
-        'bulletedList', 'numberedList', '|', 
+        //'bulletedList', 'numberedList', '|', 
         'codeBlock', 'blockQuote', 'insertTable', '|', 
         'undo', 'redo'
     ],
