@@ -12,7 +12,7 @@ const Dashboard = () => {
 
     return (
         <div className={classes.root}>
-            컨텐트
+            
         </div>
     );
 };

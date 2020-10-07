@@ -124,6 +124,31 @@ const BoardView = props => {
     };
 
     function transform(node, index) {
+        if (node.type === "tag" && node.name === "img") {
+            const img = node.attribs.src;
+            if (isDesktop) {
+                return (
+                    // eslint-disable-next-line jsx-a11y/alt-text
+                    <img
+                        key={index}
+                        src={img}
+                        width="850px"
+                    >
+                    </img>
+                )
+            } else {
+                return (
+                    // eslint-disable-next-line jsx-a11y/alt-text
+                    <img
+                        key={index}
+                        src={img}
+                        width="380px"
+                    >
+                    </img>
+                )
+            }
+        }
+        
         if (node.type === "tag" && node.name === "code") {
             const data = node.children[0].data;
 
