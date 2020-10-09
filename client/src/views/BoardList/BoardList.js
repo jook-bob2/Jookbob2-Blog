@@ -100,6 +100,10 @@ const useStyles = makeStyles(theme => ({
   selectLable:{
     fontSize: '15pt',
     fontWeight: 'bold'
+  },
+  boardTitle: {
+    paddingBottom: 10,
+    borderBottom: '1px solid rgba(224, 224, 224, 1)'
   }
 }));
 
@@ -157,7 +161,7 @@ const BoardList = props => {
   }, [callBackNotice]);
 
   useEffect(() => {
-    const timer = setInterval(progressCount, 10);
+    const timer = setInterval(progressCount, 100);
     
     return () => {
       clearInterval(timer);
@@ -227,10 +231,10 @@ const BoardList = props => {
           onChange={handleValueChange}
         />
           
-        {authenticated ? 
+        {(authenticated && memberNo === 26) || (authenticated && brdText.includes('free'))  ? 
           <div className={classes.menu}>
             <RouterLink
-                to={ { pathname: `/boardInsert/${boardState.bKinds}`, query: {history: history ,memberNo: memberNo, brdText: brdText} }}
+                to={{ pathname: `/boardInsert/${boardState.bKinds}` }}
             >
               <Button variant="contained" color="primary"><h5>글쓰기</h5></Button>
             </RouterLink>
@@ -263,13 +267,14 @@ const BoardList = props => {
 
       <div>
         <Paper className={classes.paper}>
+          <div className={classes.boardTitle}><h4>공지사항</h4></div>
           <Table>
                 {noticeState.values.length > 0 ? noticeComponents(noticeState.values) :
                   <TableBody>
                     <TableRow>
                       <TableCell colSpan="6" align="center">
                         {progress < 100
-                          ? <CircularProgress className={classes.progress} variant="determinate" value={progress}></CircularProgress> 
+                          ? <CircularProgress color="secondary" size="1rem" variant="determinate" className={classes.progress} value={progress}></CircularProgress> 
                           : '데이터가 없습니다.'
                         }
                       </TableCell>
@@ -282,13 +287,14 @@ const BoardList = props => {
       </div>
 
       <Paper className={classes.paper}>
+        <div className={classes.boardTitle}><h4>게시글</h4></div>
         <Table>
               {boardState.values.length > 0 ? boardComponents(boardState.values) :
                 <TableBody>
                   <TableRow>
                     <TableCell colSpan="6" align="center">
                       {progress < 100
-                        ? <CircularProgress className={classes.progress} variant="determinate" value={progress}></CircularProgress> 
+                        ? <CircularProgress color="secondary" size="1rem" variant="determinate" className={classes.progress} value={progress}></CircularProgress> 
                         : '데이터가 없습니다.'
                       }
                     </TableCell>

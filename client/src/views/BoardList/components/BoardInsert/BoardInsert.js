@@ -15,10 +15,10 @@ import {
     MenuItem
   } from '@material-ui/core';
 import {post} from 'axios';
-import { Link as RouterLink } from 'react-router-dom';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
 import { editorConfiguration } from 'common/Editor/Editor';
+import { useSelector } from 'react-redux';
 
 
 const styles = makeStyles(theme => ({
@@ -69,10 +69,8 @@ const styles = makeStyles(theme => ({
 
 const BoardInsert = props => {
     const classes = styles();
-    const { className, location, history, match } = props;
+    const { className, history, match } = props;
     const [state, setState] = useState({
-        memberNo: location.query !== undefined ? location.query.memberNo : '',
-        brdText: location.query !== undefined ? location.query.brdText : '',
         title: '',
         content: '',
         brdCode: ''
@@ -80,6 +78,8 @@ const BoardInsert = props => {
 
     const [showText, setShowText] = useState([]);
     const [typeOpen, setTypeOpen] = useState(false);
+    const session = useSelector(state => state.session, []) || [];
+    const memberNo = session.memberNo;
 
     const [member, setMember] = useState({
         userName: '',
@@ -98,7 +98,11 @@ const BoardInsert = props => {
     },[]);
 
     useEffect(() => {
-        post(`/boardManagement/getShowText`)
+        const formData = new FormData();
+
+        formData.append('memberNo', memberNo);
+
+        post(`/boardManagement/getShowText`, formData)
             .then(res => {
                 setShowText(res.data.list);
                 setState(state => ({
@@ -109,7 +113,7 @@ const BoardInsert = props => {
             .catch(err => {
                 throw(err);
             });
-    }, [match.params.brdCode]);
+    }, [match.params.brdCode, memberNo]);
 
     const handleChange = (event) => {
         event.persist();
@@ -155,7 +159,7 @@ const BoardInsert = props => {
     const saveBoard = (event) => {
         const url = "/board/saveBoard";
         const formData = new FormData();
-        formData.append("writerNo", state.memberNo);
+        formData.append("writerNo", memberNo);
         formData.append("writer", member.userName);
         formData.append("title", state.title);
         formData.append("content", state.content);
@@ -172,7 +176,10 @@ const BoardInsert = props => {
         
         setTypeOpen(true);
     };
-    const input = ' # 이것은 헤더입니다 \ n \ n 그리고 이것은 단락입니다 '
+    
+    const handleCancel = () => {
+        history.goBack();
+    };
     
     return (
         <div className={classes.main}>
@@ -247,18 +254,16 @@ const BoardInsert = props => {
                         >
                             등록
                         </Button>
-                        <RouterLink to={state.brdText}>
-                            <Button 
-                                color="secondary"
-                                variant="contained"
-                                className={classes.cancel}
-                            >
-                                취소
-                            </Button>
-                        </RouterLink>
                         
+                        <Button 
+                            color="secondary"
+                            variant="contained"
+                            className={classes.cancel}
+                            onClick={handleCancel}
+                        >
+                            취소
+                        </Button>
                     </div>
-                    
                 </form>
             </Card>
         </div>

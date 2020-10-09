@@ -11,7 +11,7 @@ public interface BoardManagementMapper {
 	public int boardCnt(Map<String, Object> param);
 	public void boardDelete(long bno);
 	public void boardRestore(long bno);
-	public List<Map<String, Object>> getShowText();
+	public List<Map<String, Object>> getShowText(Map<String, Object> param);
 	public Map<String, Object> boardUpdateList(Long bno);
 	public void updateBoard(Map<String, Object> param);
 }

@@ -163,6 +163,8 @@ public class MemberController {
 			entity.setPasswd((String) dataObj.get("password"));
 			entity.setName((String) dataObj.get("userName"));
 			entity.setEmail((String) dataObj.get("email"));
+			entity.setUseYn("Y");
+			entity.setSecYn("N");
 			entity.setProfileImg("");
 		}
 		String userId = entity.getUserId();

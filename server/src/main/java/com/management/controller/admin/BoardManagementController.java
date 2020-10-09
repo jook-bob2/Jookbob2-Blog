@@ -75,11 +75,18 @@ public class BoardManagementController {
 	}
 	
 	@PostMapping(value = "/getShowText")
-	public Map<String, Object> getShowText() {
+	public Map<String, Object> getShowText(@RequestParam Map<String, Object> param) {
 		Map<String, Object> map = new HashMap<>();
-		List<Map<String, Object>> list = boardManagementMapper.getShowText();
+		long memberNo = Integer.parseInt(param.get("memberNo").toString());
 		
-		map.put("list", list);
+		if (memberNo != 26) {
+			map.put("free", "free");
+			List<Map<String, Object>> list = boardManagementMapper.getShowText(map);
+			map.put("list", list);
+		} else {
+			List<Map<String, Object>> list = boardManagementMapper.getShowText(map);
+			map.put("list", list);
+		}
 		
 		return map;
 	}
