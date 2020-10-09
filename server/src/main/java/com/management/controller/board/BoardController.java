@@ -1,7 +1,6 @@
 package com.management.controller.board;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +8,6 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,9 +22,7 @@ import com.management.domain.model.Board;
 import com.management.domain.model.BoardKinds;
 import com.management.domain.model.Notice;
 import com.management.domain.model.Upload;
-import com.management.domain.repository.board.BoardRepository;
 import com.management.domain.repository.boardKinds.BoardKindsRepository;
-import com.management.domain.repository.upload.UploadRepository;
 import com.management.mapper.board.BoardMapper;
 import com.management.service.board.BoardService;
 import com.management.util.S3Service;
@@ -34,9 +30,6 @@ import com.management.util.S3Service;
 @RestController
 @RequestMapping("board")
 public class BoardController {
-	@Autowired
-	private BoardRepository boardRepository;
-	
 	@Autowired
 	private BoardKindsRepository boardKindsRepository;
 	
@@ -258,6 +251,27 @@ public class BoardController {
 		list.addAll(noticeList);
 		
 		map.put("list", list);
+		
+		return map;
+	}
+	
+	@PostMapping(value = "/getShowText")
+	public Map<String, Object> getShowText(@RequestParam Map<String, Object> param) {
+		Map<String, Object> map = new HashMap<>();
+		long memberNo = 0;
+		
+		if (param.get("memberNo") != null) {
+			memberNo = Integer.parseInt(param.get("memberNo").toString());
+		}
+		
+		if (memberNo != 26) {
+			map.put("free", "free");
+			List<Map<String, Object>> list = boardMapper.getShowText(map);
+			map.put("list", list);
+		} else {
+			List<Map<String, Object>> list = boardMapper.getShowText(map);
+			map.put("list", list);
+		}
 		
 		return map;
 	}

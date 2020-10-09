@@ -102,7 +102,7 @@ const BoardInsert = props => {
 
         formData.append('memberNo', memberNo);
 
-        post(`/boardManagement/getShowText`, formData)
+        post(`/board/getShowText`, formData)
             .then(res => {
                 setShowText(res.data.list);
                 setState(state => ({

@@ -138,7 +138,7 @@
 		WHERE bno = #{bno}
 	</update>
 	
-	<select id="getShowText" parameterType="long" resultType="hashmap">
+	<select id="getShowText" resultType="hashmap">
 		SELECT 
 			b_kinds_no as bKindsNo,
 			brd_code as brdCode,
@@ -147,9 +147,6 @@
 		WHERE
 			use_yn = 'Y'
 			AND del_yn = 'N'
-			<if test="free != null">
-				AND brd_text like CONCAT('%', #{free}, '%')
-			</if> 
 	</select>
 	
 	<select id="boardUpdateList" parameterType="Long" resultType="hashmap">

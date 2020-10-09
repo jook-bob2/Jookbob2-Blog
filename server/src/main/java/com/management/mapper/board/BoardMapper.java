@@ -31,4 +31,5 @@ public interface BoardMapper {
 	public List<Map<String, Object>> freeList(Map<String, Object> map);
 	public List<Map<String, Object>> timelineNoticeList(Map<String, Object> map);
 	public List<Map<String, Object>> timelineBoardList(Map<String, Object> map);
+	public List<Map<String, Object>> getShowText(Map<String, Object> param);
 }

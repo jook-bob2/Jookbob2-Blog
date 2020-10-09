@@ -378,4 +378,18 @@
 					LIMIT #{pageBegin}, #{pageEnd}
 				) AS t2
 	</select>
+	
+	<select id="getShowText" parameterType="long" resultType="hashmap">
+		SELECT 
+			b_kinds_no as bKindsNo,
+			brd_code as brdCode,
+			show_text as showText
+		FROM board_kinds
+		WHERE
+			use_yn = 'Y'
+			AND del_yn = 'N'
+			<if test="free != null">
+				AND brd_text like CONCAT('%', #{free}, '%')
+			</if> 
+	</select>
 </mapper>
