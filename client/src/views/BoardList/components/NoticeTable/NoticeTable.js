@@ -43,7 +43,7 @@ const NoticeTable = props => {
                     <h5># {props.noticeNo}</h5>
                 </td>
                 <td colSpan="4">
-                    <h6>{moment(props.createDt).format('YYYY-MM-DD hh:mm:ss')}</h6>
+                    <h6>{moment(props.createDt).format('YYYY-MM-DD HH:mm:ss')}</h6>
                 </td>
                 <td></td>
                 
