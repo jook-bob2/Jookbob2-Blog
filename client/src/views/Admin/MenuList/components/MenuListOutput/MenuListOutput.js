@@ -178,7 +178,6 @@ const MenuListOutput = props => {
 
     const handleCreateChange = (event) => {
         event.persist();
-        console.log(event.target.value);
         setCreateState(createState => ({
             ...createState,
             [event.target.name]: event.target.value
