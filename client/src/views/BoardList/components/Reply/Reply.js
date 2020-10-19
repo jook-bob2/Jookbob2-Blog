@@ -67,6 +67,10 @@ const styles = makeStyles(theme => ({
     },
     signIn: {
         textAlign: 'center',
+    },
+    replyTitle: {
+      paddingBottom: 10,
+      borderBottom: '1px solid rgba(224, 224, 224, 1)'
     }
 }));
 
@@ -201,25 +205,23 @@ const Reply = props => {
     return (
         <Card className={clsx(classes.root, className)}>
             <CardContent className={classes.content}>
-                <div >
-                    <Table>
-                        <colgroup>
-                            <col width="5%"/>
-                            <col width="85%"/>
-                            <col width="10%"/>
-                        </colgroup>
-                        {replyState.values ? setValueComponents(replyState.values) :
-                            <TableBody>
-                                <TableRow>
-                                <TableCell colSpan="2" align="center">
-                                    <CircularProgress className={classes.progress} variant="determinate" value={progress}></CircularProgress>
-                                </TableCell>
-                                </TableRow>
-                            </TableBody>
-                        }
-                    </Table>
-                    
-                </div>
+                <div className={classes.replyTitle}><h4>댓글</h4></div>
+                <Table>
+                    <colgroup>
+                        <col width="5%"/>
+                        <col width="85%"/>
+                        <col width="10%"/>
+                    </colgroup>
+                    {replyState.values ? setValueComponents(replyState.values) :
+                        <TableBody>
+                            <TableRow>
+                            <TableCell colSpan="2" align="center">
+                                <CircularProgress className={classes.progress} variant="determinate" value={progress}></CircularProgress>
+                            </TableCell>
+                            </TableRow>
+                        </TableBody>
+                    }
+                </Table>
             </CardContent>
             <CardContent className={classes.content}>
                 <form onSubmit={handleSubmit}>
