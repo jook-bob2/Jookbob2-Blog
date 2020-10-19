@@ -69,7 +69,7 @@ const styles = makeStyles(theme => ({
         textAlign: 'center',
     },
     replyTitle: {
-      paddingBottom: 10,
+      padding: '1em',
       borderBottom: '1px solid rgba(224, 224, 224, 1)'
     }
 }));
